@@ -10,9 +10,18 @@ import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
 import { Updates } from "./screens/Updates";
 import { NotFound } from "./screens/NotFound";
+import Map from "./screens/Map";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
+    Map: {
+      screen: Map,
+      options: {
+        title: "Map",
+        tabBarIcon: ({ color, size }) => <FontAwesome name="map" size={size} color={color} />,
+      },
+    },
     Home: {
       screen: Home,
       options: {
