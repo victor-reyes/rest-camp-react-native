@@ -4,7 +4,7 @@ import Supercluster, { MapDimensions } from "react-native-clusterer/lib/typescri
 import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import { StyleSheet, View, LayoutChangeEvent, Dimensions } from "react-native";
+import { StyleSheet, View, LayoutChangeEvent, Dimensions, Alert } from "react-native";
 import { useGetParkingsQuery } from "@/features/rest-areas/rest-areas-api";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import { Parking } from "@/features/rest-areas/parking-zod-schema";
@@ -23,9 +23,10 @@ export default function Map() {
   const [mapDimensions, setMapDimensions] = useState<MapDimensions>(initialDimensions);
 
   const handleGetUserLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
+    const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      console.log("Permission to access location was denied");
+      if (!canAskAgain)
+        Alert.alert("Location permission denied", "Please enable location permission in settings.");
       return;
     }
     const userLocation = await Location.getCurrentPositionAsync({});
