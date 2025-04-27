@@ -17,6 +17,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     config: {
       googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_IOS_API_KEY,
     },
+    infoPlist: {
+      NSLocationWhenInUseUsageDescription:
+        "This app requires access to your location to show your position on the map.",
+    },
   },
   android: {
     adaptiveIcon: {
@@ -29,6 +33,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
       },
     },
+    permissions: ["ACCESS_FINE_LOCATION"],
   },
   web: {
     favicon: "./assets/favicon.png",

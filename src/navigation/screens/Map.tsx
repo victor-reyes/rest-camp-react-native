@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
-import MapView, { Marker, MarkerAnimated, PROVIDER_GOOGLE, Region } from "react-native-maps";
+import { useMemo, useRef, useState } from "react";
+import MapView, { MarkerAnimated, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster, { MapDimensions } from "react-native-clusterer/lib/typescript/types";
+import * as Location from "expo-location";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import { StyleSheet, View, LayoutChangeEvent, Dimensions } from "react-native";
 import { useGetParkingsQuery } from "@/features/rest-areas/rest-areas-api";
@@ -19,6 +21,27 @@ export default function Map() {
   });
 
   const [mapDimensions, setMapDimensions] = useState<MapDimensions>(initialDimensions);
+
+  const handleGetUserLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+      return;
+    }
+    const userLocation = await Location.getCurrentPositionAsync({});
+
+    mapRef.current?.animateToRegion(
+      {
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+        latitudeDelta: 3,
+        longitudeDelta: 3,
+      },
+      1000,
+    );
+  };
+
+  const mapRef = useRef<MapView>(null);
 
   const memorizedPoints: Supercluster.PointFeature<Parking>[] = useMemo(
     () =>
@@ -45,16 +68,17 @@ export default function Map() {
   return (
     <View style={styles.container} onLayout={onLayout}>
       <MapView
+        ref={mapRef}
         style={styles.map}
-        showsMyLocationButton={true}
-        showsTraffic={true}
         provider={PROVIDER_GOOGLE}
         onRegionChange={setRegion}
+        showsMyLocationButton={false}
+        showsUserLocation
         initialRegion={region}>
         {points.map(point => {
           if (isPointCluster(point))
             return (
-              <Marker
+              <MarkerAnimated
                 key={`cluster-${point.properties.cluster_id}`}
                 coordinate={{
                   latitude: point.geometry.coordinates[1],
@@ -79,6 +103,19 @@ export default function Map() {
           );
         })}
       </MapView>
+      <MaterialIcons
+        name="gps-fixed"
+        size={24}
+        color="gray"
+        zIndex={1000}
+        position="absolute"
+        bottom={20}
+        right={20}
+        backgroundColor="#ffffffbb"
+        padding={10}
+        style={{ borderRadius: 5 }}
+        onPress={handleGetUserLocation}
+      />
     </View>
   );
 }

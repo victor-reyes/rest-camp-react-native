@@ -34,7 +34,8 @@
     "react-native-web": "~0.19.13",
     "react-redux": "^9.2.0",
     "redux-devtools-expo-dev-plugin": "^1.0.0",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "expo-location": "~18.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
