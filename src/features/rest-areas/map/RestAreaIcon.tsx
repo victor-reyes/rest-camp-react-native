@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
@@ -5,7 +6,7 @@ interface Props extends SvgProps {
   numberOfRestAreas?: number;
 }
 
-export function RestAreaIcon({
+function RestAreaIconConponent({
   numberOfRestAreas,
   width = 24,
   height = 24,
@@ -45,6 +46,8 @@ export function RestAreaIcon({
     </View>
   );
 }
+
+export const RestAreaIcon = memo(RestAreaIconConponent);
 
 const styles = StyleSheet.create({
   badge: {
