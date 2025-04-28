@@ -1,4 +1,4 @@
-import { infer, z } from "zod";
+import { z } from "zod";
 
 // Equipment types from XSD documentation
 const equipmentTypeValues = [
