@@ -98,8 +98,13 @@ export default function Map() {
                   latitude: point.geometry.coordinates[1],
                   longitude: point.geometry.coordinates[0],
                 }}
-                onPress={() => handleOnClusterPress(point)}
-              />
+                onPress={() => handleOnClusterPress(point)}>
+                <RestAreaIcon
+                  numberOfRestAreas={point.properties.point_count}
+                  width={40}
+                  height={40}
+                />
+              </MarkerAnimated>
             );
 
           const parking = point.properties;
@@ -112,7 +117,7 @@ export default function Map() {
               }}
               title={parking.Name}
               description={parking.Description}>
-              <RestAreaIcon width={40} height={40} />
+              <RestAreaIcon width={32} height={32} />
             </MarkerAnimated>
           );
         })}
