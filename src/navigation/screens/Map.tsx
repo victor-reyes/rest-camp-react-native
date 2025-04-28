@@ -68,6 +68,17 @@ export default function Map() {
       setMapDimensions({ width, height });
   };
 
+  const handleOnClusterPress = async (cluster: Supercluster.ClusterFeature<unknown>) => {
+    const { latitude, longitude } = cluster.properties.getExpansionRegion();
+    const toRegion: Region = {
+      latitude,
+      longitude,
+      latitudeDelta: region.latitudeDelta / 2,
+      longitudeDelta: region.longitudeDelta / 2,
+    };
+    mapRef.current?.animateToRegion(toRegion, 1500);
+  };
+
   return (
     <View style={styles.container} onLayout={onLayout}>
       <MapView
@@ -87,8 +98,7 @@ export default function Map() {
                   latitude: point.geometry.coordinates[1],
                   longitude: point.geometry.coordinates[0],
                 }}
-                title={`${point.properties.point_count} parkings`}
-                description={`Cluster of ${point.properties.point_count} parkings`}
+                onPress={() => handleOnClusterPress(point)}
               />
             );
 
