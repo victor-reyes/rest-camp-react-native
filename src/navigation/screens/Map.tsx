@@ -3,6 +3,7 @@ import MapView, { MarkerAnimated, PROVIDER_GOOGLE, Region } from "react-native-m
 import Supercluster, { MapDimensions } from "react-native-clusterer/lib/typescript/types";
 import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { RestAreaIcon } from "@/features/rest-areas/RestAreaIcon";
 
 import { StyleSheet, View, LayoutChangeEvent, Dimensions, Alert } from "react-native";
 import { useGetParkingsQuery } from "@/features/rest-areas/rest-areas-api";
@@ -29,6 +30,7 @@ export default function Map() {
         Alert.alert("Location permission denied", "Please enable location permission in settings.");
       return;
     }
+
     const userLocation = await Location.getCurrentPositionAsync({});
 
     mapRef.current?.animateToRegion(
@@ -76,7 +78,7 @@ export default function Map() {
         showsMyLocationButton={false}
         showsUserLocation
         initialRegion={region}>
-        {points.map(point => {
+        {points?.map(point => {
           if (isPointCluster(point))
             return (
               <MarkerAnimated
@@ -99,8 +101,9 @@ export default function Map() {
                 longitude: parking.Geometry.longitude,
               }}
               title={parking.Name}
-              description={parking.Description}
-            />
+              description={parking.Description}>
+              <RestAreaIcon width={40} height={40} />
+            </MarkerAnimated>
           );
         })}
       </MapView>
@@ -112,9 +115,9 @@ export default function Map() {
         position="absolute"
         bottom={20}
         right={20}
-        backgroundColor="#ffffffbb"
+        backgroundColor="#ffffffdd"
         padding={10}
-        style={{ borderRadius: 5 }}
+        style={{ borderRadius: 5, zIndex: 1000 }}
         onPress={handleGetUserLocation}
       />
     </View>
