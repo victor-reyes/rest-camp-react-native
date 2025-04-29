@@ -10,6 +10,7 @@ import { useGetParkingsQuery } from "../rest-areas-api";
 import { Parking } from "../parking-zod-schema";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
@@ -67,6 +68,8 @@ export function Map() {
     mapRef.current?.animateToRegion(toRegion, 1500);
   };
 
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container} onLayout={onLayout}>
       <MapView
@@ -98,7 +101,8 @@ export function Map() {
             <FastMarker
               key={point.properties.Id}
               latitude={point.properties.Geometry.latitude}
-              longitude={point.properties.Geometry.longitude}>
+              longitude={point.properties.Geometry.longitude}
+              onPress={() => navigation.navigate("ParkingInfoModal")}>
               <RestAreaIcon width={32} height={32} />
             </FastMarker>
           );

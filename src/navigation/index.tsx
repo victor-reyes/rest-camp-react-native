@@ -12,6 +12,7 @@ import { Updates } from "./screens/Updates";
 import { NotFound } from "./screens/NotFound";
 import MapScreen from "./screens/Map";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ParkingInfoModal } from "./screens/ParkingInfoModal";
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
@@ -96,6 +97,14 @@ const RootStack = createNativeStackNavigator({
       linking: {
         path: "*",
       },
+    },
+  },
+  ParkingInfoModal: {
+    screen: ParkingInfoModal,
+    options: {
+      presentation: "formSheet",
+      headerShown: false,
+      sheetAllowedDetents: [0.5, 0.75, 1],
     },
   },
 });
