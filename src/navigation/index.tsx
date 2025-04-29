@@ -18,7 +18,7 @@ const HomeTabs = createBottomTabNavigator({
     Map: {
       screen: Map,
       options: {
-        title: "Map",
+        headerShown: false,
         tabBarIcon: ({ color, size }) => <FontAwesome name="map" size={size} color={color} />,
       },
     },
