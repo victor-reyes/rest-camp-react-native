@@ -1,14 +1,14 @@
 import { useMemo, useRef, useState } from "react";
-import MapView, { MarkerAnimated, PROVIDER_GOOGLE, Region } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import Supercluster, { MapDimensions } from "react-native-clusterer/lib/typescript/types";
 import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { RestAreaIcon } from "@/features/rest-areas/RestAreaIcon";
-
 import { StyleSheet, View, LayoutChangeEvent, Dimensions, Alert } from "react-native";
 import { useGetParkingsQuery } from "@/features/rest-areas/rest-areas-api";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import { Parking } from "@/features/rest-areas/parking-zod-schema";
+import { RestAreaIcon } from "@/features/rest-areas/map/RestAreaIcon";
+import { FastMarker } from "@/features/rest-areas/map/FastMarker";
 
 const initialDimensions = Dimensions.get("window");
 
@@ -86,39 +86,33 @@ export default function Map() {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         onRegionChange={setRegion}
+        toolbarEnabled={false}
         showsMyLocationButton={false}
         showsUserLocation
         initialRegion={region}>
         {points?.map(point => {
           if (isPointCluster(point))
             return (
-              <MarkerAnimated
+              <FastMarker
                 key={`cluster-${point.properties.cluster_id}`}
-                coordinate={{
-                  latitude: point.geometry.coordinates[1],
-                  longitude: point.geometry.coordinates[0],
-                }}
+                latitude={point.geometry.coordinates[1]}
+                longitude={point.geometry.coordinates[0]}
                 onPress={() => handleOnClusterPress(point)}>
                 <RestAreaIcon
                   numberOfRestAreas={point.properties.point_count}
                   width={40}
                   height={40}
                 />
-              </MarkerAnimated>
+              </FastMarker>
             );
 
-          const parking = point.properties;
           return (
-            <MarkerAnimated
-              key={parking.Id}
-              coordinate={{
-                latitude: parking.Geometry.latitude,
-                longitude: parking.Geometry.longitude,
-              }}
-              title={parking.Name}
-              description={parking.Description}>
+            <FastMarker
+              key={point.properties.Id}
+              latitude={point.properties.Geometry.latitude}
+              longitude={point.properties.Geometry.longitude}>
               <RestAreaIcon width={32} height={32} />
-            </MarkerAnimated>
+            </FastMarker>
           );
         })}
       </MapView>
