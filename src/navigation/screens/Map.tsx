@@ -27,17 +27,8 @@ export default function Map() {
       return;
     }
 
-    const userLocation = await Location.getCurrentPositionAsync({});
-
-    mapRef.current?.animateToRegion(
-      {
-        latitude: userLocation.coords.latitude,
-        longitude: userLocation.coords.longitude,
-        latitudeDelta: 3,
-        longitudeDelta: 3,
-      },
-      1000,
-    );
+    const { coords } = await Location.getCurrentPositionAsync({});
+    mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 3, longitudeDelta: 3 }, 1000);
   };
 
   const mapRef = useRef<MapView>(null);
