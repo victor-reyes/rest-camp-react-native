@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
-import Supercluster, { MapDimensions } from "react-native-clusterer/lib/typescript/types";
+import Supercluster from "react-native-clusterer/lib/typescript/types";
 import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { StyleSheet, View, LayoutChangeEvent, Dimensions, Alert } from "react-native";
@@ -10,7 +10,7 @@ import { Parking } from "@/features/rest-areas/parking-zod-schema";
 import { RestAreaIcon } from "@/features/rest-areas/map/RestAreaIcon";
 import { FastMarker } from "@/features/rest-areas/map/FastMarker";
 
-const initialDimensions = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default function Map() {
   const { data: parkings } = useGetParkingsQuery();
@@ -21,7 +21,7 @@ export default function Map() {
     longitudeDelta: 10.1,
   });
 
-  const [mapDimensions, setMapDimensions] = useState<MapDimensions>(initialDimensions);
+  const [mapDimensions, setMapDimensions] = useState({ width, height });
 
   const handleGetUserLocation = async () => {
     const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
