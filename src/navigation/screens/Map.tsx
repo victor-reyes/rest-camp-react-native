@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -11,15 +11,11 @@ import { RestAreaIcon } from "@/features/rest-areas/map/RestAreaIcon";
 import { FastMarker } from "@/features/rest-areas/map/FastMarker";
 
 const { width, height } = Dimensions.get("window");
+const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
 export default function Map() {
   const { data: parkings } = useGetParkingsQuery();
-  const [region, setRegion] = useState<Region>({
-    latitude: 59.62403,
-    longitude: 14.26099,
-    latitudeDelta: 0.01,
-    longitudeDelta: 10.1,
-  });
+  const [region, setRegion] = useState(initialRegion);
 
   const [mapDimensions, setMapDimensions] = useState({ width, height });
 
@@ -70,7 +66,7 @@ export default function Map() {
 
   const handleOnClusterPress = async (cluster: Supercluster.ClusterFeature<unknown>) => {
     const { latitude, longitude } = cluster.properties.getExpansionRegion();
-    const toRegion: Region = {
+    const toRegion = {
       latitude,
       longitude,
       latitudeDelta: region.latitudeDelta / 2,
