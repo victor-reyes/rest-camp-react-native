@@ -49,7 +49,8 @@ export function Map() {
     [parkings],
   );
 
-  const [points] = useClusterer(memorizedPoints, mapDimensions, region);
+  const clusterOptions = { radius: 25, maxZoom: 12 };
+  const [points] = useClusterer(memorizedPoints, mapDimensions, region, clusterOptions);
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
