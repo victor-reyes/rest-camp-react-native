@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HeaderButton, Text } from "@react-navigation/elements";
-import { createStaticNavigation, StaticParamList } from "@react-navigation/native";
+import { createStaticNavigation, NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Image } from "react-native";
 import bell from "../assets/bell.png";
@@ -14,7 +14,21 @@ import MapScreen from "./screens/Map";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ParkingInfoModal } from "./screens/ParkingInfoModal";
 
-const HomeTabs = createBottomTabNavigator({
+export type HomeTabsParamList = {
+  Map: undefined;
+  Home: undefined;
+  Updates: undefined;
+};
+
+export type RootStackParamList = {
+  HomeTabs: NavigatorScreenParams<HomeTabsParamList> | undefined;
+  Profile: { user: string };
+  Settings: undefined;
+  NotFound: undefined;
+  ParkingInfoModal: { id: string };
+};
+
+const HomeTabs = createBottomTabNavigator<HomeTabsParamList>({
   screens: {
     Map: {
       screen: MapScreen,
@@ -57,7 +71,7 @@ const HomeTabs = createBottomTabNavigator({
   },
 });
 
-const RootStack = createNativeStackNavigator({
+const RootStack = createNativeStackNavigator<RootStackParamList>({
   screens: {
     HomeTabs: {
       screen: HomeTabs,
@@ -98,23 +112,22 @@ const RootStack = createNativeStackNavigator({
         path: "*",
       },
     },
-  },
-  ParkingInfoModal: {
-    screen: ParkingInfoModal,
-    options: {
-      presentation: "formSheet",
-      headerShown: false,
-      sheetAllowedDetents: [0.5, 0.75, 1],
+    ParkingInfoModal: {
+      screen: ParkingInfoModal,
+      options: {
+        presentation: "formSheet",
+        headerShown: false,
+        sheetAllowedDetents: [0.5, 0.75, 1],
+      },
     },
   },
 });
 
 export const Navigation = createStaticNavigation(RootStack);
 
-type RootStackParamList = StaticParamList<typeof RootStack>;
-
 declare global {
   namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }

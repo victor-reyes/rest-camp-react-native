@@ -1,10 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native";
-import { Text } from "react-native";
-import { View } from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-export function ParkingInfoModal() {
+type Props = NativeStackScreenProps<RootStackParamList, "ParkingInfoModal">;
+
+export function ParkingInfoModal({ route }: Props) {
+  const { id } = route.params;
   const navigation = useNavigation();
+
+  const {} = useGetParkingByIdQuery(id);
 
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
