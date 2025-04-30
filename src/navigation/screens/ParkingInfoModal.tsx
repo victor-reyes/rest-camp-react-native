@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import type { RootStackParamList } from "../index";
 import { useGetParkingByIdQuery } from "@/features/rest-areas/rest-areas-api";
 import { useNavigation } from "@react-navigation/native";
@@ -24,6 +24,7 @@ export function ParkingInfoModal({ route }: Props) {
 
       {isLoading && (
         <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" />
           <Text>Loading parking information...</Text>
         </View>
       )}
