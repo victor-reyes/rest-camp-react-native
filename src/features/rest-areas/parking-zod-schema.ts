@@ -193,5 +193,25 @@ const ResponseSchema = z.object({
 
 type Response = z.infer<typeof ResponseSchema>;
 type Parking = z.infer<typeof ParkingSchema>;
+type Equipment = z.infer<typeof EquipmentSchema>;
+type Facility = z.infer<typeof FacilitySchema>;
+type Geometry = z.infer<typeof GeometrySchema>;
+type Operator = z.infer<typeof OperatorSchema>;
+type ParkingAccess = z.infer<typeof ParkingAccessSchema>;
+type Photo = z.infer<typeof PhotoSchema>;
+type Payment = z.infer<typeof TariffsAndPaymentSchema>;
+type VehicleCharacteristics = z.infer<typeof VehicleCharacteristicsSchema>;
 
-export { ResponseSchema, Response, Parking };
+export {
+  ResponseSchema,
+  Response,
+  Parking,
+  Equipment,
+  Facility,
+  Geometry,
+  Operator,
+  ParkingAccess,
+  Photo,
+  Payment,
+  VehicleCharacteristics,
+};
