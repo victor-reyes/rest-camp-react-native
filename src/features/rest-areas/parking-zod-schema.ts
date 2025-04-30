@@ -82,12 +82,12 @@ const usageScenarioValues = ["restArea", "truckParking"] as const;
 const iconIdValues = ["restArea", "restArea-closed", "restArea-closed-partially"] as const;
 
 const EquipmentSchema = z.object({
-  Type: z.enum(equipmentTypeValues).optional(),
+  Type: z.enum(equipmentTypeValues),
   Accessibility: z.enum(equipmentAccessibilityValues).optional(),
 });
 
 const FacilitySchema = z.object({
-  Type: z.enum(facilityTypeValues).optional(),
+  Type: z.enum(facilityTypeValues),
   Accessibility: z.enum(facilityAccessibilityValues).optional(),
 });
 
@@ -110,54 +110,54 @@ const GeometrySchema = z
   });
 
 const OperatorSchema = z.object({
-  Contact: z.string().optional(),
-  ContactEmail: z.string().optional(),
-  ContactTelephoneNumber: z.string().optional(),
-  Name: z.string().optional(),
+  Contact: z.string(),
+  ContactEmail: z.string(),
+  ContactTelephoneNumber: z.string(),
+  Name: z.string(),
 });
 
 const ParkingAccessSchema = z.object({
-  SWEREF99TM: z.string().optional(),
-  WGS84: z.string().optional(),
+  SWEREF99TM: z.string(),
+  WGS84: z.string(),
 });
 
 const PhotoSchema = z.object({
-  Title: z.string().optional(),
-  Url: z.string().optional(),
+  Title: z.string(),
+  Url: z.string(),
 });
 
 const TariffsAndPaymentSchema = z.object({
-  FreeOfCharge: z.boolean().optional(),
+  FreeOfCharge: z.boolean(),
   Tariff: z.string().optional(),
 });
 
 const VehicleCharacteristicsSchema = z.object({
-  VehicleType: z.enum(vehicleTypeValues).optional(),
-  NumberOfSpaces: z.number().int().min(0).max(255).optional(),
+  VehicleType: z.enum(vehicleTypeValues),
+  NumberOfSpaces: z.number().int(),
   LoadType: z.string().optional(),
 });
 
 const ParkingSchema = z.object({
-  CountyNo: z.array(z.number().int()).optional(),
-  Deleted: z.boolean().optional(),
+  CountyNo: z.array(z.number().int()),
+  Deleted: z.boolean(),
   Description: z.string().optional(),
   DistanceToNearestCity: z.string().optional(),
-  Equipment: z.array(EquipmentSchema).optional(),
+  Equipment: z.array(EquipmentSchema),
   Facility: z.array(FacilitySchema).optional(),
   Geometry: GeometrySchema,
-  IconId: z.enum(iconIdValues).optional(),
-  Id: z.string().optional(),
+  IconId: z.enum(iconIdValues),
+  Id: z.string(),
   LocationDescription: z.string().optional(),
-  Name: z.string().optional(),
-  OpenStatus: z.enum(openStatusValues).optional(),
-  OperationStatus: z.enum(operationStatusValues).nullable().optional(),
+  Name: z.string(),
+  OpenStatus: z.enum(openStatusValues),
+  OperationStatus: z.enum(operationStatusValues).optional(),
   Operator: OperatorSchema.optional(),
   ParkingAccess: z.array(ParkingAccessSchema).optional(),
   Photo: z.array(PhotoSchema).optional(),
   TariffsAndPayment: TariffsAndPaymentSchema.optional(),
-  UsageSenario: z.array(z.enum(usageScenarioValues)).optional(),
-  VehicleCharacteristics: z.array(VehicleCharacteristicsSchema).optional(),
-  ModifiedTime: z.string().datetime().optional(),
+  UsageSenario: z.array(z.enum(usageScenarioValues)),
+  VehicleCharacteristics: z.array(VehicleCharacteristicsSchema),
+  ModifiedTime: z.string().datetime(),
 });
 
 const ErrorSchema = z.object({
@@ -166,7 +166,7 @@ const ErrorSchema = z.object({
 });
 
 const LastModifiedSchema = z.object({
-  datetime: z.string().datetime().optional(),
+  datetime: z.string().datetime(),
 });
 
 const EvalResultSchema = z.object({}); // xs:any, so allow any object
@@ -179,7 +179,7 @@ const InfoSchema = z.object({
 });
 
 const ResultSchema = z.object({
-  Parking: z.array(ParkingSchema).optional(),
+  Parking: z.array(ParkingSchema),
   ERROR: ErrorSchema.optional(),
   INFO: InfoSchema.optional(),
   id: z.string().optional(),
