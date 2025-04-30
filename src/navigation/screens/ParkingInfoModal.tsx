@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Button, Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import type { RootStackParamList } from "../index";
 import { useGetParkingByIdQuery } from "@/features/rest-areas/rest-areas-api";
 import { useNavigation } from "@react-navigation/native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ParkingInfoModal">;
 
@@ -16,7 +17,9 @@ export function ParkingInfoModal({ route }: Props) {
   return (
     <>
       <View style={styles.header}>
-        <Button onPress={() => navigation.goBack()} title="Close" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialIcons name="close" size={24} color="black" />
+        </TouchableOpacity>
       </View>
 
       {isLoading && (
@@ -29,7 +32,9 @@ export function ParkingInfoModal({ route }: Props) {
         <View style={styles.errorContainer}>
           <MaterialIcons name="error" size={48} color="#D32F2F" />
           <Text style={styles.errorText}>Failed to load parking information</Text>
-          <Button onPress={refetch} title="Reload" />
+          <TouchableOpacity onPress={refetch}>
+            <Text>Retry</Text>
+          </TouchableOpacity>
         </View>
       )}
 
