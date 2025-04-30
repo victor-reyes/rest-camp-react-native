@@ -102,7 +102,7 @@ export function Map() {
               key={point.properties.Id}
               latitude={point.properties.Geometry.latitude}
               longitude={point.properties.Geometry.longitude}
-              onPress={() => navigation.navigate("ParkingInfoModal")}>
+              onPress={() => navigation.navigate("ParkingInfoModal", { id: point.properties.Id! })}>
               <RestAreaIcon width={32} height={32} />
             </FastMarker>
           );
