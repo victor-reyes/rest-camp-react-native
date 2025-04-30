@@ -3,6 +3,8 @@
   "compilerOptions": {
     "moduleResolution": "bundler",
     "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
