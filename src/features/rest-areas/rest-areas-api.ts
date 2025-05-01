@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Parking, Response, ResponseSchema } from "./parking-zod-schema";
+import { Parking, ResponseSchema, Response } from "../schemas";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
@@ -18,20 +18,16 @@ export const restAreasApi = createApi({
         body: getBody(),
       }),
       rawResponseSchema: ResponseSchema,
-      transformResponse: async (response: Response) =>
-        response?.RESPONSE?.RESULT?.[0]?.Parking || [],
+      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking,
     }),
     getParkingById: builder.query<Parking | undefined, string>({
       query: (id: string) => ({
         url: "",
         method: "POST",
-        body: getBody(`<EQ name=\"Id\" value=\"${id}\" />`),
+        body: getBody(`<EQ name="Id" value="${id}" />`),
       }),
       rawResponseSchema: ResponseSchema,
-      transformResponse: async (response: Response) => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return response?.RESPONSE?.RESULT?.[0]?.Parking?.at(0);
-      },
+      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking[0],
     }),
   }),
 });

@@ -5,9 +5,8 @@ import * as Location from "expo-location";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { StyleSheet, View, LayoutChangeEvent, Dimensions, Alert } from "react-native";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
-
 import { useGetParkingsQuery } from "../rest-areas-api";
-import { Parking } from "../parking-zod-schema";
+import { Parking } from "@/features/schemas";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 import { useNavigation } from "@react-navigation/native";
