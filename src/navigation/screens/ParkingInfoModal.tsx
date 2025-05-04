@@ -2,25 +2,20 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import type { RootStackParamList } from "../index";
 import { useGetParkingByIdQuery } from "@/features/rest-areas/rest-areas-api";
-import { useNavigation } from "@react-navigation/native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { ParkingInfoCard } from "@/features/rest-areas/components/parking";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ParkingInfoModal">;
 
 export function ParkingInfoModal({ route }: Props) {
   const { id } = route.params;
-  const navigation = useNavigation();
 
   const { data: parking, isLoading, error, refetch } = useGetParkingByIdQuery(id);
 
   return (
-    <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons name="close" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      {parking && <ParkingInfoCard parking={parking} />}
 
       {isLoading && (
         <View style={styles.loadingContainer}>
@@ -38,23 +33,14 @@ export function ParkingInfoModal({ route }: Props) {
           </TouchableOpacity>
         </View>
       )}
-
-      {parking && <Text>Parking ID: {parking.Id}</Text>}
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#f5f5f5",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    padding: 12,
-    backgroundColor: "white",
-    borderBottomColor: "#eee",
-    borderBottomWidth: 1,
   },
   loadingContainer: {
     justifyContent: "center",
