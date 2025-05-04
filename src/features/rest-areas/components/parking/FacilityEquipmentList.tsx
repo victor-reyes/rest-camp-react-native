@@ -15,8 +15,8 @@ import {
 } from "./icons";
 
 interface Props {
-  equipments: Equipment[];
-  facilities: Facility[];
+  equipments?: Equipment[];
+  facilities?: Facility[];
 }
 export function FacilityEquipmentList({ equipments = [], facilities = [] }: Props) {
   if (!equipments.length && !facilities.length) return null;
