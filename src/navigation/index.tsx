@@ -117,6 +117,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
       options: {
         presentation: "formSheet",
         headerShown: false,
+        sheetCornerRadius: 25,
         sheetAllowedDetents: [0.5, 0.75, 1],
       },
     },
