@@ -21,11 +21,11 @@ interface Props {
 export function FacilityEquipmentList({ equipments = [], facilities = [] }: Props) {
   if (!equipments.length && !facilities.length) return null;
 
-  const icons = [...equipments, ...facilities].map(equipment => {
-    const type = equipment.Type;
+  const icons = [...equipments, ...facilities].map(service => {
+    const type = service.Type;
     switch (type) {
       case "toilet":
-        return equipment.Accessibility ? <HWC /> : <WC />;
+        return service.Accessibility ? <HWC /> : <WC />;
       case "picnicFacilities":
         return <Picnic />;
       case "playground":
