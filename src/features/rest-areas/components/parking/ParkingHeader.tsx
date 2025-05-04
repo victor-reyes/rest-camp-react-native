@@ -1,11 +1,16 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { openMap } from "@/navigation/open-map";
+import { MapIcon } from "@/components/icons/MapIcon";
 
 interface Props {
   name: string;
   modifiedTime: string;
+  latitude: number;
+  longitude: number;
 }
 
-export function ParkingHeader({ name, modifiedTime }: Props) {
+export function ParkingHeader({ name, modifiedTime, latitude, longitude }: Props) {
+  const handleOpenMap = () => openMap({ latitude, longitude, label: name });
   return (
     <View style={styles.headerContainer}>
       <View>
@@ -14,6 +19,12 @@ export function ParkingHeader({ name, modifiedTime }: Props) {
           Senast ändrad: {new Date(modifiedTime).toLocaleDateString()}
         </Text>
       </View>
+
+      <Pressable
+        style={({ pressed }) => [styles.iconButton, pressed && styles.iconButtonPressed]}
+        onPress={handleOpenMap}>
+        <MapIcon width={34} height={34} />
+      </Pressable>
     </View>
   );
 }
@@ -33,6 +44,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  iconButton: {
+    elevation: 2,
+    borderRadius: 50,
+    padding: 6,
+    backgroundColor: "lightblue",
+  },
+  iconButtonPressed: { backgroundColor: "#eeeeee" },
+
   footerText: {
     fontSize: 6,
     color: "#666666",

@@ -17,9 +17,8 @@ export function ParkingInfoCard({ parking }: Props) {
     <View style={styles.container}>
       <ParkingHeader
         name={parking.Name}
-        openStatus={parking.OpenStatus}
-        operationStatus={parking.OperationStatus}
         modifiedTime={parking.ModifiedTime}
+        {...parking.Geometry}
       />
       <ScrollView nestedScrollEnabled={true} style={styles.scrollView}>
         <Description
