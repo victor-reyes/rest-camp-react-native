@@ -16,7 +16,7 @@ function RestAreaIconConponent({
   ...props
 }: Props) {
   return (
-    <View style={[{ width: width * 1.1, height: height * 1.1 }, style]}>
+    <View style={[{ width: width * 1.12, height: height * 1.12 }, style]}>
       <Svg
         viewBox="0 0 24 24"
         style={{ position: "absolute", bottom: 0, left: 0 }}
@@ -51,7 +51,7 @@ export const RestAreaIcon = memo(RestAreaIconConponent);
 const styles = StyleSheet.create({
   badge: {
     position: "absolute",
-    backgroundColor: "red",
+    backgroundColor: "#ffffffee",
     borderRadius: 25,
     minWidth: 16,
     height: 16,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   badgeText: {
-    color: "#fff",
+    color: "#155196",
     fontSize: 8,
     fontWeight: "bold",
   },
