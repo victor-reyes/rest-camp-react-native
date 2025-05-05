@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 
@@ -6,7 +7,7 @@ interface Props {
   coords: { latitude: number; longitude: number };
   onParkingPress: (id: string) => void;
 }
-export function ParkingMarker({ id, coords, onParkingPress }: Props) {
+function ParkingMarkerComponent({ id, coords, onParkingPress }: Props) {
   const handlePress = () => onParkingPress(id);
   return (
     <FastMarker {...coords} onPress={handlePress}>
@@ -14,3 +15,5 @@ export function ParkingMarker({ id, coords, onParkingPress }: Props) {
     </FastMarker>
   );
 }
+
+export const ParkingMarker = memo(ParkingMarkerComponent);

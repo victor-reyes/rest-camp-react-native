@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 
@@ -7,7 +8,7 @@ interface Props {
   onClusterPress: (coords: { latitude: number; longitude: number }) => void;
 }
 
-export function ClusterMarker({ coords, count, onClusterPress }: Props) {
+function ClusterMarkerComponent({ coords, count, onClusterPress }: Props) {
   const handlePress = () => onClusterPress(coords);
   return (
     <FastMarker {...coords} onPress={handlePress}>
@@ -15,3 +16,5 @@ export function ClusterMarker({ coords, count, onClusterPress }: Props) {
     </FastMarker>
   );
 }
+
+export const ClusterMarker = memo(ClusterMarkerComponent);
