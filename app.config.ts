@@ -23,10 +23,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   android: {
-    adaptiveIcon: {
-      foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#ffffff",
-    },
     package: "nordic.rastplatser",
     config: {
       googleMaps: {
@@ -44,7 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "expo-splash-screen",
       {
         backgroundColor: "#ffffff",
-        image: "./assets/splash-icon.png",
+        image: "./assets/icon.png",
       },
     ],
     "react-native-edge-to-edge",
