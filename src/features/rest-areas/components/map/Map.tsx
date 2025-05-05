@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { ParkingCluster, useMap } from "../../hooks/useMap";
+import { useMap } from "../../hooks/useMap";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 import { useNavigation } from "@react-navigation/native";
@@ -20,9 +20,9 @@ export function Map() {
     [mapRef],
   );
 
-  const handleOnClusterPress = async (cluster: ParkingCluster) => {
+  const handleOnClusterPress = async (coords: { latitude: number; longitude: number }) => {
     const toRegion = {
-      ...cluster.coordinates,
+      ...coords,
       latitudeDelta: region.latitudeDelta / 3,
       longitudeDelta: region.longitudeDelta / 3,
     };
@@ -42,16 +42,16 @@ export function Map() {
         initialRegion={region}>
         {points.map(point => {
           if (point.type === "Cluster") {
-            const { id, coordinates, count } = point;
+            const { id, coords, count } = point;
             return (
-              <FastMarker key={id} {...coordinates} onPress={() => handleOnClusterPress(point)}>
+              <FastMarker key={id} {...coords} onPress={() => handleOnClusterPress(coords)}>
                 <RestAreaIcon numberOfRestAreas={count} width={40} height={40} />
               </FastMarker>
             );
           }
-          const { Id: id, Geometry: coordinates } = point;
+          const { Id: id, Geometry: coords } = point;
           return (
-            <FastMarker key={id} {...coordinates} onPress={() => handleNavigateToParking(id)}>
+            <FastMarker key={id} {...coords} onPress={() => handleNavigateToParking(id)}>
               <RestAreaIcon width={32} height={32} />
             </FastMarker>
           );

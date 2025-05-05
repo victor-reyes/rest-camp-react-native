@@ -10,7 +10,7 @@ type ParkingPoint = Parking & { type: "Point" };
 export type ParkingCluster = {
   type: "Cluster";
   id: string;
-  coordinates: {
+  coords: {
     latitude: number;
     longitude: number;
   };
@@ -51,7 +51,7 @@ export function useMap(initialRegion: Region) {
       return {
         type: "Cluster",
         id: `cluster-${point.properties.cluster_id}`,
-        coordinates: {
+        coords: {
           latitude: point.geometry.coordinates[1],
           longitude: point.geometry.coordinates[0],
         },
