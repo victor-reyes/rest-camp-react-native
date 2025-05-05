@@ -18,7 +18,7 @@ export const restAreasApi = createApi({
         body: getBody(),
       }),
       rawResponseSchema: ResponseSchema,
-      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking,
+      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking || [],
     }),
     getParkingById: builder.query<Parking | undefined, string>({
       query: (id: string) => ({
