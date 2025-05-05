@@ -27,7 +27,7 @@ export function Map() {
         ref={mapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        onRegionChange={setRegion}
+        onRegionChangeComplete={setRegion}
         toolbarEnabled={false}
         showsMyLocationButton={false}
         showsUserLocation
