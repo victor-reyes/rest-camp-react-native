@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useMap } from "../hooks/useMap";
+import { useMap } from "../../hooks/useMap";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 import { useNavigation } from "@react-navigation/native";
