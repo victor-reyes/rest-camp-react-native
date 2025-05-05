@@ -4,6 +4,8 @@ import Svg, { SvgProps, Path } from "react-native-svg";
 
 interface Props extends SvgProps {
   numberOfRestAreas?: number;
+  width: number;
+  height: number;
 }
 
 function RestAreaIconConponent({
@@ -13,16 +15,13 @@ function RestAreaIconConponent({
   style,
   ...props
 }: Props) {
-  const showCount = numberOfRestAreas && numberOfRestAreas > 0;
-  const iconWidth = width as number;
-  const iconHeight = height as number;
   return (
-    <View style={[{ width: iconWidth * 1.1, height: iconHeight * 1.1 }, style]}>
+    <View style={[{ width: width * 1.1, height: height * 1.1 }, style]}>
       <Svg
         viewBox="0 0 24 24"
         style={{ position: "absolute", bottom: 0, left: 0 }}
-        width={iconWidth}
-        height={iconHeight}
+        width={width}
+        height={height}
         {...props}>
         <Path
           fill="#fff"
@@ -38,7 +37,7 @@ function RestAreaIconConponent({
           d="M6.93 15.53h-1.5v-1.07h4.23v1.06H8.32v1.51h4.63v-3.72H9.23l2.22-2.22h-.95l2.21-2.22h-.95l1.87-3.2 1.82 3.2h-1l2.23 2.22h-.95l2.21 2.22h-3.76v3.72h3.68v1.15H5.43v-1.15h1.5z"
         />
       </Svg>
-      {showCount && (
+      {numberOfRestAreas && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{numberOfRestAreas}</Text>
         </View>
