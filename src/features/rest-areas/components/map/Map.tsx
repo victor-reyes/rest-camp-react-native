@@ -1,11 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { useMap } from "../../hooks/useMap";
-import { FastMarker } from "./FastMarker";
-import { RestAreaIcon } from "./RestAreaIcon";
 import { useNavigation } from "@react-navigation/native";
 import { MapControls } from "./MapController";
 import { useCallback, useRef } from "react";
+import { ParkingMarker } from "./ParkingMarker";
+import { ClusterMarker } from "./ClusterMarker";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 export function Map() {
@@ -40,22 +40,16 @@ export function Map() {
         showsMyLocationButton={false}
         showsUserLocation
         initialRegion={region}>
-        {points.map(point => {
-          if (point.type === "Cluster") {
-            const { id, coords, count } = point;
-            return (
-              <FastMarker key={id} {...coords} onPress={() => handleOnClusterPress(coords)}>
-                <RestAreaIcon numberOfRestAreas={count} width={40} height={40} />
-              </FastMarker>
-            );
-          }
-          const { Id: id, Geometry: coords } = point;
-          return (
-            <FastMarker key={id} {...coords} onPress={() => handleNavigateToParking(id)}>
-              <RestAreaIcon width={32} height={32} />
-            </FastMarker>
-          );
-        })}
+        {points.map(point =>
+          point.type === "Cluster" ?
+            <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
+          : <ParkingMarker
+              key={point.Id}
+              id={point.Id}
+              coords={point.Geometry}
+              onParkingPress={handleOnParkingPress}
+            />,
+        )}
       </MapView>
       <MapControls onLocationUpdate={handleOnLocationUpdate} />
     </View>
