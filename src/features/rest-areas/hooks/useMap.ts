@@ -1,14 +1,13 @@
-import { useMemo, useRef, useState } from "react";
-import MapView, { Region } from "react-native-maps";
-import * as Location from "expo-location";
-import { Dimensions, LayoutChangeEvent, Alert } from "react-native";
+import { useMemo, useState } from "react";
+import { Region } from "react-native-maps";
+import { Dimensions, LayoutChangeEvent } from "react-native";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { useGetParkingsQuery } from "../rest-areas-api";
 import { Parking } from "@/features/schemas";
 
 type ParkingPoint = Parking & { type: "Point" };
-type ParkingCluster = {
+export type ParkingCluster = {
   type: "Cluster";
   id: string;
   coordinates: {
@@ -23,19 +22,6 @@ export function useMap(initialRegion: Region) {
   const { data: parkings } = useGetParkingsQuery();
   const [region, setRegion] = useState(initialRegion);
   const [mapDimensions, setMapDimensions] = useState({ width, height });
-  const mapRef = useRef<MapView>(null);
-
-  const handleGetUserLocation = async () => {
-    const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      if (!canAskAgain)
-        Alert.alert("Location permission denied", "Please enable location permission in settings.");
-      return;
-    }
-
-    const { coords } = await Location.getCurrentPositionAsync({});
-    mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 3, longitudeDelta: 3 }, 1000);
-  };
 
   const memorizedPoints: Supercluster.PointFeature<Parking>[] = useMemo(
     () =>
@@ -60,15 +46,6 @@ export function useMap(initialRegion: Region) {
       setMapDimensions({ width, height });
   };
 
-  const handleOnClusterPress = async (cluster: ParkingCluster) => {
-    const toRegion = {
-      ...cluster.coordinates,
-      latitudeDelta: region.latitudeDelta / 2,
-      longitudeDelta: region.longitudeDelta / 2,
-    };
-    mapRef.current?.animateToRegion(toRegion, 1500);
-  };
-
   const filteredPoints: (ParkingPoint | ParkingCluster)[] = points.map(point => {
     if (isPointCluster(point))
       return {
@@ -85,12 +62,9 @@ export function useMap(initialRegion: Region) {
   });
 
   return {
-    mapRef,
     region,
     points: filteredPoints,
     mapDimensions,
-    handleGetUserLocation,
-    handleOnClusterPress,
     setRegion,
     onLayout,
   };

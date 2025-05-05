@@ -1,25 +1,33 @@
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useMap } from "../../hooks/useMap";
+import { ParkingCluster, useMap } from "../../hooks/useMap";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
 import { useNavigation } from "@react-navigation/native";
+import { MapControls } from "./MapController";
+import { useCallback, useRef } from "react";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 export function Map() {
-  const {
-    mapRef,
-    region,
-    points,
-    handleGetUserLocation,
-    handleOnClusterPress,
-    setRegion,
-    onLayout,
-  } = useMap(initialRegion);
+  const mapRef = useRef<MapView>(null);
+  const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();
 
   const handleNavigateToParking = (id: string) => navigation.navigate("ParkingInfoModal", { id });
+  const handleOnLocationUpdate = useCallback(
+    (coords: { latitude: number; longitude: number }) =>
+      mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 2, longitudeDelta: 2 }, 1000),
+    [mapRef],
+  );
+
+  const handleOnClusterPress = async (cluster: ParkingCluster) => {
+    const toRegion = {
+      ...cluster.coordinates,
+      latitudeDelta: region.latitudeDelta / 3,
+      longitudeDelta: region.longitudeDelta / 3,
+    };
+    mapRef.current?.animateToRegion(toRegion, 1500);
+  };
 
   return (
     <View style={styles.container} onLayout={onLayout}>
@@ -49,19 +57,7 @@ export function Map() {
           );
         })}
       </MapView>
-      <MaterialIcons
-        name="gps-fixed"
-        size={24}
-        color="gray"
-        zIndex={1000}
-        position="absolute"
-        bottom={20}
-        right={20}
-        backgroundColor="#ffffffdd"
-        padding={10}
-        style={{ borderRadius: 5, zIndex: 1000 }}
-        onPress={handleGetUserLocation}
-      />
+      <MapControls onLocationUpdate={handleOnLocationUpdate} />
     </View>
   );
 }
