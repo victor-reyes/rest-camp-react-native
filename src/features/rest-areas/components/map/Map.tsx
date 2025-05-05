@@ -13,21 +13,27 @@ export function Map() {
   const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();
 
-  const handleNavigateToParking = (id: string) => navigation.navigate("ParkingInfoModal", { id });
+  const handleOnParkingPress = useCallback(
+    (id: string) => navigation.navigate("ParkingInfoModal", { id }),
+    [navigation],
+  );
   const handleOnLocationUpdate = useCallback(
     (coords: { latitude: number; longitude: number }) =>
       mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 2, longitudeDelta: 2 }, 1000),
     [mapRef],
   );
 
-  const handleOnClusterPress = async (coords: { latitude: number; longitude: number }) => {
-    const toRegion = {
-      ...coords,
-      latitudeDelta: region.latitudeDelta / 3,
-      longitudeDelta: region.longitudeDelta / 3,
-    };
-    mapRef.current?.animateToRegion(toRegion, 1500);
-  };
+  const handleOnClusterPress = useCallback(
+    async (coords: { latitude: number; longitude: number }) => {
+      const toRegion = {
+        ...coords,
+        latitudeDelta: region.latitudeDelta / 3,
+        longitudeDelta: region.longitudeDelta / 3,
+      };
+      mapRef.current?.animateToRegion(toRegion, 1500);
+    },
+    [region],
+  );
 
   return (
     <View style={styles.container} onLayout={onLayout}>
