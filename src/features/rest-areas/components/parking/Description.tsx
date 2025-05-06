@@ -1,25 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 interface Props {
   description?: string;
   locationDescription?: string;
+  distanceToNearestCity?: string;
 }
 
-export function Description({ description, locationDescription }: Props) {
-  if (!description && !locationDescription) return null;
-
+export function Description({ description, locationDescription, distanceToNearestCity }: Props) {
+  if (!description && !locationDescription && !distanceToNearestCity) return null;
+  const info = [locationDescription, distanceToNearestCity].filter(Boolean).join(" ");
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Information</Text>
       {description && <Text style={styles.descriptionText}>{description}</Text>}
-      {locationDescription && (
-        <View style={styles.locationContainer}>
-          <MaterialIcons name="location-on" size={16} color="#666" />
-          <Text style={styles.locationText}>{locationDescription}</Text>
-        </View>
-      )}
+      {info && <Text style={styles.locationText}>🧭 {info}</Text>}
     </View>
   );
 }
@@ -41,11 +36,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: "#333333",
     marginBottom: 8,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
   },
   locationText: {
     fontSize: 14,

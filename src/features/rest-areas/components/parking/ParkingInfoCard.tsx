@@ -24,6 +24,7 @@ export function ParkingInfoCard({ parking }: Props) {
         <Description
           description={parking.Description}
           locationDescription={parking.LocationDescription}
+          distanceToNearestCity={parking.DistanceToNearestCity}
         />
         <FacilityEquipmentList facilities={parking.Facility} equipments={parking.Equipment} />
         {parking.Photo?.length && <PhotoGallery photos={parking.Photo} />}
