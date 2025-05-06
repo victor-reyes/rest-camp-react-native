@@ -1,11 +1,16 @@
 import { Assets as NavigationAssets } from "@react-navigation/elements";
 import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
-import * as React from "react";
 import { Navigation } from "./navigation";
 import { Provider } from "react-redux";
 import { store } from "@/app/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as SQLite from "expo-sqlite";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useEffect, useState } from "react";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import migrations from "./db/drizzle/migrations";
+import { Alert } from "react-native";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -15,7 +20,27 @@ Asset.loadAsync([
 
 SplashScreen.preventAutoHideAsync();
 
+const expo = SQLite.openDatabaseSync("db.db", { enableChangeListener: true });
+
+const db = drizzle(expo);
+
 export function App() {
+  const { success, error } = useMigrations(db, migrations);
+  const [navigationIsReady, setNavigationIsReady] = useState(false);
+
+  useEffect(() => {
+    if (success && navigationIsReady) {
+      SplashScreen.hideAsync();
+    }
+    if (error) {
+      console.error("Migration error:", error);
+      Alert.alert(
+        "Migration error",
+        "There was an error during the migration process. Please try again later.",
+        [{ text: "OK" }],
+      );
+    }
+  }, [success, error, navigationIsReady]);
   return (
     <Provider store={store}>
       <GestureHandlerRootView>
@@ -27,9 +52,7 @@ export function App() {
               "helloworld://",
             ],
           }}
-          onReady={() => {
-            SplashScreen.hideAsync();
-          }}
+          onReady={() => setNavigationIsReady(true)}
         />
       </GestureHandlerRootView>
     </Provider>
