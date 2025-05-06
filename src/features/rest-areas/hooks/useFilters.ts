@@ -1,20 +1,14 @@
-import { useMemo, useState } from "react";
-import { EquipmentCategory, FacilityCategory, Parking } from "@/features/schemas";
+import { useState } from "react";
+import { Parking } from "@/features/schemas";
+import { Filter } from "../types";
 
 export function useFilters(parkings: Parking[]) {
-  const [filters, setFilters] = useState<(EquipmentCategory | FacilityCategory)[]>([]);
+  const [filters, setFilters] = useState<Filter[]>([]);
 
-  const filteredParkings = useMemo(
-    () =>
-      parkings.filter(parking =>
-        filters.every(filter => {
-          const { Equipment, Facility } = parking;
-          const equipment = Equipment.find(e => e.Type === filter);
-          const facility = Facility?.find(f => f.Type === filter);
-          return equipment || facility;
-        }),
-      ),
-    [filters, parkings],
+  const filteredParkings = parkings.filter(({ Equipment, Facility }) =>
+    filters.every(filter =>
+      [...Equipment, ...(Facility || [])].map(service => service.Type).includes(filter),
+    ),
   );
 
   return { filters, setFilters, filteredParkings };
