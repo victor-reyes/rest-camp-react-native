@@ -5,12 +5,10 @@ import { Navigation } from "./navigation";
 import { Provider } from "react-redux";
 import { store } from "@/app/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import * as SQLite from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import migrations from "./db/drizzle/migrations";
 import { Alert } from "react-native";
+import { db, migrations } from "@/db/";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -19,10 +17,6 @@ Asset.loadAsync([
 ]);
 
 SplashScreen.preventAutoHideAsync();
-
-const expo = SQLite.openDatabaseSync("db.db", { enableChangeListener: true });
-
-const db = drizzle(expo);
 
 export function App() {
   const { success, error } = useMigrations(db, migrations);
