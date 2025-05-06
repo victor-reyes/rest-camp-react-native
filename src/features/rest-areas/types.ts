@@ -1,4 +1,4 @@
-import { Parking } from "../schemas";
+import { EquipmentCategory, FacilityCategory, Parking } from "../schemas";
 
 export type ParkingPoint = Parking & { type: "Point" };
 export type ParkingCluster = {
@@ -10,3 +10,5 @@ export type ParkingCluster = {
   };
   count: number;
 };
+
+export type Filter = EquipmentCategory | FacilityCategory;
