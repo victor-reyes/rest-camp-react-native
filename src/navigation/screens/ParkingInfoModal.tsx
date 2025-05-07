@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import type { RootStackParamList } from "../index";
-import { useGetParkingByIdQuery } from "@/features/rest-areas/rest-areas-api";
+import { useGetParkingByIdQuery } from "@/features/rest-areas/api";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ParkingInfoCard } from "@/features/rest-areas/components/parking";

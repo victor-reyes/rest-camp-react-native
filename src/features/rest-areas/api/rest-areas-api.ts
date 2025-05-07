@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Parking, ResponseSchema, Response } from "../schemas";
+import { Parking, ResponseSchema, Response } from "./schemas";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",

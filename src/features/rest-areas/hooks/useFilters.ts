@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Parking } from "@/features/schemas";
+import { Parking } from "@/features/rest-areas/api/schemas";
 import { Filter } from "../types";
 
 export function useFilters(parkings: Parking[]) {

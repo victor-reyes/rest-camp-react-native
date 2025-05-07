@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { VehicleCharacteristics } from "@/features/schemas";
+import { VehicleCharacteristics } from "@/features/rest-areas/api/schemas";
 
 interface Props {
   vehicleInfo: VehicleCharacteristics[];

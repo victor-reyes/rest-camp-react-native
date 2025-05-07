@@ -1,4 +1,4 @@
-import { Equipment, Facility } from "@/features/schemas";
+import { Equipment, Facility } from "@/features/rest-areas/api/schemas";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";

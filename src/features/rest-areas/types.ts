@@ -1,4 +1,4 @@
-import { EquipmentCategory, FacilityCategory, Parking } from "../schemas";
+import { EquipmentCategory, FacilityCategory, Parking } from "./api/schemas";
 
 export type ParkingPoint = Parking & { type: "Point" };
 export type ParkingCluster = {

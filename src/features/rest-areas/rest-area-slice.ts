@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Parking } from "../schemas";
+import { Parking } from "./api/schemas";
 
 type RestArea = Parking;
 

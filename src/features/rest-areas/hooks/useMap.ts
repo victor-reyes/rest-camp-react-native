@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Region } from "react-native-maps";
-import { useGetParkingsQuery } from "../rest-areas-api";
+import { useGetParkingsQuery } from "../api";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";
 import { useFilters } from "./useFilters";

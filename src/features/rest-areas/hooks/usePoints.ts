@@ -1,4 +1,4 @@
-import { Parking } from "@/features/schemas";
+import { Parking } from "@/features/rest-areas/api/schemas";
 import { useMemo } from "react";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";

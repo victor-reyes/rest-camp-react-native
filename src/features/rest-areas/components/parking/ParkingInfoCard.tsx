@@ -5,7 +5,7 @@ import { ParkingHeader } from "./ParkingHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { VehicleInfo } from "./VehicleInfo";
 import { StyleSheet } from "react-native";
-import { Parking } from "@/features/schemas";
+import { Parking } from "@/features/rest-areas/api/schemas";
 import { ScrollView } from "react-native-gesture-handler";
 
 export interface Props {
