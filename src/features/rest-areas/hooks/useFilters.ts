@@ -1,14 +1,11 @@
 import { useState } from "react";
-import { Parking } from "@/features/rest-areas/api/schemas";
-import { Filter } from "../types";
+import { Filter, ParkingItem } from "../types";
 
-export function useFilters(parkings: Parking[]) {
+export function useFilters(parkings: ParkingItem[]) {
   const [filters, setFilters] = useState<Filter[]>([]);
 
-  const filteredParkings = parkings.filter(({ Equipment, Facility }) =>
-    filters.every(filter =>
-      [...Equipment, ...(Facility || [])].map(service => service.Type).includes(filter),
-    ),
+  const filteredParkings = parkings.filter(({ services }) =>
+    filters.every(filter => services.map(service => service.name).includes(filter)),
   );
 
   return { filters, setFilters, filteredParkings };

@@ -11,7 +11,7 @@ export type ParkingCluster = {
   count: number;
 };
 
-export type Filter = Pick<typeof services.$inferSelect, "name">;
+export type Filter = typeof services.$inferSelect["name"];
 
 export type ParkingItem = typeof parkings.$inferSelect & {
   services: (typeof services.$inferSelect)[];

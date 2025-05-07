@@ -55,9 +55,9 @@ export function Map() {
           point.type === "Cluster" ?
             <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
           : <ParkingMarker
-              key={point.Id}
-              id={point.Id}
-              coords={point.Geometry}
+              key={point.id}
+              id={point.id}
+              coords={{ latitude: point.latitude, longitude: point.longitude }}
               onParkingPress={handleOnParkingPress}
             />,
         )}

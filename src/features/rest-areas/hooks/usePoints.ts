@@ -3,21 +3,21 @@ import { useMemo } from "react";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { Region } from "react-native-maps";
-import { ParkingCluster, ParkingPoint } from "../types";
+import { ParkingCluster, ParkingItem, ParkingPoint } from "../types";
 
 export function usePoints(
-  parkings: Parking[] = [],
+  parkings: ParkingItem[],
   mapDimensions: { width: number; height: number },
   region: Region,
 ) {
-  const memorizedPoints: Supercluster.PointFeature<Parking>[] = useMemo(
+  const memorizedPoints: Supercluster.PointFeature<ParkingItem>[] = useMemo(
     () =>
       parkings.map(parking => ({
         type: "Feature",
-        id: `point-${parking.Id}`,
+        id: parking.id,
         geometry: {
           type: "Point",
-          coordinates: [parking.Geometry.longitude, parking.Geometry.latitude],
+          coordinates: [parking.longitude, parking.latitude],
         },
         properties: { ...parking },
       })),
