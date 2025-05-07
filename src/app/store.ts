@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { restAreasSlice } from "../features/rest-areas/rest-area-slice";
-import { restAreasApi } from "../features/rest-areas/rest-areas-api";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
+import { restAreasApi } from "@/features/rest-areas/api";
 
 export const store = configureStore({
   reducer: {

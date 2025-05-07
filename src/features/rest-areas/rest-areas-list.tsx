@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useGetParkingsQuery } from "./rest-areas-api";
 import { Image } from "expo-image";
+import { useGetParkingsQuery } from "./api";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -55,12 +55,6 @@ export function RestAreasList() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
   image: {
     width: 250,
     aspectRatio: 16 / 9,
