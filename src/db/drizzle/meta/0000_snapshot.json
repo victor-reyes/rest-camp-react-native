@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e7c947b5-8904-46bd-b575-3567483b461a",
+  "id": "dd37a0c9-2c12-4cce-9422-88a471fb6408",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "parkings": {
@@ -9,7 +9,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -35,8 +35,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "info": {
-          "name": "info",
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "localDescription": {
+          "name": "localDescription",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -73,17 +80,10 @@
     "photos": {
       "name": "photos",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
         "url": {
           "name": "url",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
@@ -127,7 +127,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
