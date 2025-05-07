@@ -1,6 +1,6 @@
-import { EquipmentCategory, FacilityCategory, Parking } from "./api/schemas";
+import { parkings, photos, services } from "@/db";
 
-export type ParkingPoint = Parking & { type: "Point" };
+export type ParkingPoint = ParkingItem & { type: "Point" };
 export type ParkingCluster = {
   type: "Cluster";
   id: string;
@@ -11,4 +11,9 @@ export type ParkingCluster = {
   count: number;
 };
 
-export type Filter = EquipmentCategory | FacilityCategory;
+export type Filter = Pick<typeof services.$inferSelect, "name">;
+
+export type ParkingItem = typeof parkings.$inferSelect & {
+  services: (typeof services.$inferSelect)[];
+  photos: (typeof photos.$inferSelect)[];
+};
