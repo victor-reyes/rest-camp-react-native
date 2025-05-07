@@ -5,7 +5,6 @@ import { db, parkings, photos, services } from "@/db";
 export function useSyncData() {
   const { data } = useGetParkingsQuery();
   useEffect(() => {
-    console.log("useSyncData", "fuck");
     if (data) {
       db.transaction(
         async tx => {
@@ -44,7 +43,7 @@ export function useSyncData() {
 
             return [...Equipment, ...(Facility || [])].map(service => ({
               name: service.Type,
-              parkingId: Number(item.Id),
+              parkingId: item.Id,
             }));
           });
 
@@ -52,7 +51,7 @@ export function useSyncData() {
             (item.Photo || []).map(photo => ({
               url: photo.Url,
               description: photo.Title,
-              parkingId: Number(item.Id),
+              parkingId: item.Id,
             })),
           );
 

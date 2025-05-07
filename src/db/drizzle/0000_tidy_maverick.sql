@@ -11,15 +11,16 @@ CREATE TABLE `parkings` (
 );
 --> statement-breakpoint
 CREATE TABLE `photos` (
-	`url` text PRIMARY KEY NOT NULL,
+	`url` text NOT NULL,
 	`description` text,
-	`parkingId` integer,
+	`parkingId` text NOT NULL,
+	PRIMARY KEY(`url`, `parkingId`),
 	FOREIGN KEY (`parkingId`) REFERENCES `parkings`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `services` (
-	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`parkingId` integer,
+	`parkingId` text NOT NULL,
+	PRIMARY KEY(`name`, `parkingId`),
 	FOREIGN KEY (`parkingId`) REFERENCES `parkings`(`id`) ON UPDATE no action ON DELETE no action
 );

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "dd37a0c9-2c12-4cce-9422-88a471fb6408",
+  "id": "3331b2e1-f87f-4095-878d-5ae5bf8093fb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "parkings": {
@@ -83,7 +83,7 @@
         "url": {
           "name": "url",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
@@ -96,9 +96,9 @@
         },
         "parkingId": {
           "name": "parkingId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -118,20 +118,21 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "photos_url_parkingId_pk": {
+          "columns": [
+            "url",
+            "parkingId"
+          ],
+          "name": "photos_url_parkingId_pk"
+        }
+      },
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
     "services": {
       "name": "services",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
         "name": {
           "name": "name",
           "type": "text",
@@ -141,9 +142,9 @@
         },
         "parkingId": {
           "name": "parkingId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -163,7 +164,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "services_name_parkingId_pk": {
+          "columns": [
+            "name",
+            "parkingId"
+          ],
+          "name": "services_name_parkingId_pk"
+        }
+      },
       "uniqueConstraints": {},
       "checkConstraints": {}
     }

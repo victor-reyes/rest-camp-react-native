@@ -1,7 +1,6 @@
 import { EQUIPMENTS, FACILITIES } from "@/features/rest-areas/api";
 import { relations } from "drizzle-orm";
-import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { v4 } from "uuid";
+import { int, primaryKey, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const parkings = sqliteTable("parkings", {
   id: text().primaryKey(),
@@ -19,13 +18,16 @@ export const parkingsRelations = relations(parkings, ({ many }) => ({
   photos: many(photos),
 }));
 
-export const services = sqliteTable("services", {
-  id: text()
-    .primaryKey()
-    .$defaultFn(() => v4()),
-  name: text({ enum: [...EQUIPMENTS, ...FACILITIES] }).notNull(),
-  parkingId: int().references(() => parkings.id),
-});
+export const services = sqliteTable(
+  "services",
+  {
+    name: text({ enum: [...EQUIPMENTS, ...FACILITIES] }).notNull(),
+    parkingId: text()
+      .notNull()
+      .references(() => parkings.id),
+  },
+  table => [primaryKey({ columns: [table.name, table.parkingId] })],
+);
 export const servicesRelations = relations(services, ({ one }) => ({
   parking: one(parkings, {
     fields: [services.parkingId],
@@ -33,11 +35,17 @@ export const servicesRelations = relations(services, ({ one }) => ({
   }),
 }));
 
-export const photos = sqliteTable("photos", {
-  url: text().primaryKey(),
-  description: text(),
-  parkingId: int().references(() => parkings.id),
-});
+export const photos = sqliteTable(
+  "photos",
+  {
+    url: text().notNull(),
+    description: text(),
+    parkingId: text()
+      .notNull()
+      .references(() => parkings.id),
+  },
+  table => [primaryKey({ columns: [table.url, table.parkingId] })],
+);
 export const photosRelations = relations(photos, ({ one }) => ({
   parking: one(parkings, {
     fields: [photos.parkingId],
