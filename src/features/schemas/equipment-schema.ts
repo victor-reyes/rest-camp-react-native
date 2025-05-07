@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-const EquipmentCategorySchema = z.enum([
+const EQUIPMENTS = [
   "refuseBin",
   "toilet",
   "picnicFacilities",
   "playground",
   "dumpingStation",
-]);
+] as const;
+
+const EquipmentCategorySchema = z.enum(EQUIPMENTS);
 
 const EquipmentAccessibilitySchema = z.enum(["handicappedAccessible"]);
 
@@ -26,4 +28,5 @@ export {
   EquipmentCategory,
   EquipmentAccessibility,
   Equipment,
+  EQUIPMENTS,
 };

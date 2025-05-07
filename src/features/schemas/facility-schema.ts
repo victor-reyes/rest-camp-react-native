@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-const FacilityCategorySchema = z.enum(["touristInformation", "restaurant", "petrolStation"]);
+const FACILITIES = ["touristInformation", "restaurant", "petrolStation"] as const;
+const FacilityCategorySchema = z.enum(FACILITIES);
 
 const FacilitySchema = z.object({
   Type: FacilityCategorySchema,
@@ -9,4 +10,4 @@ const FacilitySchema = z.object({
 type FacilityCategory = z.infer<typeof FacilityCategorySchema>;
 type Facility = z.infer<typeof FacilitySchema>;
 
-export { FacilityCategorySchema, FacilitySchema, FacilityCategory, Facility };
+export { FacilityCategorySchema, FacilitySchema, FacilityCategory, Facility, FACILITIES };
