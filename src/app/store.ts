@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { restAreasSlice } from "../features/rest-areas/rest-area-slice";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 import { restAreasApi } from "@/features/rest-areas/api";
+import { useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
@@ -15,3 +16,6 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
