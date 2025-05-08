@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import type { RootStackParamList } from "../index";
 import { ParkingInfoCard } from "@/features/rest-areas/components/parking";
 import { useAppSelector } from "@/app/store";
@@ -12,7 +12,7 @@ export function ParkingInfoModal({ route }: Props) {
 
   const parking = useAppSelector(state => selectRestAreaById(state, id));
 
-  return <View style={styles.container}>{parking && <ParkingInfoCard parking={parking} />}</View>;
+  return parking && <ParkingInfoCard parking={parking} />;
 }
 
 const styles = StyleSheet.create({

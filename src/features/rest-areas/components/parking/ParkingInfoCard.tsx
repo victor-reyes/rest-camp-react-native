@@ -5,7 +5,6 @@ import { ParkingHeader } from "./ParkingHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
 
-import { ScrollView } from "react-native-gesture-handler";
 import { Parking } from "../../types";
 
 export interface Props {
@@ -21,17 +20,12 @@ export function ParkingInfoCard({ parking }: Props) {
         latitude={parking.latitude}
         longitude={parking.longitude}
       />
-      <ScrollView nestedScrollEnabled={true} style={styles.scrollView}>
-        <Description
-          description={parking.description || undefined}
-          locationDescription={parking.localDescription || undefined}
-        />
-        <FacilityEquipmentList services={parking.services} />
-        <PhotoGallery photos={parking.photos} />
-        {/* {parking.VehicleCharacteristics.length && (
-          <VehicleInfo vehicleInfo={parking.VehicleCharacteristics} />
-        )} */}
-      </ScrollView>
+      <Description
+        description={parking.description || undefined}
+        locationDescription={parking.localDescription || undefined}
+      />
+      <FacilityEquipmentList services={parking.services} />
+      <PhotoGallery photos={parking.photos} />
     </View>
   );
 }
@@ -39,12 +33,6 @@ export function ParkingInfoCard({ parking }: Props) {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     borderRadius: 8,
-  },
-  scrollView: {
-    flex: 1,
-    padding: 8,
-    backgroundColor: "#fff",
   },
 });
