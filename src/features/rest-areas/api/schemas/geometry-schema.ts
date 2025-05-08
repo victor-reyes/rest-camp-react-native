@@ -27,7 +27,4 @@ const ParkingAccessSchema = z
     return { ...data, ...longLat };
   });
 
-type ParkingAccess = z.infer<typeof ParkingAccessSchema>;
-type Geometry = z.infer<typeof GeometrySchema>;
-
-export { GeometrySchema, ParkingAccessSchema, Geometry, ParkingAccess };
+export { GeometrySchema, ParkingAccessSchema };

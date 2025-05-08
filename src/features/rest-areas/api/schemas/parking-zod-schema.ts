@@ -51,8 +51,4 @@ const ResponseSchema = z.object({
   }),
 });
 
-type Response = z.infer<typeof ResponseSchema>;
-type Parking = z.infer<typeof ParkingSchema>;
-type Result = z.infer<typeof ResultSchema>;
-
-export { ResponseSchema, Response, Parking, Result, ParkingSchema, ResultSchema };
+export { ResponseSchema };

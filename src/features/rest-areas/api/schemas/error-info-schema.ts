@@ -18,18 +18,4 @@ const InfoSchema = z.object({
   SSEURL: z.string().optional(),
 });
 
-type ErrorInfo = z.infer<typeof ErrorSchema>;
-type LastModified = z.infer<typeof LastModifiedSchema>;
-type EvalResult = z.infer<typeof EvalResultSchema>;
-type Info = z.infer<typeof InfoSchema>;
-
-export {
-  ErrorSchema,
-  LastModifiedSchema,
-  EvalResultSchema,
-  InfoSchema,
-  ErrorInfo,
-  LastModified,
-  EvalResult,
-  Info,
-};
+export { ErrorSchema, LastModifiedSchema, EvalResultSchema, InfoSchema };

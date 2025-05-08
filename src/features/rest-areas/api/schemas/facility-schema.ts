@@ -7,7 +7,4 @@ const FacilitySchema = z.object({
   Type: FacilityCategorySchema,
 });
 
-type FacilityCategory = z.infer<typeof FacilityCategorySchema>;
-type Facility = z.infer<typeof FacilitySchema>;
-
-export { FacilityCategorySchema, FacilitySchema, FacilityCategory, Facility, FACILITIES };
+export { FacilityCategorySchema, FacilitySchema, FACILITIES };

@@ -6,7 +6,4 @@ const VehicleCharacteristicsSchema = z.object({
   NumberOfSpaces: z.number().int(),
 });
 
-type Vehicle = z.infer<typeof VehicleShema>;
-type VehicleCharacteristics = z.infer<typeof VehicleCharacteristicsSchema>;
-
-export { VehicleShema, VehicleCharacteristicsSchema, Vehicle, VehicleCharacteristics };
+export { VehicleShema, VehicleCharacteristicsSchema };

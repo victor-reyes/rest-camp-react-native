@@ -17,16 +17,4 @@ const EquipmentSchema = z.object({
   Accessibility: EquipmentAccessibilitySchema.optional(),
 });
 
-type EquipmentCategory = z.infer<typeof EquipmentCategorySchema>;
-type EquipmentAccessibility = z.infer<typeof EquipmentAccessibilitySchema>;
-type Equipment = z.infer<typeof EquipmentSchema>;
-
-export {
-  EquipmentCategorySchema,
-  EquipmentAccessibilitySchema,
-  EquipmentSchema,
-  EquipmentCategory,
-  EquipmentAccessibility,
-  Equipment,
-  EQUIPMENTS,
-};
+export { EquipmentCategorySchema, EquipmentAccessibilitySchema, EquipmentSchema, EQUIPMENTS };
