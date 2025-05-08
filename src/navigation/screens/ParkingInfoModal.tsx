@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StyleSheet } from "react-native";
 import type { RootStackParamList } from "../index";
 import { ParkingInfoCard } from "@/features/rest-areas/components/parking";
 import { useAppSelector } from "@/app/store";
@@ -14,10 +13,3 @@ export function ParkingInfoModal({ route }: Props) {
 
   return parking && <ParkingInfoCard parking={parking} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-});

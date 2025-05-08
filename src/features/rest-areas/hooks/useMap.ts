@@ -10,7 +10,6 @@ export function useMap(initialRegion: Region) {
   useGetParkingsQuery();
 
   const parkings = useParkings();
-
   const { filters, setFilters, filteredParkings } = useFilters(parkings);
   const [region, setRegion] = useState(initialRegion);
   const { mapDimensions, onLayout } = useMapDimensions();
