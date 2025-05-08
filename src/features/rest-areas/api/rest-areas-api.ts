@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Parking, ResponseSchema, Response } from "./schemas";
-import { transformToSql } from "./transform";
+import { ResponseSchema } from "./schemas";
+import { transformToSql } from "./transform-to-sql";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
@@ -38,4 +38,4 @@ function getBody(filter: string = "") {
 </REQUEST>`;
 }
 
-export const { useGetParkingsQuery, useGetParkingByIdQuery } = restAreasApi;
+export const { useGetParkingsQuery } = restAreasApi;
