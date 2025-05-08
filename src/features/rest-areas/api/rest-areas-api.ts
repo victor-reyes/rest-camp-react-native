@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ResponseSchema } from "./schemas";
 import { transformToSql } from "./transform-to-sql";
+import { updateDb } from "../utils/updateDb";
+import { loadRestAreas } from "../rest-area-slice";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
@@ -20,6 +22,13 @@ export const restAreasApi = createApi({
       }),
       rawResponseSchema: ResponseSchema,
       transformResponse: transformToSql,
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        if (data) {
+          await updateDb(data);
+          dispatch(loadRestAreas());
+        }
+      },
     }),
   }),
 });
