@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { restAreasApi } from "./api";
-import { ParkingItem } from "./types";
+import { Parking } from "./types";
 import { db, parkings, photos, services } from "@/db";
 import equal from "fast-deep-equal";
 import { RootState } from "@/app/store";
 
-type RestArea = ParkingItem;
+type RestArea = Parking;
 
 export type RestAreasState = {
   restAreas: RestArea[];

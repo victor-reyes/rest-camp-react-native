@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Filter, ParkingItem } from "../types";
+import { Filter, Parking } from "../types";
 
-export function useFilters(parkings: ParkingItem[]) {
+export function useFilters(parkings: Parking[]) {
   const [filters, setFilters] = useState<Filter[]>([]);
 
   const filteredParkings = parkings.filter(({ services }) =>

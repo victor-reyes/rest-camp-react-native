@@ -6,10 +6,10 @@ import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
-import { ParkingItem } from "../../types";
+import { Parking } from "../../types";
 
 export interface Props {
-  parking: ParkingItem;
+  parking: Parking;
 }
 
 export function ParkingInfoCard({ parking }: Props) {
