@@ -21,15 +21,6 @@ export const restAreasApi = createApi({
       rawResponseSchema: ResponseSchema,
       transformResponse: transformToSql,
     }),
-    getParkingById: builder.query<Parking | undefined, string>({
-      query: (id: string) => ({
-        url: "",
-        method: "POST",
-        body: getBody(`<EQ name="Id" value="${id}" />`),
-      }),
-      rawResponseSchema: ResponseSchema,
-      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking[0],
-    }),
   }),
 });
 
