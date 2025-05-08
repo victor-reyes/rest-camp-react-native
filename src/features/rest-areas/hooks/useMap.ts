@@ -3,11 +3,11 @@ import { Region } from "react-native-maps";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";
 import { useFilters } from "./useFilters";
-import { useSyncData } from "./useSyncData";
 import { useParkings } from "./useParkings";
+import { useGetParkingsQuery } from "../api";
 
 export function useMap(initialRegion: Region) {
-  useSyncData();
+  useGetParkingsQuery();
 
   const parkings = useParkings();
 

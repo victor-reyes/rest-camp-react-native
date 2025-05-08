@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Parking, ResponseSchema, Response } from "./schemas";
+import { transformToSql } from "./transform";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
@@ -11,14 +12,14 @@ export const restAreasApi = createApi({
     },
   }),
   endpoints: builder => ({
-    getParkings: builder.query<Parking[], void>({
+    getParkings: builder.query<Awaited<ReturnType<typeof transformToSql>>, void>({
       query: () => ({
         url: "",
         method: "POST",
         body: getBody(),
       }),
       rawResponseSchema: ResponseSchema,
-      transformResponse: async (r: Response) => r.RESPONSE.RESULT[0].Parking || [],
+      transformResponse: transformToSql,
     }),
     getParkingById: builder.query<Parking | undefined, string>({
       query: (id: string) => ({
