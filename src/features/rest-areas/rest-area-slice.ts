@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { restAreasApi } from "./api";
 import { Parking } from "./types";
-import { db, parkings, photos, services } from "@/db";
+import { db } from "@/db";
 import equal from "fast-deep-equal";
 import { RootState } from "@/app/store";
+import { updateDb } from "./utils/updateDb";
 
 type RestArea = Parking;
 
@@ -28,18 +29,7 @@ export const restAreasSlice = createSlice({
       if (!equal(state.restAreas, payload)) state.restAreas = payload;
     });
     builder.addMatcher(restAreasApi.endpoints.getParkings.matchFulfilled, (_, { payload }) => {
-      db.transaction(async tx => {
-        try {
-          await tx.delete(parkings);
-          await tx.delete(services);
-          await tx.delete(photos);
-          await tx.insert(parkings).values(payload.parkings);
-          await tx.insert(services).values(payload.services);
-          await tx.insert(photos).values(payload.photos);
-        } catch (error) {
-          console.error("Error inserting data into the database:", error);
-        }
-      });
+      updateDb(payload);
     });
   },
 });
