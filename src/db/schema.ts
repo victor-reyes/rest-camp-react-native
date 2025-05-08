@@ -12,7 +12,7 @@ export const parkings = sqliteTable("parkings", {
   status: text().notNull(),
   numberOfCarSpaces: int(),
   numberOfTruckSpaces: int(),
-  modifiedTime: int({ mode: "timestamp_ms" }).notNull(),
+  modifiedTime: int({ mode: "number" }).notNull(),
 });
 export const parkingsRelations = relations(parkings, ({ many }) => ({
   services: many(services),

@@ -26,7 +26,7 @@ export async function transformToSql(responce: ParkingResponse) {
       status: item.OpenStatus,
       numberOfCarSpaces: carSpaces,
       numberOfTruckSpaces: truckSpaces,
-      modifiedTime: new Date(item.ModifiedTime),
+      modifiedTime: new Date(item.ModifiedTime).getTime(),
     };
   });
   const services = data.flatMap(item => {

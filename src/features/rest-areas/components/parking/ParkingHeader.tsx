@@ -4,7 +4,7 @@ import { MapIcon } from "@/components/icons/MapIcon";
 
 interface Props {
   name: string;
-  modifiedTime: Date;
+  modifiedTime: number;
   latitude: number;
   longitude: number;
 }
@@ -15,7 +15,9 @@ export function ParkingHeader({ name, modifiedTime, latitude, longitude }: Props
     <View style={styles.headerContainer}>
       <View>
         <Text style={styles.headerTitle}>{name}</Text>
-        <Text style={styles.footerText}>Senast ändrad: {modifiedTime.toLocaleDateString()}</Text>
+        <Text style={styles.footerText}>
+          Senast ändrad: {new Date(modifiedTime).toLocaleDateString()}
+        </Text>
       </View>
 
       <Pressable
