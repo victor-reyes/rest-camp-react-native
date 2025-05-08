@@ -7,7 +7,8 @@ CREATE TABLE `parkings` (
 	`localDescription` text,
 	`status` text NOT NULL,
 	`numberOfCarSpaces` integer,
-	`numberOfTruckSpaces` integer
+	`numberOfTruckSpaces` integer,
+	`modifiedTime` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `photos` (

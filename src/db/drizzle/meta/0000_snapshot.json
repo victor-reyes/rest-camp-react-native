@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "3331b2e1-f87f-4095-878d-5ae5bf8093fb",
+  "id": "896f6927-f2d1-4d4a-9679-38ddf7aca8ca",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "parkings": {
@@ -68,6 +68,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "modifiedTime": {
+          "name": "modifiedTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         }
       },

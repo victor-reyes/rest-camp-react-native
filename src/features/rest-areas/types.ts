@@ -17,3 +17,6 @@ export type ParkingItem = typeof parkings.$inferSelect & {
   services: (typeof services.$inferSelect)[];
   photos: (typeof photos.$inferSelect)[];
 };
+
+export type Photo = typeof photos.$inferSelect;
+export type Service = typeof services.$inferSelect;
