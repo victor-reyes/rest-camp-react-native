@@ -1,8 +1,8 @@
 import { db, parkings, photos, services } from "@/db";
 import { transformToSql } from "../api/transform-to-sql";
 
-export function updateDb(data: Awaited<ReturnType<typeof transformToSql>>) {
-  db.transaction(async tx => {
+export async function updateDb(data: Awaited<ReturnType<typeof transformToSql>>) {
+  await db.transaction(async tx => {
     try {
       await tx.delete(parkings);
       await tx.delete(services);
