@@ -1,6 +1,6 @@
-import { Response } from "./schemas";
+import { ParkingResponse } from "../types";
 
-export async function transformToSql(responce: Response) {
+export async function transformToSql(responce: ParkingResponse) {
   const data = responce.RESPONSE.RESULT[0].Parking || [];
 
   const parkings = data.map(item => {
