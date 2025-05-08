@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
-import { Photo } from "@/features/rest-areas/api/schemas";
+import { Photo } from "../../types";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -12,21 +12,23 @@ interface Props {
 }
 
 export function PhotoGallery({ photos }: Props) {
+  if (!photos.length) return null;
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Photos</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScrollView}>
         {photos.map(photo => (
-          <View key={photo.Url} style={styles.photoContainer}>
+          <View key={photo.url} style={styles.photoContainer}>
             <Image
-              source={{ uri: photo.Url }}
+              source={{ uri: photo.url }}
               style={styles.photo}
               placeholder={{ blurhash }}
               contentFit="cover"
               transition={300}
             />
             <Text style={styles.photoTitle} numberOfLines={1}>
-              {photo.Title}
+              {photo.description}
             </Text>
           </View>
         ))}

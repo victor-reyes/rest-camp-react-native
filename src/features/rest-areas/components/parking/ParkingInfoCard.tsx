@@ -3,34 +3,34 @@ import { Description } from "./Description";
 import { FacilityEquipmentList } from "./FacilityEquipmentList";
 import { ParkingHeader } from "./ParkingHeader";
 import { PhotoGallery } from "./PhotoGallery";
-import { VehicleInfo } from "./VehicleInfo";
 import { StyleSheet } from "react-native";
-import { Parking } from "@/features/rest-areas/api/schemas";
+
 import { ScrollView } from "react-native-gesture-handler";
+import { ParkingItem } from "../../types";
 
 export interface Props {
-  parking: Parking;
+  parking: ParkingItem;
 }
 
 export function ParkingInfoCard({ parking }: Props) {
   return (
     <View style={styles.container}>
       <ParkingHeader
-        name={parking.Name}
-        modifiedTime={parking.ModifiedTime}
-        {...parking.Geometry}
+        name={parking.name}
+        modifiedTime={parking.modifiedTime}
+        latitude={parking.latitude}
+        longitude={parking.longitude}
       />
       <ScrollView nestedScrollEnabled={true} style={styles.scrollView}>
         <Description
-          description={parking.Description}
-          locationDescription={parking.LocationDescription}
-          distanceToNearestCity={parking.DistanceToNearestCity}
+          description={parking.description || undefined}
+          locationDescription={parking.localDescription || undefined}
         />
-        <FacilityEquipmentList facilities={parking.Facility} equipments={parking.Equipment} />
-        {parking.Photo?.length && <PhotoGallery photos={parking.Photo} />}
-        {parking.VehicleCharacteristics.length && (
+        <FacilityEquipmentList services={parking.services} />
+        <PhotoGallery photos={parking.photos} />
+        {/* {parking.VehicleCharacteristics.length && (
           <VehicleInfo vehicleInfo={parking.VehicleCharacteristics} />
-        )}
+        )} */}
       </ScrollView>
     </View>
   );

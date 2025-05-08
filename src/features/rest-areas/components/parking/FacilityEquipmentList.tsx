@@ -1,31 +1,18 @@
-import { Equipment, Facility } from "@/features/rest-areas/api/schemas";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
-import {
-  HWC,
-  Info,
-  Latrine,
-  PetrolStation,
-  Picnic,
-  Playground,
-  Restaurant,
-  Trash,
-  WC,
-} from "./icons";
+import { HWC, Info, Latrine, PetrolStation, Picnic, Playground, Restaurant, Trash } from "./icons";
+import { Service } from "../../types";
 
 interface Props {
-  equipments?: Equipment[];
-  facilities?: Facility[];
+  services: Service[];
 }
-export function FacilityEquipmentList({ equipments = [], facilities = [] }: Props) {
-  if (!equipments.length && !facilities.length) return null;
-
-  const icons = [...equipments, ...facilities].map(service => {
-    const type = service.Type;
+export function FacilityEquipmentList({ services }: Props) {
+  const icons = services.map(service => {
+    const type = service.name;
     switch (type) {
       case "toilet":
-        return service.Accessibility ? <HWC /> : <WC />;
+        return <HWC />;
       case "picnicFacilities":
         return <Picnic />;
       case "playground":

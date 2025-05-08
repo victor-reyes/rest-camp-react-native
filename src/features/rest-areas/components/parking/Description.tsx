@@ -4,17 +4,16 @@ import { View, Text, StyleSheet } from "react-native";
 interface Props {
   description?: string;
   locationDescription?: string;
-  distanceToNearestCity?: string;
 }
 
-export function Description({ description, locationDescription, distanceToNearestCity }: Props) {
-  if (!description && !locationDescription && !distanceToNearestCity) return null;
-  const info = [locationDescription, distanceToNearestCity].filter(Boolean).join(" ");
+export function Description({ description, locationDescription }: Props) {
+  if (!description && !locationDescription) return null;
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Information</Text>
       {description && <Text style={styles.descriptionText}>{description}</Text>}
-      {info && <Text style={styles.locationText}>🧭 {info}</Text>}
+      {locationDescription && <Text style={styles.locationText}>🧭 {locationDescription}</Text>}
     </View>
   );
 }
