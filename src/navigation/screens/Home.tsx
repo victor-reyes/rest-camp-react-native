@@ -1,4 +1,3 @@
-import { RestAreasList } from "@/features/rest-areas/rest-areas-list";
 import { Button, Text } from "@react-navigation/elements";
 import { StyleSheet, View } from "react-native";
 
@@ -11,7 +10,6 @@ export function Home() {
         Go to Profile
       </Button>
       <Button screen="Settings">Go to Settings</Button>
-      <RestAreasList />
     </View>
   );
 }
