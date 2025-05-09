@@ -1,4 +1,4 @@
-import { EQUIPMENTS, FACILITIES } from "@/features/rest-areas/api";
+import { EQUIPMENTS, FACILITIES } from "@/features/rest-areas/api/schemas";
 import { relations } from "drizzle-orm";
 import { int, primaryKey, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
