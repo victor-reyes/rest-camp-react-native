@@ -5,4 +5,4 @@ export * from "./photo-schema";
 export * from "./status-values-schema";
 export * from "./vehicle-characteristics-schema";
 export * from "./error-info-schema";
-export * from "./parking-zod-schema";
+export * from "./response-schema";

@@ -1,2 +1,2 @@
 export * from "./map";
-export * from "./parking";
+export * from "./rest-areas";

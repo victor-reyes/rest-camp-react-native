@@ -2,31 +2,31 @@ import { useMemo } from "react";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { Region } from "react-native-maps";
-import { ParkingCluster, Parking, ParkingPoint } from "../types";
+import { RestAreaCluster, RestArea, RestAreaPoint } from "../types";
 
 export function usePoints(
-  parkings: Parking[],
+  restAreas: RestArea[],
   mapDimensions: { width: number; height: number },
   region: Region,
 ) {
-  const memorizedPoints: Supercluster.PointFeature<Parking>[] = useMemo(
+  const memorizedPoints: Supercluster.PointFeature<RestArea>[] = useMemo(
     () =>
-      parkings.map(parking => ({
+      restAreas.map(restArea => ({
         type: "Feature",
-        id: parking.id,
+        id: restArea.id,
         geometry: {
           type: "Point",
-          coordinates: [parking.longitude, parking.latitude],
+          coordinates: [restArea.longitude, restArea.latitude],
         },
-        properties: { ...parking },
+        properties: { ...restArea },
       })),
-    [parkings],
+    [restAreas],
   );
 
   const clusterOptions = { radius: 25, maxZoom: 12 };
   const [_points] = useClusterer(memorizedPoints, mapDimensions, region, clusterOptions);
 
-  const points: (ParkingPoint | ParkingCluster)[] = _points.map(point => {
+  const points: (RestAreaPoint | RestAreaCluster)[] = _points.map(point => {
     if (isPointCluster(point))
       return {
         type: "Cluster",

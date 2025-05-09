@@ -14,7 +14,7 @@ export const restAreasApi = createApi({
     },
   }),
   endpoints: builder => ({
-    getParkings: builder.query<Awaited<ReturnType<typeof transformToSql>>, void>({
+    restAreas: builder.query<Awaited<ReturnType<typeof transformToSql>>, void>({
       query: () => ({
         url: "",
         method: "POST",
@@ -47,4 +47,4 @@ function getBody(filter: string = "") {
 </REQUEST>`;
 }
 
-export const { useGetParkingsQuery } = restAreasApi;
+export const { useRestAreasQuery } = restAreasApi;

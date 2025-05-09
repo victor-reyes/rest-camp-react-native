@@ -1,13 +1,13 @@
-import { db, parkings, photos, services } from "@/db";
+import { db, restAreas, photos, services } from "@/db";
 import { transformToSql } from "../api/transform-to-sql";
 
 export async function updateDb(data: Awaited<ReturnType<typeof transformToSql>>) {
   await db.transaction(async tx => {
     try {
-      await tx.delete(parkings);
+      await tx.delete(restAreas);
       await tx.delete(services);
       await tx.delete(photos);
-      await tx.insert(parkings).values(data.parkings);
+      await tx.insert(restAreas).values(data.restAreas);
       await tx.insert(services).values(data.services);
       await tx.insert(photos).values(data.photos);
     } catch (error) {

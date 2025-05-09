@@ -1,9 +1,9 @@
-import { ParkingResponse } from "../types";
+import { Photo, RestAreaApiResponse, Service } from "../types";
 
-export async function transformToSql(responce: ParkingResponse) {
+export async function transformToSql(responce: RestAreaApiResponse) {
   const data = responce.RESPONSE.RESULT[0].Parking || [];
 
-  const parkings = data.map(item => {
+  const restAreas = data.map(item => {
     const carSpaces = item.VehicleCharacteristics.find(
       vc => vc.VehicleType === "car",
     )?.NumberOfSpaces;
@@ -29,22 +29,22 @@ export async function transformToSql(responce: ParkingResponse) {
       modifiedTime: new Date(item.ModifiedTime).getTime(),
     };
   });
-  const services = data.flatMap(item => {
+  const services: Service[] = data.flatMap(item => {
     const { Equipment, Facility } = item;
 
     return [...Equipment, ...(Facility || [])].map(service => ({
       name: service.Type,
-      parkingId: item.Id,
+      restAreaId: item.Id,
     }));
   });
 
-  const photos = data.flatMap(item =>
+  const photos: Photo[] = data.flatMap(item =>
     (item.Photo || []).map(photo => ({
       url: photo.Url,
       description: photo.Title,
-      parkingId: item.Id,
+      restAreaId: item.Id,
     })),
   );
 
-  return { parkings, services, photos };
+  return { restAreas, services, photos };
 }

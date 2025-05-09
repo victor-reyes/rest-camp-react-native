@@ -2,19 +2,17 @@ import { EQUIPMENTS, FACILITIES } from "@/features/rest-areas/api/schemas";
 import { relations } from "drizzle-orm";
 import { int, primaryKey, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const parkings = sqliteTable("parkings", {
+export const restAreas = sqliteTable("rest_areas", {
   id: text().primaryKey(),
   name: text().notNull(),
   latitude: real().notNull(),
   longitude: real().notNull(),
   description: text(),
-  localDescription: text(),
+  localDescription: text("local_description"),
   status: text().notNull(),
-  numberOfCarSpaces: int(),
-  numberOfTruckSpaces: int(),
-  modifiedTime: int({ mode: "number" }).notNull(),
+  modifiedTime: int("modified_time", { mode: "number" }).notNull(),
 });
-export const parkingsRelations = relations(parkings, ({ many }) => ({
+export const restAreaRelations = relations(restAreas, ({ many }) => ({
   services: many(services),
   photos: many(photos),
 }));
@@ -23,16 +21,16 @@ export const services = sqliteTable(
   "services",
   {
     name: text({ enum: [...EQUIPMENTS, ...FACILITIES] }).notNull(),
-    parkingId: text()
+    restAreaId: text("rest_area_id")
       .notNull()
-      .references(() => parkings.id),
+      .references(() => restAreas.id),
   },
-  table => [primaryKey({ columns: [table.name, table.parkingId] })],
+  table => [primaryKey({ columns: [table.name, table.restAreaId] })],
 );
 export const servicesRelations = relations(services, ({ one }) => ({
-  parking: one(parkings, {
-    fields: [services.parkingId],
-    references: [parkings.id],
+  restArea: one(restAreas, {
+    fields: [services.restAreaId],
+    references: [restAreas.id],
   }),
 }));
 
@@ -41,15 +39,15 @@ export const photos = sqliteTable(
   {
     url: text().notNull(),
     description: text(),
-    parkingId: text()
+    restAreaId: text("rest_area_id")
       .notNull()
-      .references(() => parkings.id),
+      .references(() => restAreas.id),
   },
-  table => [primaryKey({ columns: [table.url, table.parkingId] })],
+  table => [primaryKey({ columns: [table.url, table.restAreaId] })],
 );
 export const photosRelations = relations(photos, ({ one }) => ({
-  parking: one(parkings, {
-    fields: [photos.parkingId],
-    references: [parkings.id],
+  restArea: one(restAreas, {
+    fields: [photos.restAreaId],
+    references: [restAreas.id],
   }),
 }));

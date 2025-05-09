@@ -5,10 +5,10 @@ import { RestAreaIcon } from "./RestAreaIcon";
 interface Props {
   id: string;
   coords: { latitude: number; longitude: number };
-  onParkingPress: (id: string) => void;
+  onRestAreaPress: (id: string) => void;
 }
-function ParkingMarkerComponent({ id, coords, onParkingPress }: Props) {
-  const handlePress = () => onParkingPress(id);
+function RestAreaMarkerComponent({ id, coords, onRestAreaPress }: Props) {
+  const handlePress = () => onRestAreaPress(id);
   return (
     <FastMarker {...coords} onPress={handlePress}>
       <RestAreaIcon width={32} height={32} />
@@ -16,4 +16,4 @@ function ParkingMarkerComponent({ id, coords, onParkingPress }: Props) {
   );
 }
 
-export const ParkingMarker = memo(ParkingMarkerComponent);
+export const RestAreaMarker = memo(RestAreaMarkerComponent);

@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Filter, Parking } from "./types";
+import { Filter, RestArea } from "./types";
 import { db } from "@/db";
 import equal from "fast-deep-equal";
 import { RootState } from "@/app/store";
-
-type RestArea = Parking;
 
 export type RestAreasState = {
   restAreas: RestArea[];
@@ -18,7 +16,7 @@ const initialState: RestAreasState = {
 
 export const loadRestAreas = createAsyncThunk(
   "restAreas/loadRestAreas",
-  async () => await db.query.parkings.findMany({ with: { services: true, photos: true } }),
+  async () => await db.query.restAreas.findMany({ with: { services: true, photos: true } }),
 );
 export const restAreasSlice = createSlice({
   name: "restAreas",

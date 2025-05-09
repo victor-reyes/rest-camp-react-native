@@ -4,7 +4,7 @@ import { useMap } from "../../hooks/useMap";
 import { useNavigation } from "@react-navigation/native";
 import { MapControls } from "./MapControls";
 import { useCallback, useRef } from "react";
-import { ParkingMarker } from "./ParkingMarker";
+import { RestAreaMarker } from "./RestAreaMarker";
 import { ClusterMarker } from "./ClusterMarker";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
@@ -13,8 +13,8 @@ export function Map() {
   const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();
 
-  const handleOnParkingPress = useCallback(
-    (id: string) => navigation.navigate("ParkingInfoModal", { id }),
+  const handleOnRestAreaPress = useCallback(
+    (id: string) => navigation.navigate("RestAreaModal", { id }),
     [navigation],
   );
   const handleOnLocationUpdate = useCallback(
@@ -49,11 +49,11 @@ export function Map() {
         {points.map(point =>
           point.type === "Cluster" ?
             <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
-          : <ParkingMarker
+          : <RestAreaMarker
               key={point.id}
               id={point.id}
               coords={{ latitude: point.latitude, longitude: point.longitude }}
-              onParkingPress={handleOnParkingPress}
+              onRestAreaPress={handleOnRestAreaPress}
             />,
         )}
       </MapView>

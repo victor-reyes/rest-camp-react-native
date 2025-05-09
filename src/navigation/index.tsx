@@ -12,7 +12,7 @@ import { Updates } from "./screens/Updates";
 import { NotFound } from "./screens/NotFound";
 import MapScreen from "./screens/Map";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ParkingInfoModal } from "./screens/ParkingInfoModal";
+import { RestAreaModal } from "./screens/RestAreaModal";
 
 export type HomeTabsParamList = {
   Map: undefined;
@@ -25,7 +25,7 @@ export type RootStackParamList = {
   Profile: { user: string };
   Settings: undefined;
   NotFound: undefined;
-  ParkingInfoModal: { id: string };
+  RestAreaModal: { id: string };
 };
 
 const HomeTabs = createBottomTabNavigator<HomeTabsParamList>({
@@ -112,8 +112,8 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
         path: "*",
       },
     },
-    ParkingInfoModal: {
-      screen: ParkingInfoModal,
+    RestAreaModal: {
+      screen: RestAreaModal,
       options: {
         presentation: "formSheet",
         headerShown: false,
