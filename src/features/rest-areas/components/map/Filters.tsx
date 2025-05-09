@@ -57,12 +57,7 @@ export function Filters() {
               <Text>{label}</Text>
             </Pressable>
           ))}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 10,
-            }}>
+          <View style={styles.buttonContainer}>
             <Pressable onPress={() => setOpen(false)} style={styles.button}>
               <Text style={styles.buttonText}>OK</Text>
             </Pressable>
@@ -103,6 +98,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 4,
     gap: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+    marginTop: 12,
   },
   button: {
     backgroundColor: "#155196",
