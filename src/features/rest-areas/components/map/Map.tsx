@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { useMap } from "../../hooks/useMap";
 import { useNavigation } from "@react-navigation/native";
-import { MapControls } from "./MapController";
+import { MapControls } from "./MapControls";
 import { useCallback, useRef } from "react";
 import { ParkingMarker } from "./ParkingMarker";
 import { ClusterMarker } from "./ClusterMarker";
