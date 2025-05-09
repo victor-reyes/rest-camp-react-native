@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   itemButton: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     padding: 4,
     gap: 8,
   },
