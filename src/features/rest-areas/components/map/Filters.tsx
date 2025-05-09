@@ -2,11 +2,8 @@ import { useState } from "react";
 import { Filter } from "../../types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
-interface Props {
-  filters: Filter[];
-  setFilters: (filters: Filter[]) => void;
-}
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { filtersUpdated, selectFilters } from "../../rest-area-slice";
 
 const filterOptions: { label: string; value: Filter }[] = [
   { label: "Sophantering", value: "refuseBin" },
@@ -18,20 +15,24 @@ const filterOptions: { label: string; value: Filter }[] = [
   { label: "Lekplats", value: "playground" },
   { label: "Drivmedel", value: "petrolStation" },
 ];
-export function Filters({ filters, setFilters }: Props) {
+export function Filters() {
   const [open, setOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector(selectFilters);
 
   const handlePress = () => setOpen(!open);
 
   const handleFilterPress = (value: Filter) => {
-    if (filters.includes(value)) setFilters(filters.filter(filter => filter !== value));
-    else setFilters([...filters, value]);
+    if (filters.includes(value))
+      dispatch(filtersUpdated(filters.filter(filter => filter !== value)));
+    else dispatch(filtersUpdated([...filters, value]));
   };
 
   return (
     <>
-      <Pressable onPress={handlePress}>
-        <FontAwesome name="filter" size={32} color="#eee" />
+      <Pressable onPress={handlePress} style={styles.filterButtonContainer}>
+        <FontAwesome name="filter" size={24} color="#aaa" />
       </Pressable>
       {open && (
         <View style={styles.container}>
@@ -39,10 +40,7 @@ export function Filters({ filters, setFilters }: Props) {
             <Pressable
               key={value}
               onPress={() => handleFilterPress(value)}
-              style={({ pressed }) => [
-                styles.filterButton,
-                pressed && { backgroundColor: "#eee" },
-              ]}>
+              style={({ pressed }) => [styles.itemButton, pressed && { backgroundColor: "#eee" }]}>
               <FontAwesome
                 name={filters.includes(value) ? "check-square-o" : "square-o"}
                 size={24}
@@ -61,7 +59,7 @@ export function Filters({ filters, setFilters }: Props) {
             <Pressable onPress={() => setOpen(false)} style={styles.button}>
               <Text style={styles.buttonText}>OK</Text>
             </Pressable>
-            <Pressable onPress={() => setFilters([])} style={styles.button}>
+            <Pressable onPress={() => dispatch(filtersUpdated([]))} style={styles.button}>
               <Text style={styles.buttonText}>Rensa</Text>
             </Pressable>
           </View>
@@ -72,6 +70,15 @@ export function Filters({ filters, setFilters }: Props) {
 }
 
 const styles = StyleSheet.create({
+  filterButtonContainer: {
+    height: 42,
+    width: 42,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 2,
+  },
   container: {
     backgroundColor: "#fff",
     borderBlockColor: "black",
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 10,
   },
-  filterButton: {
+  itemButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
