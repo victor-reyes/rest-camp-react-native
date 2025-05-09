@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter } from "../../types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text, useAnimatedValue, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import { filtersUpdated, selectFilters } from "../../rest-area-slice";
 
@@ -29,10 +29,20 @@ export function Filters() {
     else dispatch(filtersUpdated([...filters, value]));
   };
 
+  const fadeAnim = useAnimatedValue(0);
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: open ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim, open]);
+
   return (
     <>
       {open && (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
           {filterOptions.map(({ label, value }) => (
             <Pressable
               key={value}
@@ -60,7 +70,7 @@ export function Filters() {
               <Text style={styles.buttonText}>Rensa</Text>
             </Pressable>
           </View>
-        </View>
+        </Animated.View>
       )}
       <Pressable onPress={handlePress} style={styles.filterButtonContainer}>
         <FontAwesome name="filter" size={24} color="#aaa" />
