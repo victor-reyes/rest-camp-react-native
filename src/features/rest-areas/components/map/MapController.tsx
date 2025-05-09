@@ -1,6 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
-import { Alert, Pressable, StyleSheet } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { Filters } from "./Filters";
 
 interface Props {
   onLocationUpdate: (coords: { latitude: number; longitude: number }) => void;
@@ -19,23 +20,29 @@ export function MapControls({ onLocationUpdate }: Props) {
   };
 
   return (
-    <Pressable
-      onPress={handleGetUserLocation}
-      style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
-      <MaterialIcons name="gps-fixed" size={24} color="gray" />
-    </Pressable>
+    <View style={styles.container}>
+      <Filters />
+      <Pressable
+        onPress={handleGetUserLocation}
+        style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
+        <MaterialIcons name="gps-fixed" size={24} color="gray" />
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  container: {
+    gap: 8,
     position: "absolute",
     bottom: 20,
     right: 20,
+  },
+  button: {
     backgroundColor: "#ffffffcc",
-    padding: 10,
+    padding: 8,
     borderRadius: 5,
-    zIndex: 100,
+    alignSelf: "flex-end",
   },
   buttonPressed: {
     backgroundColor: "#fff",

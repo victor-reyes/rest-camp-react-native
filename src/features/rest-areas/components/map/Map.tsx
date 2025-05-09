@@ -6,12 +6,11 @@ import { MapControls } from "./MapController";
 import { useCallback, useRef } from "react";
 import { ParkingMarker } from "./ParkingMarker";
 import { ClusterMarker } from "./ClusterMarker";
-import { Filters } from "./Filters";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 export function Map() {
   const mapRef = useRef<MapView>(null);
-  const { region, points, filters, setRegion, onLayout, setFilters } = useMap(initialRegion);
+  const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();
 
   const handleOnParkingPress = useCallback(
@@ -38,10 +37,6 @@ export function Map() {
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <View style={{ position: "absolute", top: 48, left: 24, zIndex: 1 }}>
-        <Filters filters={filters} setFilters={setFilters} />
-      </View>
-
       <MapView
         ref={mapRef}
         style={styles.map}

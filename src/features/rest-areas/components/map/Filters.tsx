@@ -31,9 +31,6 @@ export function Filters() {
 
   return (
     <>
-      <Pressable onPress={handlePress} style={styles.filterButtonContainer}>
-        <FontAwesome name="filter" size={24} color="#aaa" />
-      </Pressable>
       {open && (
         <View style={styles.container}>
           {filterOptions.map(({ label, value }) => (
@@ -65,6 +62,9 @@ export function Filters() {
           </View>
         </View>
       )}
+      <Pressable onPress={handlePress} style={styles.filterButtonContainer}>
+        <FontAwesome name="filter" size={24} color="#aaa" />
+      </Pressable>
     </>
   );
 }
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 2,
+    alignSelf: "flex-end",
   },
   container: {
     backgroundColor: "#fff",
