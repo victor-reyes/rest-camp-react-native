@@ -9,6 +9,7 @@ import {
 import { Filter } from "@/features/rest-areas/types";
 import { FilterItem } from "./FilterItem";
 import { useState } from "react";
+import { ServiceIcon } from "../../rest-areas";
 
 const filterOptions: { label: string; filter: Filter }[] = [
   { label: "Sophantering", filter: "refuseBin" },
@@ -43,6 +44,7 @@ export function FilterPopup({ children }: Props) {
             <FilterItem
               key={filter}
               label={label}
+              icon={<ServiceIcon name={filter} size={24} />}
               value={filters.includes(filter)}
               onValueChange={isEnabled => handleFilterPress(filter, isEnabled)}
             />
