@@ -9,17 +9,16 @@ import {
 import { Filter } from "@/features/rest-areas/types";
 import { FilterItem } from "./FilterItem";
 import { useState } from "react";
-import { ServiceIcon } from "../../rest-areas";
 
-const filterOptions: { label: string; filter: Filter }[] = [
-  { label: "Sophantering", filter: "refuseBin" },
-  { label: "Toalett", filter: "toilet" },
-  { label: "Restaurang", filter: "restaurant" },
-  { label: "Latrintömning", filter: "dumpingStation" },
-  { label: "Rastplatsmöbler", filter: "picnicFacilities" },
-  { label: "Turistinformation", filter: "touristInformation" },
-  { label: "Lekplats", filter: "playground" },
-  { label: "Drivmedel", filter: "petrolStation" },
+const filterOptions: Filter[] = [
+  "refuseBin",
+  "toilet",
+  "restaurant",
+  "dumpingStation",
+  "picnicFacilities",
+  "touristInformation",
+  "playground",
+  "petrolStation",
 ];
 
 interface Props {
@@ -40,12 +39,11 @@ export function FilterPopup({ children }: Props) {
     <>
       {open && (
         <View style={styles.container}>
-          {filterOptions.map(({ label, filter }) => (
+          {filterOptions.map(filter => (
             <FilterItem
               key={filter}
-              label={label}
-              icon={<ServiceIcon name={filter} size={24} />}
-              value={filters.includes(filter)}
+              filter={filter}
+              isActive={filters.includes(filter)}
               onValueChange={isEnabled => handleFilterPress(filter, isEnabled)}
             />
           ))}
