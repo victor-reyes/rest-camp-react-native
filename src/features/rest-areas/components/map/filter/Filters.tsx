@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Filter } from "../../../types";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Animated, Pressable, StyleSheet, Text, useAnimatedValue, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import {
@@ -10,6 +9,7 @@ import {
   selectFilters,
 } from "../../../rest-area-slice";
 import { FilterItem } from "./FilterItem";
+import { FilterButton } from "./FilterButton";
 
 const filterOptions: { label: string; filter: Filter }[] = [
   { label: "Sophantering", filter: "refuseBin" },
@@ -64,24 +64,12 @@ export function Filters() {
           </View>
         </Animated.View>
       )}
-      <Pressable onPress={handlePress} style={styles.filterButtonContainer}>
-        <FontAwesome name="filter" size={24} color="#aaa" />
-      </Pressable>
+      <FilterButton handlePress={handlePress} />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  filterButtonContainer: {
-    height: 42,
-    width: 42,
-    backgroundColor: "#fff",
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 2,
-    alignSelf: "flex-end",
-  },
   container: {
     backgroundColor: "#fff",
     borderBlockColor: "black",
