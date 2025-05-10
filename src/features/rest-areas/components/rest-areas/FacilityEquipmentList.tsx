@@ -1,43 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
-import {
-  HWC,
-  Info,
-  Latrine,
-  PetrolStation,
-  Picnic,
-  Playground,
-  Restaurant,
-  Trash,
-} from "./service-icons";
+
 import { Service } from "../../types";
+import { ServiceIcon } from "./service-icons";
+import { mapServiceToIcon } from "../../utils/map-service-to-icon";
 
 interface Props {
   services: Service[];
 }
 export function FacilityEquipmentList({ services }: Props) {
-  const icons = services.map(service => {
-    const type = service.name;
-    switch (type) {
-      case "toilet":
-        return <HWC />;
-      case "picnicFacilities":
-        return <Picnic />;
-      case "playground":
-        return <Playground />;
-      case "dumpingStation":
-        return <Latrine />;
-      case "refuseBin":
-        return <Trash />;
-      case "touristInformation":
-        return <Info />;
-      case "restaurant":
-        return <Restaurant />;
-      case "petrolStation":
-        return <PetrolStation />;
-    }
-  });
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
@@ -49,9 +21,9 @@ export function FacilityEquipmentList({ services }: Props) {
         </Pressable>
       </View>
       <View style={styles.container}>
-        {icons.map((icon, index) => (
-          <View key={index} style={{ width: 40, height: 40 }}>
-            {icon}
+        {services.map(service => (
+          <View key={service.name}>
+            <ServiceIcon name={mapServiceToIcon(service.name)} size={40} color="#155196" />
           </View>
         ))}
       </View>
