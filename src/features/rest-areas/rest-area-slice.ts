@@ -22,8 +22,14 @@ export const restAreasSlice = createSlice({
   name: "restAreas",
   initialState,
   reducers: {
-    filtersUpdated: (state, { payload }: PayloadAction<Filter[]>) => {
-      state.filters = payload;
+    filtersCleared: state => {
+      state.filters = [];
+    },
+    filterAdded: (state, { payload }: PayloadAction<Filter>) => {
+      if (!state.filters.includes(payload)) state.filters.push(payload);
+    },
+    filterRemoved: (state, { payload }: PayloadAction<Filter>) => {
+      state.filters = state.filters.filter(filter => filter !== payload);
     },
   },
   extraReducers: builder => {
@@ -33,7 +39,7 @@ export const restAreasSlice = createSlice({
   },
 });
 
-export const { filtersUpdated } = restAreasSlice.actions;
+export const { filtersCleared, filterAdded, filterRemoved } = restAreasSlice.actions;
 export const selectFilters = (state: RootState) => state.restAreas.filters;
 export const selectRestAreas = (state: RootState) => state.restAreas.restAreas;
 export const selectRestAreaId = (_: RootState, restAreaId: string) => restAreaId;
