@@ -7,12 +7,12 @@ import { Picnic } from "./Picnic";
 import { Playground } from "./Playground";
 import { Restaurant } from "./Restaurant";
 import { Trash } from "./Trash";
+import { SvgProps } from "react-native-svg";
 
 type ServiceIconName = Filter;
-interface Props {
+interface Props extends SvgProps {
   name: ServiceIconName;
   size?: number;
-  color?: string;
 }
 
 export function ServiceIcon({ name, size = 24 }: Props) {
