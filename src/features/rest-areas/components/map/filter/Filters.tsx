@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
-import { Filter } from "../../types";
+import { Filter } from "../../../types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Animated, Pressable, StyleSheet, Text, useAnimatedValue, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { filtersUpdated, selectFilters } from "../../rest-area-slice";
+import {
+  filterAdded,
+  filterRemoved,
+  filtersCleared,
+  selectFilters,
+} from "../../../rest-area-slice";
+import { FilterItem } from "./FilterItem";
 
-const filterOptions: { label: string; value: Filter }[] = [
-  { label: "Sophantering", value: "refuseBin" },
-  { label: "Toalett", value: "toilet" },
-  { label: "Restaurang", value: "restaurant" },
-  { label: "Latrintömning", value: "dumpingStation" },
-  { label: "Rastplatsmöbler", value: "picnicFacilities" },
-  { label: "Turistinformation", value: "touristInformation" },
-  { label: "Lekplats", value: "playground" },
-  { label: "Drivmedel", value: "petrolStation" },
+const filterOptions: { label: string; filter: Filter }[] = [
+  { label: "Sophantering", filter: "refuseBin" },
+  { label: "Toalett", filter: "toilet" },
+  { label: "Restaurang", filter: "restaurant" },
+  { label: "Latrintömning", filter: "dumpingStation" },
+  { label: "Rastplatsmöbler", filter: "picnicFacilities" },
+  { label: "Turistinformation", filter: "touristInformation" },
+  { label: "Lekplats", filter: "playground" },
+  { label: "Drivmedel", filter: "petrolStation" },
 ];
 export function Filters() {
   const [open, setOpen] = useState(false);
@@ -23,11 +29,8 @@ export function Filters() {
 
   const handlePress = () => setOpen(!open);
 
-  const handleFilterPress = (value: Filter) => {
-    if (filters.includes(value))
-      dispatch(filtersUpdated(filters.filter(filter => filter !== value)));
-    else dispatch(filtersUpdated([...filters, value]));
-  };
+  const handleFilterPress = (filter: Filter, isEnabled: boolean) =>
+    dispatch(isEnabled ? filterAdded(filter) : filterRemoved(filter));
 
   const fadeAnim = useAnimatedValue(0);
 
@@ -43,25 +46,19 @@ export function Filters() {
     <>
       {open && (
         <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-          {filterOptions.map(({ label, value }) => (
-            <Pressable
-              key={value}
-              onPress={() => handleFilterPress(value)}
-              style={({ pressed }) => [styles.itemButton, pressed && { backgroundColor: "#eee" }]}>
-              <FontAwesome
-                name={filters.includes(value) ? "check-square-o" : "square-o"}
-                size={24}
-                style={{ height: 24, width: 24 }}
-                color="#155196"
-              />
-              <Text>{label}</Text>
-            </Pressable>
+          {filterOptions.map(({ label, filter }) => (
+            <FilterItem
+              key={filter}
+              label={label}
+              value={filters.includes(filter)}
+              onValueChange={isEnabled => handleFilterPress(filter, isEnabled)}
+            />
           ))}
           <View style={styles.buttonContainer}>
             <Pressable onPress={() => setOpen(false)} style={styles.button}>
               <Text style={styles.buttonText}>OK</Text>
             </Pressable>
-            <Pressable onPress={() => dispatch(filtersUpdated([]))} style={styles.button}>
+            <Pressable onPress={() => dispatch(filtersCleared())} style={styles.button}>
               <Text style={styles.buttonText}>Rensa</Text>
             </Pressable>
           </View>
@@ -91,12 +88,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     padding: 10,
-  },
-  itemButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 4,
-    gap: 8,
   },
   buttonContainer: {
     flexDirection: "row",

@@ -1,7 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
-import { Filters } from "./Filters";
+import { Filters } from "./filter/Filters";
 
 interface Props {
   onLocationUpdate: (coords: { latitude: number; longitude: number }) => void;
