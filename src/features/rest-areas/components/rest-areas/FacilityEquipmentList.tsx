@@ -1,7 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { HWC, Info, Latrine, PetrolStation, Picnic, Playground, Restaurant, Trash } from "./icons";
+import {
+  HWC,
+  Info,
+  Latrine,
+  PetrolStation,
+  Picnic,
+  Playground,
+  Restaurant,
+  Trash,
+} from "./service-icons";
 import { Service } from "../../types";
 
 interface Props {
