@@ -1,7 +1,8 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
-import { Filters } from "./filter/Filters";
+import { FilterPopup } from "./filter/FilterPopup";
 
 interface Props {
   onLocationUpdate: (coords: { latitude: number; longitude: number }) => void;
@@ -21,7 +22,9 @@ export function MapControls({ onLocationUpdate }: Props) {
 
   return (
     <View style={styles.container}>
-      <Filters />
+      <FilterPopup>
+        <FontAwesome name="filter" size={24} color="#aaa" />
+      </FilterPopup>
       <Pressable
         onPress={handleGetUserLocation}
         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
