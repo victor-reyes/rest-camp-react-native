@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Filter } from "../../../types";
-import { Animated, Pressable, StyleSheet, Text, useAnimatedValue, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import {
   filterAdded,
@@ -32,20 +32,10 @@ export function Filters() {
   const handleFilterPress = (filter: Filter, isEnabled: boolean) =>
     dispatch(isEnabled ? filterAdded(filter) : filterRemoved(filter));
 
-  const fadeAnim = useAnimatedValue(0);
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: open ? 1 : 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim, open]);
-
   return (
     <>
       {open && (
-        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <View style={styles.container}>
           {filterOptions.map(({ label, filter }) => (
             <FilterItem
               key={filter}
@@ -62,7 +52,7 @@ export function Filters() {
               <Text style={styles.buttonText}>Rensa</Text>
             </Pressable>
           </View>
-        </Animated.View>
+        </View>
       )}
       <FilterButton handlePress={handlePress} />
     </>
