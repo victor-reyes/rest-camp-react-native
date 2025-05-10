@@ -42,10 +42,18 @@ const styles = StyleSheet.create({
     right: 20,
   },
   button: {
-    backgroundColor: "#ffffffcc",
+    backgroundColor: "#ffffffee",
     padding: 8,
     borderRadius: 5,
     alignSelf: "flex-end",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   buttonPressed: {
     backgroundColor: "#fff",

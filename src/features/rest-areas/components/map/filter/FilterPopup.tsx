@@ -77,10 +77,17 @@ const styles = StyleSheet.create({
   filterButtonContainer: {
     height: 42,
     width: 42,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffffee",
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
     elevation: 2,
     alignSelf: "flex-end",
   },
