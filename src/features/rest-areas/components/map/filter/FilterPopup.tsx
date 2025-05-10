@@ -39,13 +39,16 @@ export function FilterPopup({ children }: Props) {
     <>
       {open && (
         <View style={styles.container}>
-          {filterOptions.map(filter => (
-            <FilterItem
-              key={filter}
-              filter={filter}
-              isActive={filters.includes(filter)}
-              onValueChange={isEnabled => handleFilterPress(filter, isEnabled)}
-            />
+          {filterOptions.map((filter, index, array) => (
+            <View key={filter}>
+              <FilterItem
+                key={filter}
+                filter={filter}
+                isActive={filters.includes(filter)}
+                onValueChange={isEnabled => handleFilterPress(filter, isEnabled)}
+              />
+              {index < array.length - 1 && <View style={styles.divider} />}
+            </View>
           ))}
 
           <View style={styles.buttonContainer}>
@@ -87,6 +90,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     padding: 10,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#eee",
+    marginVertical: 4,
   },
   buttonContainer: {
     flexDirection: "row",
