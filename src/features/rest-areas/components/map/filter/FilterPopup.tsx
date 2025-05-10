@@ -9,6 +9,7 @@ import {
 import { Filter } from "@/features/rest-areas/types";
 import { FilterItem } from "./FilterItem";
 import { useState } from "react";
+import { FilterCountBadge } from "./FilterCountBadge";
 
 const filterOptions: Filter[] = [
   "refuseBin",
@@ -67,6 +68,7 @@ export function FilterPopup({ children }: Props) {
           styles.filterButtonContainer,
           pressed && { backgroundColor: "#eee" },
         ]}>
+        <FilterCountBadge count={filters.length} />
         {children}
       </Pressable>
     </>
