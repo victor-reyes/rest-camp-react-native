@@ -1,10 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
 import AntDesign from "@expo/vector-icons/AntDesign";
-
 import { Service } from "../../types";
 import { ServiceIcon } from "./service-icons";
-import { mapServiceToIcon } from "../../utils/map-service-to-icon";
 
 interface Props {
   services: Service[];
@@ -22,9 +19,7 @@ export function FacilityEquipmentList({ services }: Props) {
       </View>
       <View style={styles.container}>
         {services.map(service => (
-          <View key={service.name}>
-            <ServiceIcon name={mapServiceToIcon(service.name)} size={40} color="#155196" />
-          </View>
+          <ServiceIcon key={service.name} name={service.name} size={40} color="#155196" />
         ))}
       </View>
     </View>

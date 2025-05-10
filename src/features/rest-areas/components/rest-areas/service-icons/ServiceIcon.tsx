@@ -1,3 +1,4 @@
+import { Filter } from "@/features/rest-areas/types";
 import { HWC } from "./HWC";
 import { Info } from "./Info";
 import { Latrine } from "./Latrine";
@@ -6,18 +7,8 @@ import { Picnic } from "./Picnic";
 import { Playground } from "./Playground";
 import { Restaurant } from "./Restaurant";
 import { Trash } from "./Trash";
-import { WC } from "./WC";
 
-export type ServiceIconName =
-  | "HWC"
-  | "Info"
-  | "Latrine"
-  | "Picnic"
-  | "Playground"
-  | "PetrolStation"
-  | "Restaurant"
-  | "Trash"
-  | "WC";
+type ServiceIconName = Filter;
 interface Props {
   name: ServiceIconName;
   size?: number;
@@ -26,23 +17,21 @@ interface Props {
 
 export function ServiceIcon({ name, size = 24 }: Props) {
   switch (name) {
-    case "HWC":
+    case "toilet":
       return <HWC width={size} height={size} />;
-    case "Info":
+    case "touristInformation":
       return <Info width={size} height={size} />;
-    case "Latrine":
+    case "dumpingStation":
       return <Latrine width={size} height={size} />;
-    case "Picnic":
+    case "picnicFacilities":
       return <Picnic width={size} height={size} />;
-    case "Playground":
+    case "playground":
       return <Playground width={size} height={size} />;
-    case "PetrolStation":
+    case "petrolStation":
       return <PetrolStation width={size} height={size} />;
-    case "Restaurant":
+    case "restaurant":
       return <Restaurant width={size} height={size} />;
-    case "Trash":
+    case "refuseBin":
       return <Trash width={size} height={size} />;
-    case "WC":
-      return <WC width={size} height={size} />;
   }
 }
