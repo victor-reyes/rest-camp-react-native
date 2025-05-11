@@ -25,7 +25,7 @@ export function FilterItem({ filter, isActive, onValueChange }: Props) {
       style={({ pressed }) => [
         styles.itemButton,
         pressed && { backgroundColor: "#eee" },
-        !isActive && { opacity: 0.66 },
+        !isActive && { opacity: 0.5 },
       ]}>
       <ServiceIcon name={filter} size={32} />
       <Text style={styles.buttonText}>{filterNameMap[filter]}</Text>
