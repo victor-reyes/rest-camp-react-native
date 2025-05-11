@@ -26,7 +26,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function FilterPopup({ children }: Props) {
+export function FilterPopup({ children: trigger }: Props) {
   const [open, setOpen] = useState(false);
   const handlePress = () => setOpen(!open);
 
@@ -64,19 +64,16 @@ export function FilterPopup({ children }: Props) {
       )}
       <Pressable
         onPress={handlePress}
-        style={({ pressed }) => [
-          styles.filterButtonContainer,
-          pressed && { backgroundColor: "#eee" },
-        ]}>
+        style={({ pressed }) => [styles.triggerContainer, pressed && { backgroundColor: "#eee" }]}>
         <FilterCountBadge count={filters.length} />
-        {children}
+        {trigger}
       </Pressable>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  filterButtonContainer: {
+  triggerContainer: {
     height: 42,
     width: 42,
     backgroundColor: "#ffffffee",
