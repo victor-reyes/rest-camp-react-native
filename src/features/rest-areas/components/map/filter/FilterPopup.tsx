@@ -52,7 +52,7 @@ export function FilterPopup({ children: trigger }: Props) {
             </View>
           ))}
 
-          <View style={styles.buttonContainer}>
+          <View style={styles.buttonsContainer}>
             <Pressable style={styles.button} onPress={() => setOpen(false)}>
               <Text style={styles.buttonText}>OK</Text>
             </Pressable>
@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee",
     marginVertical: 4,
   },
-  buttonContainer: {
+  buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 8,
+    gap: 16,
     marginTop: 12,
   },
   button: {
