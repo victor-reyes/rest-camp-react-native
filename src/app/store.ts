@@ -3,10 +3,12 @@ import { restAreasSlice } from "../features/rest-areas/rest-area-slice";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 import { restAreasApi } from "@/features/rest-areas/api";
 import { useDispatch, useSelector } from "react-redux";
+import { filtersSlice } from "@/features/filters";
 
 export const store = configureStore({
   reducer: {
     restAreas: restAreasSlice.reducer,
+    filters: filtersSlice.reducer,
     [restAreasApi.reducerPath]: restAreasApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(restAreasApi.middleware),

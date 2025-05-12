@@ -1,18 +1,15 @@
-import { createAsyncThunk, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Filter, RestArea } from "./types";
+import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
+import { RestArea } from "./types";
 import { db } from "@/db";
 import equal from "fast-deep-equal";
 import { RootState } from "@/app/store";
+import { selectFilters } from "../filters";
 
 export type RestAreasState = {
   restAreas: RestArea[];
-  filters: Filter[];
 };
 
-const initialState: RestAreasState = {
-  restAreas: [],
-  filters: [],
-};
+const initialState: RestAreasState = { restAreas: [] };
 
 export const loadRestAreas = createAsyncThunk(
   "restAreas/loadRestAreas",
@@ -21,17 +18,7 @@ export const loadRestAreas = createAsyncThunk(
 export const restAreasSlice = createSlice({
   name: "restAreas",
   initialState,
-  reducers: {
-    filtersCleared: state => {
-      state.filters = [];
-    },
-    filterAdded: (state, { payload }: PayloadAction<Filter>) => {
-      if (!state.filters.includes(payload)) state.filters.push(payload);
-    },
-    filterRemoved: (state, { payload }: PayloadAction<Filter>) => {
-      state.filters = state.filters.filter(filter => filter !== payload);
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder.addCase(loadRestAreas.fulfilled, (state, { payload }) => {
       if (!equal(state.restAreas, payload)) state.restAreas = payload;
@@ -39,8 +26,6 @@ export const restAreasSlice = createSlice({
   },
 });
 
-export const { filtersCleared, filterAdded, filterRemoved } = restAreasSlice.actions;
-export const selectFilters = (state: RootState) => state.restAreas.filters;
 export const selectRestAreas = (state: RootState) => state.restAreas.restAreas;
 export const selectRestAreaId = (_: RootState, restAreaId: string) => restAreaId;
 

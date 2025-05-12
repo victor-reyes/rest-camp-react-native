@@ -1,11 +1,6 @@
 import { View, Pressable, Text, StyleSheet, Modal, Dimensions } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import {
-  filterAdded,
-  filterRemoved,
-  filtersCleared,
-  selectFilters,
-} from "@/features/rest-areas/rest-area-slice";
+import { filterAdded, filterRemoved, filtersCleared, selectFilters } from "@/features/filters";
 import { Filter } from "@/features/rest-areas/types";
 import { FilterItem } from "./FilterItem";
 import { ReactNode, useLayoutEffect, useRef, useState } from "react";
