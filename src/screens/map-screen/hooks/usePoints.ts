@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { Region } from "react-native-maps";
-import { RestAreaCluster, RestArea, RestAreaPoint } from "../types";
+import { RestAreaCluster, RestArea, RestAreaPoint } from "@/features/rest-areas";
 
 export function usePoints(
   restAreas: RestArea[],

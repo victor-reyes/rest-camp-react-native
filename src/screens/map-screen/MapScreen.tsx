@@ -1,14 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
+import { useCallback, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { useMap } from "../../hooks/useMap";
-import { useNavigation } from "@react-navigation/native";
-import { MapControls } from "./MapControls";
-import { useCallback, useRef } from "react";
-import { RestAreaMarker } from "./RestAreaMarker";
-import { ClusterMarker } from "./ClusterMarker";
+import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
+import { useMap } from "./hooks/useMap";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
-export function Map() {
+
+export function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();

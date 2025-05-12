@@ -4,8 +4,7 @@ import { FacilityEquipmentList } from "./FacilityEquipmentList";
 import { ParkingHeader } from "./RestAreaHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
-
-import { RestArea } from "../../types";
+import { RestArea } from "@/features/rest-areas";
 
 export interface Props {
   restArea: RestArea;

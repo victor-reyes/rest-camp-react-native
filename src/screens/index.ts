@@ -1,5 +1,5 @@
 export * from "./Home";
-export * from "./MapScreen";
+export * from "./map-screen";
 export * from "./RestAreaModal";
 export * from "./Settings";
 export * from "./Updates";

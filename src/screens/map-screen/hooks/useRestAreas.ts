@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/app/store";
-import { selectFilteredRestAreas } from "../rest-area-slice";
+import { selectFilteredRestAreas } from "@/features/rest-areas";
 
 export function useRestAreas() {
   return useAppSelector(selectFilteredRestAreas);

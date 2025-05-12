@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Region } from "react-native-maps";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";
 import { useRestAreas } from "./useRestAreas";
-import { useRestAreasQuery } from "../api";
+import { loadRestAreas, useRestAreasQuery } from "@/features/rest-areas";
+import { useAppDispatch } from "@/app/store";
 
 export function useMap(initialRegion: Region) {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(loadRestAreas());
+  }, [dispatch]);
+
   useRestAreasQuery();
 
   const restAreas = useRestAreas();
