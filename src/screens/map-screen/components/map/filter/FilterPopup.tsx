@@ -1,7 +1,7 @@
 import { View, Pressable, Text, StyleSheet, Modal, Dimensions } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { filterAdded, filterRemoved, filtersCleared, selectFilters } from "@/features/filters";
-import { Filter } from "@/features/rest-areas/types";
+import { filterAdded, filterRemoved, filtersCleared, selectFilters } from "@/slices/filters";
+import { Filter } from "@/slices/rest-areas";
 import { FilterItem } from "./FilterItem";
 import { ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { FilterCountBadge } from "./FilterCountBadge";

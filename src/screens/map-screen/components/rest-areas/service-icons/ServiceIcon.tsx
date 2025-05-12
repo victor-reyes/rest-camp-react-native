@@ -1,4 +1,4 @@
-import { Filter } from "@/features/rest-areas/types";
+import { Filter } from "@/slices/rest-areas";
 import { HWC } from "./HWC";
 import { Info } from "./Info";
 import { Latrine } from "./Latrine";

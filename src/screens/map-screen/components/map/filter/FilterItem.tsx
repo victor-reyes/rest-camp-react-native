@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import { Filter } from "@/features/rest-areas/types";
+import { Filter } from "@/slices/rest-areas";
 import { ServiceIcon } from "../../rest-areas";
 
 const filterNameMap: Record<Filter, string> = {

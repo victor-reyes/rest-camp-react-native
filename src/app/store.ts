@@ -1,9 +1,8 @@
+import { filtersSlice } from "@/slices/filters";
+import { restAreasSlice, restAreasApi } from "@/slices/rest-areas";
 import { configureStore } from "@reduxjs/toolkit";
-import { restAreasSlice } from "../features/rest-areas/rest-area-slice";
-import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
-import { restAreasApi } from "@/features/rest-areas/api";
 import { useDispatch, useSelector } from "react-redux";
-import { filtersSlice } from "@/features/filters";
+import devtoolsEnhancer from "redux-devtools-expo-dev-plugin";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +12,7 @@ export const store = configureStore({
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(restAreasApi.middleware),
   devTools: false,
-  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devToolsEnhancer()),
+  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devtoolsEnhancer()),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

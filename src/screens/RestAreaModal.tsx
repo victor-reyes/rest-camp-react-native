@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RestAreaCard } from "./map-screen/components";
 import { useAppSelector } from "@/app/store";
-import { selectRestAreaById } from "@/features/rest-areas/rest-area-slice";
+import { selectRestAreaById } from "@/slices/rest-areas";
 import { RootStackParamList } from "@/navigation";
 
 type Props = NativeStackScreenProps<RootStackParamList, "RestAreaModal">;

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Service } from "@/features/rest-areas";
+import { Service } from "@/slices/rest-areas";
 import { ServiceIcon } from "./service-icons";
 
 interface Props {
