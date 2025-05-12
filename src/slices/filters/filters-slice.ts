@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Filter } from "../rest-areas/types";
-import { RootState } from "@/app/store";
 
 export type FiltersState = {
   filters: Filter[];
@@ -22,7 +21,10 @@ export const filtersSlice = createSlice({
       state.filters = state.filters.filter(filter => filter !== payload);
     },
   },
+  selectors: {
+    selectFilters: state => state.filters,
+  },
 });
 
 export const { filtersCleared, filterAdded, filterRemoved } = filtersSlice.actions;
-export const selectFilters = (state: RootState) => state.filters.filters;
+export const { selectFilters } = filtersSlice.selectors;
