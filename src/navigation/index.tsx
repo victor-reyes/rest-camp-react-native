@@ -5,14 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Image } from "react-native";
 import bell from "../assets/bell.png";
 import newspaper from "../assets/newspaper.png";
-import { Home } from "./screens/Home";
-import { Profile } from "./screens/Profile";
-import { Settings } from "./screens/Settings";
-import { Updates } from "./screens/Updates";
-import { NotFound } from "./screens/NotFound";
-import MapScreen from "./screens/Map";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { RestAreaModal } from "./screens/RestAreaModal";
+import { Home, MapScreen, NotFound, Profile, RestAreaModal, Settings, Updates } from "@/screens";
 
 export type HomeTabsParamList = {
   Map: undefined;
