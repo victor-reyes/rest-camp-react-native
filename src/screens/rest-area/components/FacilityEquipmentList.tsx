@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { StyleSheet, Text, View } from "react-native";
 import { Service } from "@/slices/rest-areas";
 import { ServiceIcon } from "./service-icons";
+import { ServicePopover } from "./ServicePopover";
 
 interface Props {
   services: Service[];
@@ -11,11 +11,7 @@ export function FacilityEquipmentList({ services }: Props) {
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
         <Text style={styles.title}>Utrustning och Service:</Text>
-        <Pressable
-          onPress={() => console.log("Show all")}
-          style={({ pressed }) => (pressed ? { opacity: 0.5 } : null)}>
-          <AntDesign name="questioncircleo" size={20} color="black" />
-        </Pressable>
+        <ServicePopover services={services} />
       </View>
       <View style={styles.container}>
         {services.map(service => (
