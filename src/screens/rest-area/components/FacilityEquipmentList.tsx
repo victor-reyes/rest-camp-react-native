@@ -19,7 +19,7 @@ export function FacilityEquipmentList({ services }: Props) {
       </View>
       <View style={styles.container}>
         {services.map(service => (
-          <ServiceIcon key={service.name} name={service.name} size={40} color="#155196" />
+          <ServiceIcon key={service} name={service} size={40} color="#155196" />
         ))}
       </View>
     </View>

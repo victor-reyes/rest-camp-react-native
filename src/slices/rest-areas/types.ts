@@ -13,7 +13,7 @@ export type RestAreaCluster = {
   count: number;
 };
 
-export type Filter = (typeof services.$inferSelect)["name"];
+export type Filter = Service;
 
 export type RestArea = typeof restAreas.$inferSelect & {
   services: (typeof services.$inferSelect)[];
@@ -21,6 +21,7 @@ export type RestArea = typeof restAreas.$inferSelect & {
 };
 
 export type Photo = typeof photos.$inferSelect;
-export type Service = typeof services.$inferSelect;
+export type ServiceSelect = typeof services.$inferSelect;
+export type Service = (typeof services.$inferSelect)["name"];
 
 export type RestAreaApiResponse = z.infer<typeof ResponseSchema>;

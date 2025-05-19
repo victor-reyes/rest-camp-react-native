@@ -1,4 +1,4 @@
-import { Photo, RestAreaApiResponse, Service } from "../types";
+import { Photo, RestAreaApiResponse, ServiceSelect } from "../types";
 
 export async function transformToSql(responce: RestAreaApiResponse) {
   const data = responce.RESPONSE.RESULT[0].Parking || [];
@@ -29,7 +29,7 @@ export async function transformToSql(responce: RestAreaApiResponse) {
       modifiedTime: new Date(item.ModifiedTime).getTime(),
     };
   });
-  const services: Service[] = data.flatMap(item => {
+  const services: ServiceSelect[] = data.flatMap(item => {
     const { Equipment, Facility } = item;
 
     return [...Equipment, ...(Facility || [])].map(service => ({
