@@ -6,7 +6,7 @@ import { Image } from "react-native";
 import bell from "../assets/bell.png";
 import newspaper from "../assets/newspaper.png";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Home, MapScreen, NotFound, Profile, RestAreaModal, Settings, Updates } from "@/screens";
+import { Home, MapScreen, NotFound, Profile, RestAreaScreen, Settings, Updates } from "@/screens";
 
 export type HomeTabsParamList = {
   Map: undefined;
@@ -107,7 +107,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
       },
     },
     RestAreaModal: {
-      screen: RestAreaModal,
+      screen: RestAreaScreen,
       options: {
         presentation: "formSheet",
         headerShown: false,

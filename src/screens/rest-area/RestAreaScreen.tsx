@@ -6,7 +6,7 @@ import { RootStackParamList } from "@/navigation";
 
 type Props = NativeStackScreenProps<RootStackParamList, "RestAreaModal">;
 
-export function RestAreaModal({ route }: Props) {
+export function RestAreaScreen({ route }: Props) {
   const { id } = route.params;
 
   const restArea = useAppSelector(state => selectRestAreaById(state, id));
