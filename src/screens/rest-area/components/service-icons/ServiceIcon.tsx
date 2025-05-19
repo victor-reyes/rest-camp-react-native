@@ -15,23 +15,23 @@ interface Props extends SvgProps {
   size?: number;
 }
 
-export function ServiceIcon({ name, size = 24 }: Props) {
+export function ServiceIcon({ name, size = 24, ...rest }: Props) {
   switch (name) {
     case "toilet":
-      return <HWC width={size} height={size} />;
+      return <HWC width={size} height={size} {...rest} />;
     case "touristInformation":
-      return <Info width={size} height={size} />;
+      return <Info width={size} height={size} {...rest} />;
     case "dumpingStation":
-      return <Latrine width={size} height={size} />;
+      return <Latrine width={size} height={size} {...rest} />;
     case "picnicFacilities":
-      return <Picnic width={size} height={size} />;
+      return <Picnic width={size} height={size} {...rest} />;
     case "playground":
-      return <Playground width={size} height={size} />;
+      return <Playground width={size} height={size} {...rest} />;
     case "petrolStation":
-      return <PetrolStation width={size} height={size} />;
+      return <PetrolStation width={size} height={size} {...rest} />;
     case "restaurant":
-      return <Restaurant width={size} height={size} />;
+      return <Restaurant width={size} height={size} {...rest} />;
     case "refuseBin":
-      return <Trash width={size} height={size} />;
+      return <Trash width={size} height={size} {...rest} />;
   }
 }
