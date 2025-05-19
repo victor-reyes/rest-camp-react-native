@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Description } from "./Description";
-import { FacilityEquipmentList } from "./FacilityEquipmentList";
+import { Services } from "./Services";
 import { ParkingHeader } from "./RestAreaHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
@@ -23,7 +23,7 @@ export function RestAreaCard({ restArea }: Props) {
         description={restArea.description || undefined}
         locationDescription={restArea.localDescription || undefined}
       />
-      <FacilityEquipmentList services={restArea.services.map(service => service.name)} />
+      <Services services={restArea.services.map(service => service.name)} />
       <PhotoGallery photos={restArea.photos} />
     </View>
   );

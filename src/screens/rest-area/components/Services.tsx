@@ -6,7 +6,7 @@ import { ServicePopover } from "./ServicePopover";
 interface Props {
   services: Service[];
 }
-export function FacilityEquipmentList({ services }: Props) {
+export function Services({ services }: Props) {
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
