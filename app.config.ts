@@ -3,6 +3,11 @@ import { ExpoConfig, ConfigContext } from "@expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  extra: {
+    eas: {
+      projectId: "1c04ee02-bc1e-49fc-b2ac-28406cdd765d",
+    },
+  },
   name: "Rastplatser",
   slug: "Rastplatser",
   version: "1.0.0",
