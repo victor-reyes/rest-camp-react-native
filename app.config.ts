@@ -50,5 +50,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "react-native-edge-to-edge",
     "expo-sqlite",
+    [
+      "expo-build-properties",
+      {
+        android: {
+          enableProguardInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true,
+        },
+      },
+    ],
   ],
 });
