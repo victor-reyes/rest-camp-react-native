@@ -1,0 +1,45 @@
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+interface Props {
+  title?: string;
+  icon?: React.ReactNode;
+  iconSize?: number;
+  disabled?: boolean;
+  onPress: () => void;
+}
+
+export function Button({ onPress, title, icon, iconSize = 24, disabled = false }: Props) {
+  const iconSizeStyle = { height: iconSize, width: iconSize };
+  return (
+    <Pressable
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
+      {icon && <View style={iconSizeStyle}>{icon}</View>}
+      {title && <Text style={styles.buttonText}>{title}</Text>}
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  button: {
+    flexDirection: "row",
+    gap: 8,
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "black",
+    width: "100%",
+    maxWidth: 320,
+  },
+  buttonPressed: {
+    backgroundColor: "#eee",
+  },
+  buttonText: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+});
