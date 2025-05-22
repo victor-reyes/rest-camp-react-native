@@ -1,6 +1,6 @@
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MapScreen, RestAreaScreen } from "@/screens";
+import { MapScreen, Profile, RestAreaScreen } from "@/screens";
 
 // type HomeTabsParamList = {
 //   Map: undefined;
@@ -8,13 +8,14 @@ import { MapScreen, RestAreaScreen } from "@/screens";
 //   Updates: undefined;
 // };
 
-type RootStackParamList = {
+export type RootStackParamList = {
   // HomeTabs: NavigatorScreenParams<HomeTabsParamList> | undefined;
   // Profile: { user: string };
   // Settings: undefined;
   // NotFound: undefined;
   Map: undefined;
   RestAreaModal: { id: string };
+  Profile: undefined;
 };
 
 // const HomeTabs = createBottomTabNavigator<HomeTabsParamList>({
@@ -116,6 +117,13 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
         sheetCornerRadius: 25,
         sheetAllowedDetents: [0.5, 0.75, 1],
       },
+    },
+    Profile: {
+      screen: Profile,
+      options: () => ({
+        presentation: "modal",
+        title: "Profile",
+      }),
     },
   },
 });

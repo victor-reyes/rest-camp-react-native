@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useCallback, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
@@ -34,8 +35,13 @@ export function MapScreen() {
     [region],
   );
 
+  const handleOnProfilePress = () => navigation.navigate("Profile");
+
   return (
     <View style={styles.container} onLayout={onLayout}>
+      <Pressable onPress={handleOnProfilePress} style={styles.profileButton}>
+        <FontAwesome5 name="user" size={18} color="gray" />
+      </Pressable>
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -68,5 +74,23 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  profileButton: {
+    position: "absolute",
+    top: 36,
+    right: 18,
+    zIndex: 1,
+    backgroundColor: "#ffffffee",
+    padding: 8,
+    borderRadius: 25,
+    alignSelf: "flex-end",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
 });
