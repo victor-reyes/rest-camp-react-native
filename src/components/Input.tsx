@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   horizontalLine: {
-    height: 1,
-    backgroundColor: "#aaa",
+    height: 2,
+    backgroundColor: "#ccc",
   },
 });
