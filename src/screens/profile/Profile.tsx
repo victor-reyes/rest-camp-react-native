@@ -32,8 +32,8 @@ export function Profile() {
       : <>
           <Text>Logga in för att fortsätta</Text>
           <AppleAuth />
-          <EmailAuth />
           <GoogleAuth />
+          <EmailAuth />
         </>
       }
     </View>
