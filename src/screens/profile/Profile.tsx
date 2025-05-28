@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { EmailAuth } from "./EmailAuth";
 import { GoogleAuth } from "./GoogleAuth";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
@@ -33,7 +32,6 @@ export function Profile() {
           <Text>Logga in för att fortsätta</Text>
           <AppleAuth />
           <GoogleAuth />
-          <EmailAuth />
         </>
       }
     </View>
