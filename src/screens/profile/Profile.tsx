@@ -6,6 +6,7 @@ import { EmailAuth } from "./EmailAuth";
 import { GoogleAuth } from "./GoogleAuth";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
+import { AppleAuth } from "./AppleAuth";
 
 export function Profile() {
   const [session, setSession] = useState<Session | null>(null);
@@ -30,6 +31,7 @@ export function Profile() {
         </>
       : <>
           <Text>Logga in för att fortsätta</Text>
+          <AppleAuth />
           <EmailAuth />
           <GoogleAuth />
         </>
