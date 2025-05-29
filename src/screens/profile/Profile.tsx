@@ -3,10 +3,9 @@ import { useEffect } from "react";
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
-import { GoogleIcon } from "@/components/icons/Google";
-import { Apple } from "@/components/icons/Apple";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import { authWithGoogle, authWithApple, selectAuth, setSession, signOut } from "@/slices/auth";
+import { Apple, GoogleIcon } from "@/components/icons";
 
 export function Profile() {
   const dispatch = useAppDispatch();
