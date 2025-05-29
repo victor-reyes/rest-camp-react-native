@@ -1,21 +1,33 @@
 import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { GoogleAuth } from "./GoogleAuth";
+import { useEffect } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
 import { AppleAuth } from "./AppleAuth";
+import { GoogleIcon } from "@/components/icons/Google";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { authWithGoogle, selectAuth, setSession, signOut } from "@/slices/auth";
 
 export function Profile() {
-  const [session, setSession] = useState<Session | null>(null);
+  const dispatch = useAppDispatch();
+  const { session, isLoading, error } = useAppSelector(selectAuth);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
-    supabase.auth.onAuthStateChange((_, session) => setSession(session));
-  }, []);
+    supabase.auth.getSession().then(({ data: { session } }) => dispatch(setSession(session)));
+    supabase.auth.onAuthStateChange((_, session) => {
+      dispatch(setSession(session));
+    });
+  }, [dispatch]);
 
-  const handleSignOut = async () => await supabase.auth.signOut();
+  if (isLoading)
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#155196" />
+      </View>
+    );
+
+  const handleGoogleSignIn = () => dispatch(authWithGoogle());
+  const handleSignOut = () => dispatch(signOut());
 
   return (
     <View style={styles.container}>
@@ -31,7 +43,7 @@ export function Profile() {
       : <>
           <Text>Logga in för att fortsätta</Text>
           <AppleAuth />
-          <GoogleAuth />
+          <Button onPress={handleGoogleSignIn} title="Logga in med Google" icon={<GoogleIcon />} />
         </>
       }
     </View>

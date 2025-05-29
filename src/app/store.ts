@@ -1,3 +1,4 @@
+import { authSlice } from "@/slices/auth";
 import { filtersSlice } from "@/slices/filters";
 import { restAreasSlice, restAreasApi } from "@/slices/rest-areas";
 import { configureStore } from "@reduxjs/toolkit";
@@ -8,6 +9,7 @@ export const store = configureStore({
   reducer: {
     restAreas: restAreasSlice.reducer,
     filters: filtersSlice.reducer,
+    auth: authSlice.reducer,
     [restAreasApi.reducerPath]: restAreasApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(restAreasApi.middleware),

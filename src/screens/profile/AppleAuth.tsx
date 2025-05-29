@@ -13,6 +13,7 @@ export function AppleAuth() {
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ];
+
       const { identityToken } = await AppleAuthentication.signInAsync({ requestedScopes });
 
       if (identityToken) {
