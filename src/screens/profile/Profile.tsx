@@ -1,12 +1,12 @@
 import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
-import { AppleAuth } from "./AppleAuth";
 import { GoogleIcon } from "@/components/icons/Google";
+import { Apple } from "@/components/icons/Apple";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { authWithGoogle, selectAuth, setSession, signOut } from "@/slices/auth";
+import { authWithGoogle, authWithApple, selectAuth, setSession, signOut } from "@/slices/auth";
 
 export function Profile() {
   const dispatch = useAppDispatch();
@@ -27,6 +27,7 @@ export function Profile() {
     );
 
   const handleGoogleSignIn = () => dispatch(authWithGoogle());
+  const handleAppleSignIn = () => dispatch(authWithApple());
   const handleSignOut = () => dispatch(signOut());
 
   return (
@@ -42,7 +43,9 @@ export function Profile() {
         </>
       : <>
           <Text>Logga in för att fortsätta</Text>
-          <AppleAuth />
+          {Platform.OS === "ios" && (
+            <Button onPress={handleAppleSignIn} title="Logga in med Apple" icon={<Apple />} />
+          )}
           <Button onPress={handleGoogleSignIn} title="Logga in med Google" icon={<GoogleIcon />} />
         </>
       }

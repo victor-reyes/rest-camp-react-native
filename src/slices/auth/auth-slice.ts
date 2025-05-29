@@ -1,7 +1,7 @@
 import { RootState } from "@/app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Session } from "@supabase/supabase-js";
-import { authWithGoogle } from "./thunks";
+import { authWithApple, authWithGoogle } from "./thunks";
 import { signOut } from "./thunks/sign-out";
 
 interface AuthState {
@@ -47,6 +47,18 @@ export const authSlice = createSlice({
         state.session = null;
         state.isLoading = false;
         state.error = null;
+      })
+      .addCase(authWithApple.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(authWithApple.fulfilled, state => {
+        state.error = null;
+        state.isLoading = false;
+      })
+      .addCase(authWithApple.rejected, (state, action) => {
+        state.error = action.payload!;
+        state.isLoading = false;
       });
   },
 });
