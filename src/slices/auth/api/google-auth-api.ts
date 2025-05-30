@@ -16,7 +16,7 @@ export const googleAuthApi = {
     try {
       const { data, type } = await GoogleSignin.signIn();
       if (type === "cancelled") {
-        console.error("Google sign-in was cancelled by the user.");
+        console.warn("Google sign-in was cancelled by the user.");
         return { error: { code: "SIGN_IN_CANCELLED" } };
       }
       const { idToken: token } = data;
