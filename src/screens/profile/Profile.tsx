@@ -4,14 +4,7 @@ import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-nativ
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import {
-  authWithGoogle,
-  authWithApple,
-  selectAuth,
-  setSession,
-  signOut,
-  clearError,
-} from "@/slices/auth";
+import { selectAuth, setSession, signIn, signOut, clearError } from "@/slices/auth";
 import { Apple, GoogleIcon } from "@/components/icons";
 import Toast from "react-native-toast-message";
 
@@ -48,8 +41,8 @@ export function Profile() {
       </View>
     );
 
-  const handleGoogleSignIn = () => dispatch(authWithGoogle());
-  const handleAppleSignIn = () => dispatch(authWithApple());
+  const handleGoogleSignIn = () => dispatch(signIn("google"));
+  const handleAppleSignIn = () => dispatch(signIn("apple"));
   const handleSignOut = () => dispatch(signOut());
 
   return (
