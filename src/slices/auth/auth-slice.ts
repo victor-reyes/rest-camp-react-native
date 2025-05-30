@@ -2,10 +2,11 @@ import { RootState } from "@/app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Session } from "@supabase/supabase-js";
 import { signIn, signOut } from "./thunks";
+import { AuthenticationError } from "./types";
 
 interface AuthState {
   session: Session | null;
-  error: string | null;
+  error: AuthenticationError | null;
   isLoading: boolean;
 }
 const initialState: AuthState = {

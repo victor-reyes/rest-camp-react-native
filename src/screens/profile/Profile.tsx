@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/app/store";
 import { selectAuth, setSession, signIn, signOut, clearError } from "@/slices/auth";
 import { Apple, GoogleIcon } from "@/components/icons";
 import Toast from "react-native-toast-message";
+import { AuthenticationError } from "@/slices/auth/types";
 
 export function Profile() {
   const dispatch = useAppDispatch();
@@ -20,11 +21,11 @@ export function Profile() {
   }, [dispatch]);
 
   const showToast = useCallback(
-    (errorMessage: string) =>
+    (errorMessage: AuthenticationError) =>
       Toast.show({
         type: "error",
         text1: "Fel",
-        text2: errorMessage,
+        text2: getErrorMessage(errorMessage),
         onHide: () => dispatch(clearError()),
       }),
     [dispatch],
@@ -85,3 +86,20 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 });
+
+const getErrorMessage = (error: AuthenticationError) => {
+  switch (error.code) {
+    case "SIGN_IN_CANCELLED":
+      return "Inloggningen avbröts.";
+    case "SIGN_IN_FAILED":
+      return "Inloggningen misslyckades. Försök igen.";
+    case "SIGN_IN_IN_PROGRESS":
+      return "En inloggning pågår redan.";
+    case "PLAY_SERVICES_NOT_AVAILABLE":
+      return "Google Play-tjänster är inte tillgängliga.";
+    case "SIGN_IN_REQUIRED":
+      return "Inloggning krävs för att fortsätta.";
+    default:
+      return "Ett okänt fel inträffade. Försök igen senare.";
+  }
+};
