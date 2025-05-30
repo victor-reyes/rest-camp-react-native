@@ -24,6 +24,9 @@ export const authSlice = createSlice({
       state.error = null;
       state.isLoading = false;
     },
+    clearError: state => {
+      state.error = null;
+    },
   },
   extraReducers: builder => {
     builder
@@ -64,4 +67,4 @@ export const authSlice = createSlice({
 });
 
 export const selectAuth = (state: RootState) => state.auth;
-export const { setSession } = authSlice.actions;
+export const { setSession, clearError } = authSlice.actions;
