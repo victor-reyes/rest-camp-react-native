@@ -49,5 +49,11 @@ export const googleAuthApi = {
       return { error: { code: "UNKNOWN" } };
     }
   },
-  async signOut() {},
+  async signOut() {
+    try {
+      await GoogleSignin.signOut();
+    } catch (error) {
+      console.error("Error during Google sign-out:", JSON.stringify(error));
+    }
+  },
 };
