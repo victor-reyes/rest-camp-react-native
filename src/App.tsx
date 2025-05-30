@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Alert } from "react-native";
 import { db, migrations } from "@/db/";
+import Toast from "react-native-toast-message";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -49,6 +50,7 @@ export function App() {
           onReady={() => setNavigationIsReady(true)}
         />
       </GestureHandlerRootView>
+      <Toast position="bottom" />
     </Provider>
   );
 }

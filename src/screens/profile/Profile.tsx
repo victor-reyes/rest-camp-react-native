@@ -1,11 +1,19 @@
 import { supabase } from "@/lib/supabase";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
 import { Button } from "@/components/Button";
 import Feather from "@expo/vector-icons/Feather";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { authWithGoogle, authWithApple, selectAuth, setSession, signOut } from "@/slices/auth";
+import {
+  authWithGoogle,
+  authWithApple,
+  selectAuth,
+  setSession,
+  signOut,
+  clearError,
+} from "@/slices/auth";
 import { Apple, GoogleIcon } from "@/components/icons";
+import Toast from "react-native-toast-message";
 
 export function Profile() {
   const dispatch = useAppDispatch();
@@ -17,6 +25,21 @@ export function Profile() {
       dispatch(setSession(session));
     });
   }, [dispatch]);
+
+  const showToast = useCallback(
+    (errorMessage: string) =>
+      Toast.show({
+        type: "error",
+        text1: "Fel",
+        text2: errorMessage,
+        onHide: () => dispatch(clearError()),
+      }),
+    [dispatch],
+  );
+
+  useEffect(() => {
+    if (error) showToast(error);
+  }, [error, showToast]);
 
   if (isLoading)
     return (
@@ -30,25 +53,32 @@ export function Profile() {
   const handleSignOut = () => dispatch(signOut());
 
   return (
-    <View style={styles.container}>
-      {session ?
-        <>
-          <Text>Inloggad som {session.user.email}</Text>
-          <Button
-            title="Logga ut"
-            onPress={handleSignOut}
-            icon={<Feather name="log-out" size={24} />}
-          />
-        </>
-      : <>
-          <Text>Logga in för att fortsätta</Text>
-          {Platform.OS === "ios" && (
-            <Button onPress={handleAppleSignIn} title="Logga in med Apple" icon={<Apple />} />
-          )}
-          <Button onPress={handleGoogleSignIn} title="Logga in med Google" icon={<GoogleIcon />} />
-        </>
-      }
-    </View>
+    <>
+      <View style={styles.container}>
+        {session ?
+          <>
+            <Text>Inloggad som {session.user.email}</Text>
+            <Button
+              title="Logga ut"
+              onPress={handleSignOut}
+              icon={<Feather name="log-out" size={24} />}
+            />
+          </>
+        : <>
+            <Text>Logga in för att fortsätta</Text>
+            {Platform.OS === "ios" && (
+              <Button onPress={handleAppleSignIn} title="Logga in med Apple" icon={<Apple />} />
+            )}
+            <Button
+              onPress={handleGoogleSignIn}
+              title="Logga in med Google"
+              icon={<GoogleIcon />}
+            />
+          </>
+        }
+      </View>
+      <Toast position="bottom" />
+    </>
   );
 }
 
