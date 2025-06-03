@@ -1,13 +1,11 @@
 import { supabase } from "@/lib/supabase";
 import { useCallback, useEffect } from "react";
-import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
-import { Button } from "@/components/Button";
-import Feather from "@expo/vector-icons/Feather";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { selectAuth, setSession, signIn, signOut, clearError } from "@/slices/auth";
-import { Apple, GoogleIcon } from "@/components/icons";
+import { selectAuth, setSession, clearError } from "@/slices/auth";
 import Toast from "react-native-toast-message";
 import { AuthenticationError } from "@/slices/auth/types";
+import { SignedIn, SignedOut } from "./components";
 
 export function Profile() {
   const dispatch = useAppDispatch();
@@ -42,34 +40,12 @@ export function Profile() {
       </View>
     );
 
-  const handleGoogleSignIn = () => dispatch(signIn("google"));
-  const handleAppleSignIn = () => dispatch(signIn("apple"));
-  const handleSignOut = () => dispatch(signOut());
-
   return (
     <>
       <View style={styles.container}>
         {session ?
-          <>
-            <Text>Inloggad som {session.user.email}</Text>
-            <Button
-              title="Logga ut"
-              onPress={handleSignOut}
-              icon={<Feather name="log-out" size={24} />}
-            />
-          </>
-        : <>
-            <Text>Logga in för att fortsätta</Text>
-            {Platform.OS === "ios" && (
-              <Button onPress={handleAppleSignIn} title="Logga in med Apple" icon={<Apple />} />
-            )}
-            <Button
-              onPress={handleGoogleSignIn}
-              title="Logga in med Google"
-              icon={<GoogleIcon />}
-            />
-          </>
-        }
+          <SignedIn userId={session.user.id} email={session.user.email} />
+        : <SignedOut />}
       </View>
       <Toast position="bottom" />
     </>
@@ -80,10 +56,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch",
     backgroundColor: "#fff",
     gap: 8,
     padding: 16,
+    alignSelf: "stretch",
+    borderWidth: 1,
   },
 });
 
