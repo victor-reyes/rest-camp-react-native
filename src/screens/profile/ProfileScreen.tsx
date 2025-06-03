@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     gap: 8,
     padding: 16,
     alignSelf: "stretch",
-    borderWidth: 1,
   },
 });
 
