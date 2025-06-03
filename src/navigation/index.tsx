@@ -1,6 +1,6 @@
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MapScreen, Profile, RestAreaScreen } from "@/screens";
+import { MapScreen, ProfileScreen, RestAreaScreen } from "@/screens";
 
 // type HomeTabsParamList = {
 //   Map: undefined;
@@ -119,7 +119,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
       },
     },
     Profile: {
-      screen: Profile,
+      screen: ProfileScreen,
       options: () => ({
         presentation: "modal",
         title: "Profile",

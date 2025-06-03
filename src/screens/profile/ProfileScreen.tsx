@@ -7,7 +7,7 @@ import Toast from "react-native-toast-message";
 import { AuthenticationError } from "@/slices/auth/types";
 import { SignedIn, SignedOut } from "./components";
 
-export function Profile() {
+export function ProfileScreen() {
   const dispatch = useAppDispatch();
   const { session, isLoading, error } = useAppSelector(selectAuth);
 
