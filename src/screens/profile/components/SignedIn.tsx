@@ -18,7 +18,7 @@ export function SignedIn({ userId, email }: Props) {
   const dispatch = useAppDispatch();
   const handleSignOut = () => dispatch(signOut());
 
-  const getProfile = useCallback(async (userId: string) => {
+  const getProfile = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("profiles")
@@ -34,17 +34,21 @@ export function SignedIn({ userId, email }: Props) {
       if (data) {
         setName(data.full_name);
         setAvatarUrl(data.avatar_url);
-        console.log("Profile data:", data);
-        console.log("Avatar URL:", data.avatar_url);
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
-  }, []);
+    const response = await supabase.from("rest_areas").select("*, reviews(*, profiles(*))");
+
+    if (response.error) {
+      console.error("Error fetching rest areas:", response.error);
+    }
+    console.log("Rest areas data:", JSON.stringify(response.data, null, 2));
+  }, [userId]);
 
   useEffect(() => {
-    getProfile(userId);
-  }, [getProfile, userId]);
+    getProfile();
+  }, [getProfile]);
 
   return (
     <View style={styles.container}>
