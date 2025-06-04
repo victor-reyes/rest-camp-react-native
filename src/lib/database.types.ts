@@ -10,6 +10,7 @@ export type Database = {
           rest_area_id: string;
           review_id: string | null;
           thumbnail_url: string;
+          updated_at: string;
           url: string;
         };
         Insert: {
@@ -18,6 +19,7 @@ export type Database = {
           rest_area_id: string;
           review_id?: string | null;
           thumbnail_url: string;
+          updated_at?: string;
           url: string;
         };
         Update: {
@@ -26,6 +28,7 @@ export type Database = {
           rest_area_id?: string;
           review_id?: string | null;
           thumbnail_url?: string;
+          updated_at?: string;
           url?: string;
         };
         Relationships: [
@@ -88,17 +91,19 @@ export type Database = {
           longitude: number;
           name: string | null;
           status: string;
-          updated_at: string | null;
+          trafikverket_id: string;
+          updated_at: string;
         };
         Insert: {
           description?: string | null;
-          id: string;
+          id?: string;
           latitude: number;
           local_description?: string | null;
           longitude: number;
           name?: string | null;
           status: string;
-          updated_at?: string | null;
+          trafikverket_id: string;
+          updated_at: string;
         };
         Update: {
           description?: string | null;
@@ -108,7 +113,8 @@ export type Database = {
           longitude?: number;
           name?: string | null;
           status?: string;
-          updated_at?: string | null;
+          trafikverket_id?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -119,6 +125,7 @@ export type Database = {
           recension: string | null;
           rest_area_id: string;
           score: number;
+          updated_at: string;
         };
         Insert: {
           id?: string;
@@ -126,6 +133,7 @@ export type Database = {
           recension?: string | null;
           rest_area_id: string;
           score: number;
+          updated_at?: string;
         };
         Update: {
           id?: string;
@@ -133,6 +141,7 @@ export type Database = {
           recension?: string | null;
           rest_area_id?: string;
           score?: number;
+          updated_at?: string;
         };
         Relationships: [
           {
