@@ -15,7 +15,7 @@ export const getSupabaseClient = (authorization: string) => {
         .select("updated_at")
         .order("updated_at", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (response.error) {
         throw new Error(`Error fetching last updated time: ${response.error.message}`);
