@@ -1,4 +1,3 @@
-import process from "node:process";
 import { ResponseSchema } from "./schemas/index.ts";
 import { RestAreaWithServicesAndPhotos } from "../types.ts";
 
@@ -23,7 +22,7 @@ export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540
 function getBody(datetime: string) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <REQUEST> 
-    <LOGIN authenticationkey="${process.env.TRAFIK_API_KEY}"/>
+    <LOGIN authenticationkey="${Deno.env.get("TRAFIK_API_KEY")}"/>
     <QUERY 
         objecttype="Parking" 
         schemaversion="1.4">
