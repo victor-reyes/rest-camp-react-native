@@ -1,8 +1,8 @@
 import { fetchRestAreas } from "./api/index.ts";
 import { getSupabaseClient } from "./api/supabase.ts";
 
-Deno.serve(async req => {
-  const supabase = getSupabaseClient(req.headers.get("Authorization")!);
+Deno.serve(async _req => {
+  const supabase = getSupabaseClient();
   try {
     const updatedAt = await supabase.getLastUpdatedAt();
 

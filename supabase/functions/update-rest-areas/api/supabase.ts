@@ -1,12 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 import { RestAreaWithServicesAndPhotos } from "../types.ts";
 
-export const getSupabaseClient = (authorization: string) => {
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    { global: { headers: { Authorization: authorization } } },
-  );
+export const getSupabaseClient = () => {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+
+  const supabase = createClient(supabaseUrl, serviceRoleKey);
 
   return {
     async getLastUpdatedAt(): Promise<string> {
