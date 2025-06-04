@@ -1,5 +1,5 @@
 import process from "node:process";
-import { transformToSql } from "./schemas/transform-to-sql.ts";
+import { transformToSql } from "../schemas/transform-to-sql.ts";
 
 export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540Z") {
   const response = await fetch("https://api.trafikinfo.trafikverket.se/v2/data.json", {

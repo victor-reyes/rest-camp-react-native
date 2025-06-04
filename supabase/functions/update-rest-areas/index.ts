@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { fetchRestAreas } from "./fetch-rest-areas.ts";
+import { fetchRestAreas } from "./api/index.ts";
 
 Deno.serve(async req => {
   try {
