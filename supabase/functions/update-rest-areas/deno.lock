@@ -1,9 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:@supabase/supabase-js@2": "2.49.9",
     "npm:@supabase/supabase-js@^2.49.9": "2.49.9",
-    "npm:@types/node@*": "22.15.15",
     "npm:zod@^3.25.49": "3.25.49"
   },
   "npm": {

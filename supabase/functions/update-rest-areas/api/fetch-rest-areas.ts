@@ -1,5 +1,5 @@
 import process from "node:process";
-import { ResponseSchema } from "../schemas/index.ts";
+import { ResponseSchema } from "./schemas/index.ts";
 import { RestAreaWithServicesAndPhotos } from "../types.ts";
 
 export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540Z") {

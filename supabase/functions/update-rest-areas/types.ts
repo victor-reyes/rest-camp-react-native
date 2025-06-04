@@ -1,6 +1,6 @@
 import z from "zod";
 import { Database } from "./database.types.ts";
-import { ResponseSchema } from "./schemas/response-schema.ts";
+import { ResponseSchema } from "./api/index.ts";
 
 export type RestAreaApiResponse = z.infer<typeof ResponseSchema>;
 

@@ -1,13 +1,10 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchRestAreas } from "./api/index.ts";
+import { getSupabaseClient } from "./api/supabase.ts";
 
 Deno.serve(async req => {
+  const supabase = getSupabaseClient(req.headers.get("Authorization")!);
   try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      { global: { headers: { Authorization: req.headers.get("Authorization")! } } },
-    );
+    c;
 
     const responce = await supabase
       .from("rest_areas")
