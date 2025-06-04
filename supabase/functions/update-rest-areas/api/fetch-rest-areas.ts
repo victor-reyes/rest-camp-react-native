@@ -1,5 +1,6 @@
 import process from "node:process";
-import { transformToSql } from "../schemas/transform-to-sql.ts";
+import { ResponseSchema } from "../schemas/index.ts";
+import { RestAreaWithServicesAndPhotos } from "../types.ts";
 
 export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540Z") {
   const response = await fetch("https://api.trafikinfo.trafikverket.se/v2/data.json", {
@@ -31,4 +32,35 @@ function getBody(datetime: string) {
       </FILTER>
     </QUERY>
 </REQUEST>`;
+}
+
+function transformToSql(raw: unknown) {
+  const responce = ResponseSchema.parse(raw);
+  const data = responce.RESPONSE.RESULT[0].Parking || [];
+
+  const restAreas = data.map((item): RestAreaWithServicesAndPhotos => {
+    const localDescription = [item.LocationDescription, item.DistanceToNearestCity]
+      .filter(Boolean)
+      .join(" ");
+    return {
+      trafikverket_id: item.Id,
+      name: item.Name,
+      latitude: item.Geometry.latitude,
+      longitude: item.Geometry.longitude,
+      description: item.Description,
+      local_description: localDescription,
+      status: item.OpenStatus,
+      updated_at: item.ModifiedTime,
+      services: [...item.Equipment, ...(item.Facility || [])].map(service => ({
+        name: service.Type,
+      })),
+      photos: (item.Photo || []).map(photo => ({
+        url: photo.Url,
+        description: photo.Title,
+        thumbnail_url: photo.Url,
+      })),
+    };
+  });
+
+  return restAreas;
 }
