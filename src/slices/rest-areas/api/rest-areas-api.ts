@@ -1,27 +1,53 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ResponseSchema } from "./schemas";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { transformToSql } from "./transform-to-sql";
 import { updateDb } from "../utils/updateDb";
 import { loadRestAreas } from "../rest-area-slice";
+import { supabase } from "@/lib/supabase";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.trafikinfo.trafikverket.se/v2/data.json",
-    prepareHeaders: headers => {
-      headers.set("Content-Type", "text/xml");
-      return headers;
-    },
-  }),
+  baseQuery: fakeBaseQuery(),
   endpoints: builder => ({
     restAreas: builder.query<Awaited<ReturnType<typeof transformToSql>>, void>({
-      query: () => ({
-        url: "",
-        method: "POST",
-        body: getBody(),
-      }),
-      rawResponseSchema: ResponseSchema,
-      transformResponse: transformToSql,
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("rest_areas")
+          .select("*, services(*), photos(*)");
+
+        if (error) return { error };
+
+
+
+        const restAreas: Awaited<ReturnType<typeof transformToSql>> = {
+          restAreas: data.map(restArea => ({
+            id: restArea.id,
+            name: restArea.name || "",
+            latitude: restArea.latitude,
+            longitude: restArea.longitude,
+            description: restArea.description || "",
+            localDescription: restArea.local_description || "",
+            status: restArea.status === "open" ? "open" : "closed",
+            numberOfCarSpaces: 0,
+            numberOfTruckSpaces: 0,
+            modifiedTime: new Date(restArea.updated_at).getTime(),
+          })),
+          services: data.flatMap(restArea =>
+            restArea.services.map(service => ({
+              name: service.name,
+              restAreaId: restArea.id,
+            })),
+          ),
+          photos: data.flatMap(restArea =>
+            restArea.photos.map(photo => ({
+              url: photo.url,
+              description: photo.description,
+              restAreaId: restArea.id,
+            })),
+          ),
+        };
+
+        return { data: restAreas };
+      },
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         if (data) {
@@ -32,19 +58,5 @@ export const restAreasApi = createApi({
     }),
   }),
 });
-
-function getBody(filter: string = "") {
-  return `<?xml version="1.0" encoding="utf-8"?>
-<REQUEST> 
-    <LOGIN authenticationkey="${process.env.EXPO_PUBLIC_TRAFIK_INFO_API_KEY}"/>
-    <QUERY 
-        objecttype="Parking" 
-        schemaversion="1.4">
-      <FILTER>
-        ${filter}
-      </FILTER>
-    </QUERY>
-</REQUEST>`;
-}
 
 export const { useRestAreasQuery } = restAreasApi;
