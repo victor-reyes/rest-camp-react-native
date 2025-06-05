@@ -1,5 +1,4 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { transformToSql } from "./transform-to-sql";
 import { updateDb } from "../utils/updateDb";
 import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib/supabase";
@@ -8,7 +7,7 @@ export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
   baseQuery: fakeBaseQuery(),
   endpoints: builder => ({
-    restAreas: builder.query<Awaited<ReturnType<typeof transformToSql>>, void>({
+    restAreas: builder.query<Parameters<typeof updateDb>[0], void>({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("rest_areas")
@@ -16,9 +15,7 @@ export const restAreasApi = createApi({
 
         if (error) return { error };
 
-
-
-        const restAreas: Awaited<ReturnType<typeof transformToSql>> = {
+        const restAreas: Parameters<typeof updateDb>[0] = {
           restAreas: data.map(restArea => ({
             id: restArea.id,
             name: restArea.name || "",

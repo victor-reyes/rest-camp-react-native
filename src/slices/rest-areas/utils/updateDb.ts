@@ -1,7 +1,11 @@
 import { db, restAreas, photos, services } from "@/db";
-import { transformToSql } from "../api/transform-to-sql";
+import { PhotoInsert, RestAreaInsert, ServiceInsert } from "../types";
 
-export async function updateDb(data: Awaited<ReturnType<typeof transformToSql>>) {
+export async function updateDb(data: {
+  restAreas: RestAreaInsert[];
+  services: ServiceInsert[];
+  photos: PhotoInsert[];
+}) {
   await db.transaction(async tx => {
     try {
       await tx.delete(restAreas);

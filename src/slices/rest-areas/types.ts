@@ -25,3 +25,7 @@ export type ServiceSelect = typeof services.$inferSelect;
 export type Service = (typeof services.$inferSelect)["name"];
 
 export type RestAreaApiResponse = z.infer<typeof ResponseSchema>;
+
+export type RestAreaInsert = typeof restAreas.$inferInsert;
+export type ServiceInsert = typeof services.$inferInsert;
+export type PhotoInsert = typeof photos.$inferInsert;
