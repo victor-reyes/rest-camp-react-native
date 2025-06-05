@@ -1,6 +1,4 @@
 import { restAreas, photos, services } from "@/db";
-import { z } from "zod";
-import { ResponseSchema } from "./api";
 
 export type RestAreaPoint = RestArea & { type: "Point" };
 export type RestAreaCluster = {
@@ -23,8 +21,6 @@ export type RestArea = typeof restAreas.$inferSelect & {
 export type Photo = typeof photos.$inferSelect;
 export type ServiceSelect = typeof services.$inferSelect;
 export type Service = (typeof services.$inferSelect)["name"];
-
-export type RestAreaApiResponse = z.infer<typeof ResponseSchema>;
 
 export type RestAreaInsert = typeof restAreas.$inferInsert;
 export type ServiceInsert = typeof services.$inferInsert;

@@ -1,4 +1,4 @@
-import { EQUIPMENTS, FACILITIES } from "@/slices/rest-areas/api/schemas";
+import { Constants } from "@/lib/database.types";
 import { relations } from "drizzle-orm";
 import { int, primaryKey, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
@@ -20,7 +20,7 @@ export const restAreaRelations = relations(restAreas, ({ many }) => ({
 export const services = sqliteTable(
   "services",
   {
-    name: text({ enum: [...EQUIPMENTS, ...FACILITIES] }).notNull(),
+    name: text({ enum: Constants.public.Enums.service }).notNull(),
     restAreaId: text("rest_area_id")
       .notNull()
       .references(() => restAreas.id),
