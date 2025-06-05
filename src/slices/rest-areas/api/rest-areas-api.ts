@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { updateRestAreas } from "../utils/updateRestAreas";
+import { updateRestAreas } from "../utils";
 import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib/supabase";
 
