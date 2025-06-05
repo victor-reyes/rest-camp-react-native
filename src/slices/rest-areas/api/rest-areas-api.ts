@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { updateDb } from "../utils/updateDb";
+import { updateRestAreas } from "../utils/updateRestAreas";
 import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib/supabase";
 
@@ -7,7 +7,7 @@ export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
   baseQuery: fakeBaseQuery(),
   endpoints: builder => ({
-    restAreas: builder.query<Parameters<typeof updateDb>[0], void>({
+    restAreas: builder.query<Parameters<typeof updateRestAreas>[0], void>({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("rest_areas")
@@ -15,7 +15,7 @@ export const restAreasApi = createApi({
 
         if (error) return { error };
 
-        const restAreas: Parameters<typeof updateDb>[0] = {
+        const restAreas: Parameters<typeof updateRestAreas>[0] = {
           restAreas: data.map(restArea => ({
             id: restArea.id,
             name: restArea.name || "",
@@ -48,7 +48,7 @@ export const restAreasApi = createApi({
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         if (data) {
-          await updateDb(data);
+          await updateRestAreas(data);
           dispatch(loadRestAreas());
         }
       },

@@ -1,7 +1,7 @@
 import { db, restAreas, photos, services } from "@/db";
 import { PhotoInsert, RestAreaInsert, ServiceInsert } from "../types";
 
-export async function updateDb(data: {
+export async function updateRestAreas(data: {
   restAreas: RestAreaInsert[];
   services: ServiceInsert[];
   photos: PhotoInsert[];
