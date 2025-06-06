@@ -3,6 +3,7 @@ import { selectRestAreaById } from "@/slices/rest-areas";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { memo, useCallback, useEffect, useRef } from "react";
 import { RestAreaCard } from "./components";
+import { BackHandler } from "react-native";
 
 type Props = { id: string | null; onClose: () => void };
 function RestAreaModalComponent({ id, onClose }: Props) {
@@ -24,6 +25,15 @@ function RestAreaModalComponent({ id, onClose }: Props) {
     (props: any) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
     [],
   );
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (!id) return false;
+      bottomSheetRef.current?.dismiss();
+      return true;
+    });
+    return () => subscription?.remove();
+  }, [id]);
 
   return (
     restArea && (
