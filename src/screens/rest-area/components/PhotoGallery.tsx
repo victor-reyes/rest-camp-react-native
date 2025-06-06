@@ -1,10 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Pressable, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
 import { Photo } from "@/slices/rest-areas";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { AddPhotoButton } from "./AddPhotoButton";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -18,16 +17,7 @@ export function PhotoGallery({ photos }: Props) {
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
         <Text style={styles.sectionTitleText}>Photos</Text>
-        <Pressable
-          onPress={() => console.log("Add photo")}
-          hitSlop={8}
-          style={({ pressed }) => [
-            styles.addPhotoButton,
-            pressed && { backgroundColor: "#e0e0e0" },
-          ]}>
-          <FontAwesome6 name="plus" size={24} color="#155196" />
-          <Text>Lägg till foto</Text>
-        </Pressable>
+        <AddPhotoButton />
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScrollView}>
         {photos.map(photo => (
@@ -65,16 +55,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#155196",
-  },
-  addPhotoButton: {
-    flexDirection: "row",
-    gap: 4,
-    padding: 4,
-    borderRadius: 4,
-    borderColor: "#eee",
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   photoScrollView: {
     marginTop: 8,
