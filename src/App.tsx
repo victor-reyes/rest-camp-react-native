@@ -10,6 +10,7 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Alert } from "react-native";
 import { db, migrations } from "@/db/";
 import Toast from "react-native-toast-message";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -39,16 +40,18 @@ export function App() {
   return (
     <Provider store={store}>
       <GestureHandlerRootView>
-        <Navigation
-          linking={{
-            enabled: "auto",
-            prefixes: [
-              // Change the scheme to match your app's scheme defined in app.json
-              "helloworld://",
-            ],
-          }}
-          onReady={() => setNavigationIsReady(true)}
-        />
+        <BottomSheetModalProvider>
+          <Navigation
+            linking={{
+              enabled: "auto",
+              prefixes: [
+                // Change the scheme to match your app's scheme defined in app.json
+                "helloworld://",
+              ],
+            }}
+            onReady={() => setNavigationIsReady(true)}
+          />
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
       <Toast position="bottom" />
     </Provider>

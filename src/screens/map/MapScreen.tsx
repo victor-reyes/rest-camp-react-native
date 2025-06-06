@@ -5,7 +5,6 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { RestAreaModal } from "../rest-area/RestAreaModal";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
@@ -65,9 +64,7 @@ export function MapScreen() {
         )}
       </MapView>
       <MapControls onLocationUpdate={handleOnLocationUpdate} />
-      <BottomSheetModalProvider>
-        <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
-      </BottomSheetModalProvider>
+      <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
     </View>
   );
 }
