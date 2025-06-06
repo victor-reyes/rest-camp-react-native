@@ -2,7 +2,7 @@ import { useAppSelector } from "@/app/store";
 import { selectRestAreaById } from "@/slices/rest-areas";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { memo, useCallback, useEffect, useRef } from "react";
-import { RestAreaCard } from "./RestAreaCard";
+import { RestAreaCard } from "./components";
 
 type Props = { id: string | null; onClose: () => void };
 function RestAreaModalComponent({ id, onClose }: Props) {

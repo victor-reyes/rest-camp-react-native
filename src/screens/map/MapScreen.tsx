@@ -6,7 +6,7 @@ import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { RestAreaModal } from "../rest-area/components/RestAreaModal";
+import { RestAreaModal } from "../rest-area/RestAreaModal";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
