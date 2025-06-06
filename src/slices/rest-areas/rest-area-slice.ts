@@ -25,7 +25,7 @@ export const restAreasSlice = createSlice({
   selectors: {
     selectRestAreas: state => state.restAreas,
     selectRestAreaId: (_, restAreaId: string) => restAreaId,
-    selectRestAreaById: ({ restAreas }, restAreaId: string) =>
+    selectRestAreaById: ({ restAreas }, restAreaId: string | null) =>
       restAreas.find(restArea => restArea.id === restAreaId),
   },
 });

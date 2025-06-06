@@ -1,0 +1,39 @@
+import { useAppSelector } from "@/app/store";
+import { selectRestAreaById } from "@/slices/rest-areas";
+import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import { memo, useCallback, useEffect, useRef } from "react";
+import { RestAreaCard } from "./RestAreaCard";
+
+type Props = { id: string | null; onClose: () => void };
+function RestAreaModalComponent({ id, onClose }: Props) {
+  const restArea = useAppSelector(state => selectRestAreaById(state, id));
+
+  useEffect(() => {
+    if (restArea) bottomSheetRef.current?.present();
+    else bottomSheetRef.current?.dismiss();
+  }, [restArea]);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const handleSheetChanges = useCallback(
+    (index: number) => {
+      if (index === -1) onClose();
+    },
+    [onClose],
+  );
+
+  return (
+    restArea && (
+      <BottomSheetModal
+        ref={bottomSheetRef}
+        snapPoints={["50%", "75%", "90%"]}
+        onChange={handleSheetChanges}
+        onDismiss={onClose}
+        enablePanDownToClose>
+        <BottomSheetView>
+          <RestAreaCard restArea={restArea} />
+        </BottomSheetView>
+      </BottomSheetModal>
+    )
+  );
+}
+
+export const RestAreaModal = memo(RestAreaModalComponent);

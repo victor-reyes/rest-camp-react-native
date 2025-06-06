@@ -1,10 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { RestAreaModal } from "../rest-area/components/RestAreaModal";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
@@ -13,15 +15,9 @@ export function MapScreen() {
   const { region, points, setRegion, onLayout } = useMap(initialRegion);
   const navigation = useNavigation();
 
-  const handleOnRestAreaPress = useCallback(
-    (id: string) => navigation.navigate("RestAreaModal", { id }),
-    [navigation],
-  );
-  const handleOnLocationUpdate = useCallback(
-    (coords: { latitude: number; longitude: number }) =>
-      mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 2, longitudeDelta: 2 }, 1000),
-    [mapRef],
-  );
+  const handleOnRestAreaPress = useCallback((id: string) => setCurrentRestAreaId(id), []);
+  const handleOnRestAreaModalClose = useCallback(() => setCurrentRestAreaId(null), []);
+  const [currentRestAreaId, setCurrentRestAreaId] = useState<string | null>(null);
 
   const handleOnClusterPress = useCallback(
     async (coords: { latitude: number; longitude: number }) => {
@@ -35,11 +31,17 @@ export function MapScreen() {
     [region],
   );
 
+  const handleOnLocationUpdate = useCallback(
+    (coords: { latitude: number; longitude: number }) =>
+      mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 2, longitudeDelta: 2 }, 1000),
+    [mapRef],
+  );
+
   const handleOnProfilePress = () => navigation.navigate("Profile");
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Pressable onPress={handleOnProfilePress} style={styles.profileButton}>
+      <Pressable onPress={handleOnProfilePress} style={[styles.profileButton]}>
         <FontAwesome5 name="user" size={18} color="gray" />
       </Pressable>
       <MapView
@@ -63,6 +65,9 @@ export function MapScreen() {
         )}
       </MapView>
       <MapControls onLocationUpdate={handleOnLocationUpdate} />
+      <BottomSheetModalProvider>
+        <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
+      </BottomSheetModalProvider>
     </View>
   );
 }
