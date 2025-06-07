@@ -6,6 +6,7 @@ import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { RestAreaModal } from "../rest-area/RestAreaModal";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
@@ -39,33 +40,35 @@ export function MapScreen() {
   const handleOnProfilePress = () => navigation.navigate("Profile");
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
-      <Pressable onPress={handleOnProfilePress} style={[styles.profileButton]}>
-        <FontAwesome5 name="user" size={18} color="gray" />
-      </Pressable>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        onRegionChangeComplete={setRegion}
-        toolbarEnabled={false}
-        showsMyLocationButton={false}
-        showsUserLocation
-        initialRegion={region}>
-        {points.map(point =>
-          point.type === "Cluster" ?
-            <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
-          : <RestAreaMarker
-              key={point.id}
-              id={point.id}
-              coords={{ latitude: point.latitude, longitude: point.longitude }}
-              onRestAreaPress={handleOnRestAreaPress}
-            />,
-        )}
-      </MapView>
-      <MapControls onLocationUpdate={handleOnLocationUpdate} />
-      <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
-    </View>
+    <BottomSheetModalProvider>
+      <View style={styles.container} onLayout={onLayout}>
+        <Pressable onPress={handleOnProfilePress} style={[styles.profileButton]}>
+          <FontAwesome5 name="user" size={18} color="gray" />
+        </Pressable>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          onRegionChangeComplete={setRegion}
+          toolbarEnabled={false}
+          showsMyLocationButton={false}
+          showsUserLocation
+          initialRegion={region}>
+          {points.map(point =>
+            point.type === "Cluster" ?
+              <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
+            : <RestAreaMarker
+                key={point.id}
+                id={point.id}
+                coords={{ latitude: point.latitude, longitude: point.longitude }}
+                onRestAreaPress={handleOnRestAreaPress}
+              />,
+          )}
+        </MapView>
+        <MapControls onLocationUpdate={handleOnLocationUpdate} />
+        <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
+      </View>
+    </BottomSheetModalProvider>
   );
 }
 
