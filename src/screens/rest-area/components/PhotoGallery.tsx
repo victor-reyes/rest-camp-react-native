@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
@@ -29,9 +28,13 @@ export function PhotoGallery({ photos }: Props) {
           onPress={handleAddPhotos}
         />
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScrollView}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        style={styles.photoScrollView}
+        contentContainerStyle={styles.photoScrollViewContent}>
         {photos.map(photo => (
-          <View key={photo.url} style={styles.photoContainer}>
+          <View key={photo.url}>
             <Image
               source={{ uri: photo.url }}
               style={styles.photo}
@@ -69,9 +72,9 @@ const styles = StyleSheet.create({
   photoScrollView: {
     marginTop: 8,
   },
-  photoContainer: {
-    marginRight: 12,
-    width: 200,
+  photoScrollViewContent: {
+    flexDirection: "row",
+    gap: 8,
   },
   photo: {
     width: 200,
