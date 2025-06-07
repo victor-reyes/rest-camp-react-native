@@ -9,9 +9,18 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppSelector } from "@/app/store";
 import { selectRestAreaById } from "@/slices/rest-areas";
 
+import * as ImagePicker from "expo-image-picker";
+
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
 type SelectedPhoto = { uri: string };
+
+const options: ImagePicker.ImagePickerOptions = {
+  mediaTypes: ["images"],
+  allowsEditing: true,
+  aspect: [4, 3],
+  quality: 1,
+};
 
 export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
@@ -21,16 +30,15 @@ export function UploadPhotosScreen({ route }: Props) {
 
   const [selectedPhotos, setSelectedPhotos] = useState<SelectedPhoto[]>([]);
 
-  const handleTakePhoto = () => {
-    const newPhoto: SelectedPhoto = { uri: `https://picsum.photos/300/200?random=${Date.now()}` };
-    setSelectedPhotos(prev => [...prev, newPhoto]);
-  };
+  const handlePress = async (type: "camera" | "gallery") => {
+    const result =
+      type === "camera" ?
+        await ImagePicker.launchCameraAsync(options)
+      : await ImagePicker.launchImageLibraryAsync(options);
 
-  const handleChooseFromGallery = () => {
-    const newPhoto: SelectedPhoto = {
-      uri: `https://picsum.photos/300/200?random=${Date.now() + 1}`,
-    };
-    setSelectedPhotos(prev => [...prev, newPhoto]);
+    if (result.canceled) return;
+    const newPhotos: SelectedPhoto[] = result.assets.map(asset => ({ uri: asset.uri }));
+    setSelectedPhotos(prev => [...prev, ...newPhotos]);
   };
 
   const handleRemovePhoto = (uri: string) =>
@@ -52,13 +60,13 @@ export function UploadPhotosScreen({ route }: Props) {
             title="Kamera"
             fit
             icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
-            onPress={handleTakePhoto}
+            onPress={() => handlePress("camera")}
           />
           <Button
             title="Galleri"
             fit
             icon={<FontAwesome5 name="images" size={24} color="#155196" />}
-            onPress={handleChooseFromGallery}
+            onPress={() => handlePress("gallery")}
           />
         </View>
       </View>
