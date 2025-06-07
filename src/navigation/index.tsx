@@ -1,6 +1,6 @@
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MapScreen, ProfileScreen } from "@/screens";
+import { MapScreen, ProfileScreen, UploadPhotosScreen } from "@/screens";
 
 // type HomeTabsParamList = {
 //   Map: undefined;
@@ -15,6 +15,7 @@ export type RootStackParamList = {
   // NotFound: undefined;
   Map: undefined;
   Profile: undefined;
+  UploadPhotos: { restAreaId: string };
 };
 
 // const HomeTabs = createBottomTabNavigator<HomeTabsParamList>({
@@ -113,6 +114,15 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
       options: () => ({
         presentation: "modal",
         title: "Profile",
+      }),
+    },
+    UploadPhotos: {
+      screen: UploadPhotosScreen,
+      options: () => ({
+        title: "Ladda upp bilder",
+        presentation: "modal",
+        headerShown: true,
+        headerBackVisible: true,
       }),
     },
   },

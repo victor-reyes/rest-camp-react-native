@@ -5,3 +5,4 @@ export * from "./Settings";
 export * from "./Updates";
 export * from "./profile";
 export * from "./NotFound";
+export * from "./upload-photos";
