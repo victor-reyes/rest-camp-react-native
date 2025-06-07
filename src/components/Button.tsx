@@ -5,16 +5,28 @@ interface Props {
   icon?: React.ReactNode;
   iconSize?: number;
   disabled?: boolean;
+  fit?: boolean;
   onPress: () => void;
 }
 
-export function Button({ onPress, title, icon, iconSize = 24, disabled = false }: Props) {
+export function Button({
+  onPress,
+  title,
+  icon,
+  iconSize = 24,
+  disabled = false,
+  fit = false,
+}: Props) {
   const iconSizeStyle = { height: iconSize, width: iconSize };
   return (
     <Pressable
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
+      style={({ pressed }) => [
+        styles.button,
+        pressed && styles.buttonPressed,
+        fit && styles.buttonFit,
+      ]}>
       {icon && <View style={iconSizeStyle}>{icon}</View>}
       {title && <Text style={styles.buttonText}>{title}</Text>}
     </Pressable>
@@ -37,6 +49,10 @@ const styles = StyleSheet.create({
   },
   buttonPressed: {
     backgroundColor: "#eee",
+  },
+  buttonFit: {
+    width: "auto",
+    maxWidth: "100%",
   },
   buttonText: {
     fontSize: 12,
