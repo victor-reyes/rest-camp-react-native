@@ -26,6 +26,7 @@ export function Button({
         styles.button,
         pressed && styles.buttonPressed,
         fit && styles.buttonFit,
+        disabled && { opacity: 0.3, backgroundColor: "#eee" },
       ]}>
       {icon && <View style={iconSizeStyle}>{icon}</View>}
       {title && <Text style={styles.buttonText}>{title}</Text>}
