@@ -67,5 +67,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         iosUrlScheme: "com.googleusercontent.apps.532615947113-g9n0sdnut1e5po072f6v4al0d6mhdg53",
       },
     ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission:
+          "Appen behöver tillgång till dina foton för att ladda upp bilder på rastplatser.",
+        cameraPermission: "Appen behöver tillgång till kameran för att ta bilder på rastplatser.",
+      },
+    ],
   ],
 });
