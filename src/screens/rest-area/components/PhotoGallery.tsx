@@ -3,7 +3,9 @@ import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
 import { Photo } from "@/slices/rest-areas";
-import { AddPhotoButton } from "./AddPhotoButton";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Button } from "@/components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -13,11 +15,19 @@ interface Props {
 }
 
 export function PhotoGallery({ photos }: Props) {
+  const navigation = useNavigation();
+
+  const handleAddPhotos = () => navigation.navigate("UploadPhotos", { restAreaId: "12345" });
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
-        <Text style={styles.sectionTitleText}>Photos</Text>
-        <AddPhotoButton />
+        <Text style={styles.sectionTitleText}>Bilder</Text>
+        <Button
+          title="Lägg till bilder"
+          fit
+          icon={<FontAwesome6 name="plus" size={24} color="#155196" />}
+          onPress={handleAddPhotos}
+        />
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScrollView}>
         {photos.map(photo => (
