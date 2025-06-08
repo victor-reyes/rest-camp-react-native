@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Pressable,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable, FlatList, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -152,7 +144,7 @@ export function UploadPhotosScreen({ route }: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.description}>
           <Text>Ladda upp bilder för rastplats</Text>
@@ -189,11 +181,13 @@ export function UploadPhotosScreen({ route }: Props) {
               contentFit="cover"
             />
             <StatusIndicator status={item.status} />
-            <Pressable
-              style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
-              onPress={() => handleRemovePhoto(item.uri)}>
-              <Feather name="x" size={18} color="#fff" />
-            </Pressable>
+            {!isUploading && (
+              <Pressable
+                style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
+                onPress={() => handleRemovePhoto(item.uri)}>
+                <Feather name="x" size={18} color="#fff" />
+              </Pressable>
+            )}
           </View>
         )}
         contentContainerStyle={{ padding: 8 }}
@@ -225,7 +219,7 @@ export function UploadPhotosScreen({ route }: Props) {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
