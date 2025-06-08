@@ -15,7 +15,7 @@ import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
-type SelectedPhoto = { uri: string };
+type SelectedPhoto = { uri: string; status?: "pending" | "uploaded" | "error" };
 
 const OPTIONS: ImagePicker.ImagePickerOptions = {
   mediaTypes: ["images"],
@@ -28,6 +28,11 @@ const ERROR = {
   type: "error",
   text1: "Fel vid uppladdning",
   text2: "Kunde inte ladda upp bilden till servern.",
+};
+const SUCCESS = {
+  type: "success",
+  text1: "Uppladdning klar",
+  text2: "Bilderna har laddats upp!",
 };
 
 export function UploadPhotosScreen({ route }: Props) {
@@ -52,43 +57,54 @@ export function UploadPhotosScreen({ route }: Props) {
   const handleRemovePhoto = (uri: string) =>
     setSelectedPhotos(prev => prev.filter(photo => photo.uri !== uri));
 
+  const handleSetStatus = (uri: string, status: "pending" | "uploaded" | "error") =>
+    setSelectedPhotos(prev =>
+      prev.map(photo => (photo.uri === uri ? { ...photo, status } : photo)),
+    );
+
   const [uploading, setUploading] = useState(false);
   const handleCancel = () => navigation.goBack();
   const handleUpload = async () => {
     setUploading(true);
+    await Promise.all(
+      selectedPhotos.map(async photo => {
+        handleSetStatus(photo.uri, "pending");
+        const arrayBuffer = await fetch(photo.uri).then(res => res.arrayBuffer());
+        const fileExt = photo.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
+        const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
+        const { data: storageData, error: storageError } = await supabase.storage
+          .from("photos")
+          .upload(path, arrayBuffer, { contentType: "image/jpeg" });
+
+        if (storageError) {
+          handleSetStatus(photo.uri, "error");
+          console.error("Storage upload error:", storageError);
+          return;
+        }
+
+        const url = supabase.storage.from("photos").getPublicUrl(storageData.path).data.publicUrl;
+
+        const { error: insertError } = await supabase.from("photos").insert({
+          rest_area_id: restAreaId,
+          url,
+          thumbnail_url: url,
+        });
+        if (insertError) {
+          handleSetStatus(photo.uri, "error");
+          console.error("Database insert error:", insertError);
+          return;
+        }
+        handleSetStatus(photo.uri, "uploaded");
+      }),
+    );
+    const hasError = selectedPhotos.some(photo => photo.status === "error");
+    Toast.show(hasError ? ERROR : SUCCESS);
     for (const photo of selectedPhotos) {
-      const arrayBuffer = await fetch(photo.uri).then(res => res.arrayBuffer());
-      const fileExt = photo.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
-      const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
-      const { data: storageData, error: storageError } = await supabase.storage
-        .from("photos")
-        .upload(path, arrayBuffer, { contentType: "image/jpeg" });
-
-      if (storageError) {
-        Toast.show(ERROR);
-        console.error("Error uploading photo:", storageError);
-        setUploading(false);
-        return;
-      }
-
-      const url = supabase.storage.from("photos").getPublicUrl(storageData.path).data.publicUrl;
-
-      const { error: insertError } = await supabase.from("photos").insert({
-        rest_area_id: restAreaId,
-        url,
-        thumbnail_url: url,
-      });
-      if (insertError) {
-        Toast.show(ERROR);
-        console.error("Error inserting photo:", insertError);
-        return;
+      if (photo.status === "uploaded") {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        handleRemovePhoto(photo.uri);
       }
     }
-    Toast.show({
-      type: "success",
-      text1: "Uppladdning klar",
-      text2: `Bilderna har laddats upp till rastplatsen ${name}.`,
-    });
     setUploading(false);
   };
 
@@ -104,12 +120,14 @@ export function UploadPhotosScreen({ route }: Props) {
           <Button
             title="Kamera"
             fit
+            disabled={uploading}
             icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
             onPress={() => handlePress("camera")}
           />
           <Button
             title="Galleri"
             fit
+            disabled={uploading}
             icon={<FontAwesome5 name="images" size={24} color="#155196" />}
             onPress={() => handlePress("gallery")}
           />
@@ -123,13 +141,13 @@ export function UploadPhotosScreen({ route }: Props) {
             <View style={styles.photosGrid}>
               {selectedPhotos.map(photo => (
                 <View key={photo.uri} style={styles.photoContainer}>
-                  <Image source={{ uri: photo.uri }} style={styles.photo} contentFit="cover" />
+                  <Image
+                    source={{ uri: photo.uri }}
+                    style={[styles.photo, { opacity: photo.status === "pending" ? 0.5 : 1 }]}
+                    contentFit="cover"
+                  />
                   <Pressable
-                    style={({ pressed, hovered }) => [
-                      styles.removeButton,
-                      { transform: hovered ? [{ scale: 1.1 }] : [{ scale: 1 }] },
-                      { opacity: pressed ? 0.7 : 1 },
-                    ]}
+                    style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
                     onPress={() => handleRemovePhoto(photo.uri)}>
                     <Feather name="x" size={18} color="#fff" />
                   </Pressable>
