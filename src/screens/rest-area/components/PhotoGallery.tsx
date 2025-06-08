@@ -10,13 +10,14 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 interface Props {
+  restAreaId: string;
   photos: Photo[];
 }
 
-export function PhotoGallery({ photos }: Props) {
+export function PhotoGallery({ photos, restAreaId }: Props) {
   const navigation = useNavigation();
 
-  const handleAddPhotos = () => navigation.navigate("UploadPhotos", { restAreaId: "12345" });
+  const handleAddPhotos = () => navigation.navigate("UploadPhotos", { restAreaId });
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>
