@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
@@ -66,6 +66,7 @@ export function UploadPhotosScreen({ route }: Props) {
   const handleCancel = () => navigation.goBack();
   const handleUpload = async () => {
     setUploading(true);
+    let hasError = false;
     await Promise.all(
       selectedPhotos.map(async photo => {
         handleSetStatus(photo.uri, "pending");
@@ -79,6 +80,7 @@ export function UploadPhotosScreen({ route }: Props) {
         if (storageError) {
           handleSetStatus(photo.uri, "error");
           console.error("Storage upload error:", storageError);
+          hasError = true;
           return;
         }
 
@@ -92,19 +94,18 @@ export function UploadPhotosScreen({ route }: Props) {
         if (insertError) {
           handleSetStatus(photo.uri, "error");
           console.error("Database insert error:", insertError);
+          hasError = true;
           return;
         }
         handleSetStatus(photo.uri, "uploaded");
       }),
     );
-    const hasError = selectedPhotos.some(photo => photo.status === "error");
+
     Toast.show(hasError ? ERROR : SUCCESS);
-    for (const photo of selectedPhotos) {
-      if (photo.status === "uploaded") {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        handleRemovePhoto(photo.uri);
-      }
-    }
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    setSelectedPhotos(photos => photos.filter(photo => photo.status !== "uploaded"));
+
     setUploading(false);
   };
 
