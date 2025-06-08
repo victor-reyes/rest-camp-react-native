@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Alert, SafeAreaView, Pressable } from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -10,16 +10,24 @@ import { useAppSelector } from "@/app/store";
 import { selectRestAreaById } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
+import { supabase } from "@/lib/supabase";
+import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
 type SelectedPhoto = { uri: string };
 
-const options: ImagePicker.ImagePickerOptions = {
+const OPTIONS: ImagePicker.ImagePickerOptions = {
   mediaTypes: ["images"],
   allowsEditing: true,
   aspect: [4, 3],
   quality: 1,
+};
+
+const ERROR = {
+  type: "error",
+  text1: "Fel vid uppladdning",
+  text2: "Kunde inte ladda upp bilden till servern.",
 };
 
 export function UploadPhotosScreen({ route }: Props) {
@@ -33,8 +41,8 @@ export function UploadPhotosScreen({ route }: Props) {
   const handlePress = async (type: "camera" | "gallery") => {
     const result =
       type === "camera" ?
-        await ImagePicker.launchCameraAsync(options)
-      : await ImagePicker.launchImageLibraryAsync(options);
+        await ImagePicker.launchCameraAsync(OPTIONS)
+      : await ImagePicker.launchImageLibraryAsync(OPTIONS);
 
     if (result.canceled) return;
     const newPhotos: SelectedPhoto[] = result.assets.map(asset => ({ uri: asset.uri }));
@@ -44,8 +52,45 @@ export function UploadPhotosScreen({ route }: Props) {
   const handleRemovePhoto = (uri: string) =>
     setSelectedPhotos(prev => prev.filter(photo => photo.uri !== uri));
 
+  const [uploading, setUploading] = useState(false);
   const handleCancel = () => navigation.goBack();
-  const handleUpload = () => Alert.alert("Upload", "Upload functionality not implemented yet");
+  const handleUpload = async () => {
+    setUploading(true);
+    for (const photo of selectedPhotos) {
+      const arrayBuffer = await fetch(photo.uri).then(res => res.arrayBuffer());
+      const fileExt = photo.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
+      const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from("photos")
+        .upload(path, arrayBuffer, { contentType: "image/jpeg" });
+
+      if (storageError) {
+        Toast.show(ERROR);
+        console.error("Error uploading photo:", storageError);
+        setUploading(false);
+        return;
+      }
+
+      const url = supabase.storage.from("photos").getPublicUrl(storageData.path).data.publicUrl;
+
+      const { error: insertError } = await supabase.from("photos").insert({
+        rest_area_id: restAreaId,
+        url,
+        thumbnail_url: url,
+      });
+      if (insertError) {
+        Toast.show(ERROR);
+        console.error("Error inserting photo:", insertError);
+        return;
+      }
+    }
+    Toast.show({
+      type: "success",
+      text1: "Uppladdning klar",
+      text2: `Bilderna har laddats upp till rastplatsen ${name}.`,
+    });
+    setUploading(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
