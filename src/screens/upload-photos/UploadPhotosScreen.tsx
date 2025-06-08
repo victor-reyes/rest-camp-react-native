@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Pressable, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components/Button";
-import { FontAwesome5, Feather } from "@expo/vector-icons";
+import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAppSelector } from "@/app/store";
 import { selectRestAreaById } from "@/slices/rest-areas";
@@ -37,6 +45,31 @@ const SUCCESS = {
   text2: "Bilderna har laddats upp!",
 };
 
+const StatusIndicator = ({ status }: { status?: "pending" | "uploaded" | "error" }) => {
+  switch (status) {
+    case "pending":
+      return (
+        <View style={styles.statusIndicator}>
+          <ActivityIndicator size={16} color="#fff" />
+        </View>
+      );
+    case "uploaded":
+      return (
+        <View style={[styles.statusIndicator, styles.successIndicator]}>
+          <AntDesign name="check" size={16} color="#fff" />
+        </View>
+      );
+    case "error":
+      return (
+        <View style={[styles.statusIndicator, styles.errorIndicator]}>
+          <AntDesign name="exclamation" size={16} color="#fff" />
+        </View>
+      );
+    default:
+      return null;
+  }
+};
+
 export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
@@ -64,14 +97,21 @@ export function UploadPhotosScreen({ route }: Props) {
       prev.map(photo => (photo.uri === uri ? { ...photo, status } : photo)),
     );
 
-  const [uploading, setUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const handleCancel = () => navigation.goBack();
   const handleUpload = async () => {
-    setUploading(true);
+    setIsUploading(true);
     let hasError = false;
+    console.log("Starting upload for rest area:", restAreaId);
     await Promise.all(
-      selectedPhotos.map(async photo => {
+      selectedPhotos.map(async (photo, index) => {
         handleSetStatus(photo.uri, "pending");
+        if (index === 1) {
+          handleSetStatus(photo.uri, "error");
+          hasError = true;
+          console.error("Simulated error for testing purposes");
+          return;
+        }
         const arrayBuffer = await fetch(photo.uri).then(res => res.arrayBuffer());
         const fileExt = photo.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
         const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
@@ -105,10 +145,10 @@ export function UploadPhotosScreen({ route }: Props) {
 
     Toast.show(hasError ? ERROR : SUCCESS);
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setSelectedPhotos(photos => photos.filter(photo => photo.status !== "uploaded"));
 
-    setUploading(false);
+    setIsUploading(false);
   };
 
   return (
@@ -123,14 +163,14 @@ export function UploadPhotosScreen({ route }: Props) {
           <Button
             title="Kamera"
             fit
-            disabled={uploading}
+            disabled={isUploading}
             icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
             onPress={() => handlePress("camera")}
           />
           <Button
             title="Galleri"
             fit
-            disabled={uploading}
+            disabled={isUploading}
             icon={<FontAwesome5 name="images" size={24} color="#155196" />}
             onPress={() => handlePress("gallery")}
           />
@@ -148,6 +188,7 @@ export function UploadPhotosScreen({ route }: Props) {
               style={[styles.photo, { opacity: item.status === "pending" ? 0.5 : 1 }]}
               contentFit="cover"
             />
+            <StatusIndicator status={item.status} />
             <Pressable
               style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
               onPress={() => handleRemovePhoto(item.uri)}>
@@ -227,14 +268,31 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: "absolute",
-    top: 1,
-    right: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    top: -2,
+    right: -2,
+    backgroundColor: "rgba(237, 13, 13, 0.88)",
     borderRadius: 12,
     width: 24,
     height: 24,
     alignItems: "center",
     justifyContent: "center",
+  },
+  statusIndicator: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.88)",
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  successIndicator: {
+    backgroundColor: "#4CAF50",
+  },
+  errorIndicator: {
+    backgroundColor: "#F44336",
   },
   emptyState: {
     alignItems: "center",
