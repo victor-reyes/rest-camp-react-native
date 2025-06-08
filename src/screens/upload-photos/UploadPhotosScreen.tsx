@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Pressable } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, Pressable, FlatList } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -17,10 +17,12 @@ type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
 type SelectedPhoto = { uri: string; status?: "pending" | "uploaded" | "error" };
 
+const NUM_COLS = 3;
+const ASPECT: [number, number] = [4, 3];
 const OPTIONS: ImagePicker.ImagePickerOptions = {
   mediaTypes: ["images"],
   allowsEditing: true,
-  aspect: [4, 3],
+  aspect: ASPECT,
   quality: 1,
 };
 
@@ -135,38 +137,40 @@ export function UploadPhotosScreen({ route }: Props) {
         </View>
       </View>
 
-      <ScrollView style={styles.photosContainer} showsVerticalScrollIndicator={false}>
-        {selectedPhotos.length > 0 && (
-          <View style={styles.photosSection}>
-            <Text style={styles.sectionTitle}>Valda bilder ({selectedPhotos.length})</Text>
-            <View style={styles.photosGrid}>
-              {selectedPhotos.map(photo => (
-                <View key={photo.uri} style={styles.photoContainer}>
-                  <Image
-                    source={{ uri: photo.uri }}
-                    style={[styles.photo, { opacity: photo.status === "pending" ? 0.5 : 1 }]}
-                    contentFit="cover"
-                  />
-                  <Pressable
-                    style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
-                    onPress={() => handleRemovePhoto(photo.uri)}>
-                    <Feather name="x" size={18} color="#fff" />
-                  </Pressable>
-                </View>
-              ))}
-            </View>
+      <FlatList
+        data={selectedPhotos}
+        keyExtractor={item => item.uri}
+        numColumns={NUM_COLS}
+        renderItem={({ item }) => (
+          <View style={styles.photoContainer}>
+            <Image
+              source={{ uri: item.uri }}
+              style={[styles.photo, { opacity: item.status === "pending" ? 0.5 : 1 }]}
+              contentFit="cover"
+            />
+            <Pressable
+              style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
+              onPress={() => handleRemovePhoto(item.uri)}>
+              <Feather name="x" size={18} color="#fff" />
+            </Pressable>
           </View>
         )}
-
-        {selectedPhotos.length === 0 && (
+        contentContainerStyle={{ padding: 8 }}
+        columnWrapperStyle={{ justifyContent: "space-between", width: `${100 / NUM_COLS}%` }}
+        ListHeaderComponent={
+          selectedPhotos.length > 0 ?
+            <Text style={styles.sectionTitle}>Valda bilder ({selectedPhotos.length})</Text>
+          : null
+        }
+        ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>Inga bilder valda än</Text>
             <Text style={styles.emptyStateSubtext}>
               Använd knapparna ovan för att lägga till bilder från kamera eller galleri
             </Text>
           </View>
-        )}
-      </ScrollView>
+        }
+      />
 
       <View style={styles.bottomActions}>
         <View style={styles.bottomButton}>
@@ -200,39 +204,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
   },
-  photosContainer: {
-    flex: 1,
-    padding: 20,
-  },
+
   actionButtons: {
     flexDirection: "row",
     gap: 12,
     marginBottom: 24,
   },
-  photosSection: {
-    marginBottom: 24,
-  },
+
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 12,
     color: "#333",
   },
-  photosGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-  },
   photoContainer: {
-    position: "relative",
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-    overflow: "hidden",
+    padding: 4,
   },
   photo: {
     width: "100%",
-    height: "100%",
+    aspectRatio: ASPECT[0] / ASPECT[1],
+    borderRadius: 8,
   },
   removeButton: {
     position: "absolute",
