@@ -2,18 +2,28 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { updateRestAreas } from "../utils";
 import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib/supabase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
   baseQuery: fakeBaseQuery(),
   tagTypes: ["RestAreas"],
   endpoints: builder => ({
-    restAreas: builder.query<Parameters<typeof updateRestAreas>[0], void>({
+    restAreas: builder.query<Parameters<typeof updateRestAreas>[0] & { checkedAt: string }, void>({
       providesTags: ["RestAreas"],
       queryFn: async () => {
-        const { data, error } = await supabase.from("rest_areas").select("*, services(*)");
+        const checkedAt = new Date().toISOString();
 
-        const { data: photos, error: photosError } = await supabase.from("photos").select("*");
+        const lastChecked = (await AsyncStorage.getItem("lastCheckedAt")) || "1970-01-01T00:00:00Z";
+
+        const { data, error } = await supabase
+          .from("rest_areas")
+          .select("*, services(*)")
+          .gte("updated_at", lastChecked);
+        const { data: photos, error: photosError } = await supabase
+          .from("photos")
+          .select("*")
+          .gte("updated_at", lastChecked);
 
         if (error) return { error };
         if (photosError) return { error: photosError };
@@ -48,13 +58,18 @@ export const restAreasApi = createApi({
             })),
         };
 
-        return { data: restAreas };
+        return { data: { ...restAreas, checkedAt } };
       },
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         if (data) {
-          await updateRestAreas(data);
-          dispatch(loadRestAreas());
+          const { checkedAt, ...restAreas } = data;
+
+          const { error } = await updateRestAreas(restAreas);
+          if (!error) {
+            await AsyncStorage.setItem("lastCheckedAt", checkedAt);
+            dispatch(loadRestAreas());
+          }
         }
       },
     }),
