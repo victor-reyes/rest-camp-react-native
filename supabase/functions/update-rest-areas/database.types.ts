@@ -5,6 +5,7 @@ export type Database = {
     Tables: {
       photos: {
         Row: {
+          deleted: boolean;
           description: string | null;
           owner_id: string | null;
           rest_area_id: string;
@@ -14,6 +15,7 @@ export type Database = {
           url: string;
         };
         Insert: {
+          deleted?: boolean;
           description?: string | null;
           owner_id?: string | null;
           rest_area_id: string;
@@ -23,6 +25,7 @@ export type Database = {
           url: string;
         };
         Update: {
+          deleted?: boolean;
           description?: string | null;
           owner_id?: string | null;
           rest_area_id?: string;
@@ -84,34 +87,37 @@ export type Database = {
       };
       rest_areas: {
         Row: {
+          deleted: boolean;
           description: string | null;
           id: string;
           latitude: number;
           local_description: string | null;
           longitude: number;
-          name: string | null;
+          name: string;
           status: string;
           trafikverket_id: string;
           updated_at: string;
         };
         Insert: {
+          deleted?: boolean;
           description?: string | null;
           id?: string;
           latitude: number;
           local_description?: string | null;
           longitude: number;
-          name?: string | null;
+          name: string;
           status: string;
           trafikverket_id: string;
           updated_at: string;
         };
         Update: {
+          deleted?: boolean;
           description?: string | null;
           id?: string;
           latitude?: number;
           local_description?: string | null;
           longitude?: number;
-          name?: string | null;
+          name?: string;
           status?: string;
           trafikverket_id?: string;
           updated_at?: string;
@@ -120,6 +126,7 @@ export type Database = {
       };
       reviews: {
         Row: {
+          deleted: boolean;
           id: string;
           owner_id: string;
           recension: string | null;
@@ -128,14 +135,16 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
+          deleted?: boolean;
           id?: string;
-          owner_id: string;
+          owner_id?: string;
           recension?: string | null;
           rest_area_id: string;
           score: number;
           updated_at?: string;
         };
         Update: {
+          deleted?: boolean;
           id?: string;
           owner_id?: string;
           recension?: string | null;
