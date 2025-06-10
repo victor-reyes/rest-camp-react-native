@@ -6,11 +6,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components/Button";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import { restAreasApi, selectRestAreaById } from "@/slices/rest-areas";
+import { useAppSelector } from "@/app/store";
+import { selectRestAreaById, useAddPhotoMutation } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
-import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
@@ -23,17 +22,6 @@ const OPTIONS: ImagePicker.ImagePickerOptions = {
   allowsEditing: true,
   aspect: ASPECT,
   quality: 1,
-};
-
-const ERROR = {
-  type: "error",
-  text1: "Fel vid uppladdning",
-  text2: "Kunde inte ladda upp bilden till servern.",
-};
-const SUCCESS = {
-  type: "success",
-  text1: "Uppladdning klar",
-  text2: "Bilderna har laddats upp!",
 };
 
 const StatusIndicator = ({ status }: { status?: "pending" | "uploaded" | "error" }) => {
@@ -64,7 +52,8 @@ const StatusIndicator = ({ status }: { status?: "pending" | "uploaded" | "error"
 export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
-  const dispatch = useAppDispatch();
+
+  const [addPhoto, { isLoading: isUploading }] = useAddPhotoMutation();
 
   const restArea = useAppSelector(state => selectRestAreaById(state, restAreaId));
 
@@ -89,35 +78,19 @@ export function UploadPhotosScreen({ route }: Props) {
       prev.map(photo => (photo.uri === uri ? { ...photo, status } : photo)),
     );
 
-  const [isUploading, setIsUploading] = useState(false);
   const handleCancel = () => navigation.goBack();
   const handleUpload = async () => {
-    setIsUploading(true);
-    let hasError = false;
-
     await Promise.all(
       selectedPhotos.map(async ({ uri }) => {
         handleSetStatus(uri, "pending");
 
-        const addPhoto = restAreasApi.endpoints.addPhotos.initiate({ restAreaId, uri });
-        const { error } = await dispatch(addPhoto);
+        const { error } = await addPhoto({ restAreaId, uri });
 
-        if (error) {
-          handleSetStatus(uri, "error");
-          hasError = true;
-          return;
-        }
-
-        handleSetStatus(uri, "uploaded");
+        handleSetStatus(uri, error ? "error" : "uploaded");
       }),
     );
 
-    Toast.show(hasError ? ERROR : SUCCESS);
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
     setSelectedPhotos(photos => photos.filter(photo => photo.status !== "uploaded"));
-
-    setIsUploading(false);
   };
 
   return (

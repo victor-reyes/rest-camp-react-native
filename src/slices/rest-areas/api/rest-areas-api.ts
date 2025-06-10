@@ -57,7 +57,7 @@ export const restAreasApi = createApi({
         }
       },
     }),
-    addPhotos: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
+    addPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
       invalidatesTags: ["RestAreas"],
       queryFn: async ({ restAreaId, uri, description }) => {
         const arrayBuffer = await fetch(uri).then(res => res.arrayBuffer());
@@ -93,4 +93,4 @@ export const restAreasApi = createApi({
   }),
 });
 
-export const { useRestAreasQuery, useAddPhotosMutation } = restAreasApi;
+export const { useRestAreasQuery, useAddPhotoMutation } = restAreasApi;
