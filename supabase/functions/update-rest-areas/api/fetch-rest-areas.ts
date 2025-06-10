@@ -28,7 +28,9 @@ function getBody(datetime: string) {
     <LOGIN authenticationkey="${Deno.env.get("TRAFIK_API_KEY")}"/>
     <QUERY 
         objecttype="Parking" 
-        schemaversion="1.4">
+        schemaversion="1.4"
+        includedeletedobjects="true"
+        >
       <FILTER>
       <GT name="ModifiedTime" value="${datetime}" />
       </FILTER>
@@ -53,6 +55,7 @@ function transformToSql(raw: RestAreaApiResponse) {
       local_description: localDescription,
       status: item.OpenStatus,
       updated_at: item.ModifiedTime,
+      deleted: item.Deleted,
       services: [...item.Equipment, ...(item.Facility || [])].map(service => ({
         name: service.Type,
       })),
