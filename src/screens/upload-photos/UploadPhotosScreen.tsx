@@ -6,11 +6,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components/Button";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useAppSelector } from "@/app/store";
-import { selectRestAreaById } from "@/slices/rest-areas";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { restAreasApi, selectRestAreaById } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
-import { supabase } from "@/lib/supabase";
 import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
@@ -65,6 +64,7 @@ const StatusIndicator = ({ status }: { status?: "pending" | "uploaded" | "error"
 export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
 
   const restArea = useAppSelector(state => selectRestAreaById(state, restAreaId));
 
@@ -94,44 +94,21 @@ export function UploadPhotosScreen({ route }: Props) {
   const handleUpload = async () => {
     setIsUploading(true);
     let hasError = false;
-    console.log("Starting upload for rest area:", restAreaId);
+
     await Promise.all(
-      selectedPhotos.map(async (photo, index) => {
-        handleSetStatus(photo.uri, "pending");
-        if (index === 1) {
-          handleSetStatus(photo.uri, "error");
-          hasError = true;
-          console.error("Simulated error for testing purposes");
-          return;
-        }
-        const arrayBuffer = await fetch(photo.uri).then(res => res.arrayBuffer());
-        const fileExt = photo.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
-        const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
-        const { data: storageData, error: storageError } = await supabase.storage
-          .from("photos")
-          .upload(path, arrayBuffer, { contentType: "image/jpeg" });
+      selectedPhotos.map(async ({ uri }) => {
+        handleSetStatus(uri, "pending");
 
-        if (storageError) {
-          handleSetStatus(photo.uri, "error");
-          console.error("Storage upload error:", storageError);
+        const addPhoto = restAreasApi.endpoints.addPhotos.initiate({ restAreaId, uri });
+        const { error } = await dispatch(addPhoto);
+
+        if (error) {
+          handleSetStatus(uri, "error");
           hasError = true;
           return;
         }
 
-        const url = supabase.storage.from("photos").getPublicUrl(storageData.path).data.publicUrl;
-
-        const { error: insertError } = await supabase.from("photos").insert({
-          rest_area_id: restAreaId,
-          url,
-          thumbnail_url: url,
-        });
-        if (insertError) {
-          handleSetStatus(photo.uri, "error");
-          console.error("Database insert error:", insertError);
-          hasError = true;
-          return;
-        }
-        handleSetStatus(photo.uri, "uploaded");
+        handleSetStatus(uri, "uploaded");
       }),
     );
 
