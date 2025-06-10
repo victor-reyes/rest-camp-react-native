@@ -9,14 +9,14 @@ export async function updateRestAreas(data: {
 }) {
   return await db.transaction(async tx => {
     try {
-      const [restAreaIds, servicesIds, photosIds] = [
+      const [restAreaIds, servicesIds, photosUrls] = [
         data.restAreas.map(r => r.id),
         data.services.map(s => s.restAreaId),
-        data.photos.map(p => p.restAreaId),
+        data.photos.map(p => p.url),
       ];
       await tx.delete(restAreas).where(inArray(restAreas.id, restAreaIds));
       await tx.delete(services).where(inArray(services.restAreaId, servicesIds));
-      await tx.delete(photos).where(inArray(photos.restAreaId, photosIds));
+      await tx.delete(photos).where(inArray(photos.url, photosUrls));
 
       await tx.insert(restAreas).values(data.restAreas);
       await tx.insert(services).values(data.services);
