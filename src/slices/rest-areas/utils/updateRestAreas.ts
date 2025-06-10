@@ -18,9 +18,9 @@ export async function updateRestAreas(data: {
       await tx.delete(services).where(inArray(services.restAreaId, servicesIds));
       await tx.delete(photos).where(inArray(photos.url, photosUrls));
 
-      await tx.insert(restAreas).values(data.restAreas);
-      await tx.insert(services).values(data.services);
-      await tx.insert(photos).values(data.photos);
+      if (data.restAreas.length > 0) await tx.insert(restAreas).values(data.restAreas);
+      if (data.services.length > 0) await tx.insert(services).values(data.services);
+      if (data.photos.length > 0) await tx.insert(photos).values(data.photos);
       return { error: null };
     } catch (error) {
       console.error("Error inserting data into the database:", error);
