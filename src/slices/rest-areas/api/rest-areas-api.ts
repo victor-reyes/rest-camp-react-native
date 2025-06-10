@@ -16,20 +16,19 @@ export const restAreasApi = createApi({
 
         const lastChecked = (await AsyncStorage.getItem("lastCheckedAt")) || "1970-01-01T00:00:00Z";
 
-        const { data, error } = await supabase
-          .from("rest_areas")
-          .select("*, services(*)")
-          .gte("updated_at", lastChecked);
-        const { data: photos, error: photosError } = await supabase
-          .from("photos")
-          .select("*")
-          .gte("updated_at", lastChecked);
+        const [
+          { data: restAreasWithServices, error: restAreaError },
+          { data: photos, error: photosError },
+        ] = await Promise.all([
+          supabase.from("rest_areas").select("*, services(*)").gte("updated_at", lastChecked),
+          supabase.from("photos").select("*").gte("updated_at", lastChecked),
+        ]);
 
-        if (error) return { error };
+        if (restAreaError) return { error: restAreaError };
         if (photosError) return { error: photosError };
 
         const restAreas: Parameters<typeof updateRestAreas>[0] = {
-          restAreas: data.map(restArea => ({
+          restAreas: restAreasWithServices.map(restArea => ({
             id: restArea.id,
             name: restArea.name || "",
             latitude: restArea.latitude,
@@ -41,7 +40,7 @@ export const restAreasApi = createApi({
             numberOfTruckSpaces: 0,
             updatedAt: new Date(restArea.updated_at).getTime(),
           })),
-          services: data.flatMap(restArea =>
+          services: restAreasWithServices.flatMap(restArea =>
             restArea.services.map(service => ({
               name: service.name,
               restAreaId: service.rest_area_id,
