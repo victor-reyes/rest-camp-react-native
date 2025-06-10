@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Alert } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 import { db, migrations } from "@/db/";
 import Toast from "react-native-toast-message";
 
@@ -38,6 +39,7 @@ export function App() {
   }, [success, error, navigationIsReady]);
   return (
     <Provider store={store}>
+      <SystemBars style={"dark"} />
       <GestureHandlerRootView>
         <Navigation
           linking={{
