@@ -1,5 +1,5 @@
 import { ResponseSchema } from "./schemas/index.ts";
-import { RestAreaWithServicesAndPhotos } from "../types.ts";
+import { RestAreaApiResponse, RestAreaWithServicesAndPhotos } from "../types.ts";
 
 export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540Z") {
   const response = await fetch("https://api.trafikinfo.trafikverket.se/v2/data.json", {
@@ -12,9 +12,12 @@ export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540
 
   const json = await response.json();
 
-  const data = transformToSql(json);
-
-  console.log(`Fetched ${data.length} rest areas`);
+  const verifiedJson = ResponseSchema.safeParse(json);
+  if (!verifiedJson.success) {
+    console.error("Invalid response schema:", verifiedJson.error);
+    throw new Error("Invalid response schema from Trafikverket API");
+  }
+  const data = transformToSql(verifiedJson.data);
 
   return data;
 }
@@ -33,7 +36,7 @@ function getBody(datetime: string) {
 </REQUEST>`;
 }
 
-function transformToSql(raw: unknown) {
+function transformToSql(raw: RestAreaApiResponse) {
   const responce = ResponseSchema.parse(raw);
   const data = responce.RESPONSE.RESULT[0].Parking || [];
 
