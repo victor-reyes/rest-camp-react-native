@@ -11,11 +11,12 @@ export const restAreasApi = createApi({
     restAreas: builder.query<Parameters<typeof updateRestAreas>[0], void>({
       providesTags: ["RestAreas"],
       queryFn: async () => {
-        const { data, error } = await supabase
-          .from("rest_areas")
-          .select("*, services(*), photos(*)");
+        const { data, error } = await supabase.from("rest_areas").select("*, services(*)");
+
+        const { data: photos, error: photosError } = await supabase.from("photos").select("*");
 
         if (error) return { error };
+        if (photosError) return { error: photosError };
 
         const restAreas: Parameters<typeof updateRestAreas>[0] = {
           restAreas: data.map(restArea => ({
@@ -33,20 +34,18 @@ export const restAreasApi = createApi({
           services: data.flatMap(restArea =>
             restArea.services.map(service => ({
               name: service.name,
-              restAreaId: restArea.id,
+              restAreaId: service.rest_area_id,
               updatedAt: new Date(restArea.updated_at).getTime(),
             })),
           ),
-          photos: data.flatMap(restArea =>
-            restArea.photos
-              .sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())
-              .map(photo => ({
-                url: photo.url,
-                description: photo.description,
-                restAreaId: restArea.id,
-                updatedAt: new Date(photo.updated_at).getTime(),
-              })),
-          ),
+          photos: photos
+            .sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())
+            .map(photo => ({
+              url: photo.url,
+              description: photo.description,
+              restAreaId: photo.rest_area_id,
+              updatedAt: new Date(photo.updated_at).getTime(),
+            })),
         };
 
         return { data: restAreas };
