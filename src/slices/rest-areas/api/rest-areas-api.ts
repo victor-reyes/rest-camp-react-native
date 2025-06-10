@@ -28,12 +28,13 @@ export const restAreasApi = createApi({
             status: restArea.status === "open" ? "open" : "closed",
             numberOfCarSpaces: 0,
             numberOfTruckSpaces: 0,
-            modifiedTime: new Date(restArea.updated_at).getTime(),
+            updatedAt: new Date(restArea.updated_at).getTime(),
           })),
           services: data.flatMap(restArea =>
             restArea.services.map(service => ({
               name: service.name,
               restAreaId: restArea.id,
+              updatedAt: new Date(restArea.updated_at).getTime(),
             })),
           ),
           photos: data.flatMap(restArea =>
@@ -43,6 +44,7 @@ export const restAreasApi = createApi({
                 url: photo.url,
                 description: photo.description,
                 restAreaId: restArea.id,
+                updatedAt: new Date(photo.updated_at).getTime(),
               })),
           ),
         };

@@ -15,7 +15,7 @@ export function RestAreaCard({ restArea }: Props) {
     <View style={styles.container}>
       <ParkingHeader
         name={restArea.name}
-        modifiedTime={restArea.modifiedTime}
+        updatedAt={restArea.updatedAt}
         latitude={restArea.latitude}
         longitude={restArea.longitude}
       />

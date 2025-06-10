@@ -10,7 +10,7 @@ export const restAreas = sqliteTable("rest_areas", {
   description: text(),
   localDescription: text("local_description"),
   status: text().notNull(),
-  modifiedTime: int("modified_time", { mode: "number" }).notNull(),
+  updatedAt: int("updated_at", { mode: "number" }).notNull(),
 });
 export const restAreaRelations = relations(restAreas, ({ many }) => ({
   services: many(services),
@@ -24,6 +24,7 @@ export const services = sqliteTable(
     restAreaId: text("rest_area_id")
       .notNull()
       .references(() => restAreas.id),
+    updatedAt: int("updated_at", { mode: "number" }).notNull(),
   },
   table => [primaryKey({ columns: [table.name, table.restAreaId] })],
 );
@@ -42,6 +43,7 @@ export const photos = sqliteTable(
     restAreaId: text("rest_area_id")
       .notNull()
       .references(() => restAreas.id),
+    updatedAt: int("updated_at", { mode: "number" }).notNull(),
   },
   table => [primaryKey({ columns: [table.url, table.restAreaId] })],
 );

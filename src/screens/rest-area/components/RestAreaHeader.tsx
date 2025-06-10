@@ -4,19 +4,19 @@ import { MapIcon } from "@/components/icons";
 
 interface Props {
   name: string;
-  modifiedTime: number;
+  updatedAt: number;
   latitude: number;
   longitude: number;
 }
 
-export function ParkingHeader({ name, modifiedTime, latitude, longitude }: Props) {
+export function ParkingHeader({ name, updatedAt, latitude, longitude }: Props) {
   const handleOpenMap = () => openMap({ latitude, longitude, label: name });
   return (
     <View style={styles.headerContainer}>
       <View>
         <Text style={styles.headerTitle}>{name}</Text>
         <Text style={styles.footerText}>
-          Senast ändrad: {new Date(modifiedTime).toLocaleDateString()}
+          Senast ändrad: {new Date(updatedAt).toLocaleDateString()}
         </Text>
       </View>
 
