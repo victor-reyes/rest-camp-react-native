@@ -1,7 +1,7 @@
 import { ResponseSchema } from "./schemas/index.ts";
 import { RestAreaApiResponse, RestAreaWithServicesAndPhotos } from "../types.ts";
 
-export async function fetchRestAreas(datetime: string = "1025-05-27T01:31:12.540Z") {
+export async function fetchRestAreas(datetime: string) {
   const response = await fetch("https://api.trafikinfo.trafikverket.se/v2/data.json", {
     method: "POST",
     headers: { "Content-Type": "text/xml" },
