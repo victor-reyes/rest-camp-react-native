@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, FlatList, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
@@ -10,6 +10,7 @@ import { useAppSelector } from "@/app/store";
 import { selectRestAreaById, useUploadPhotoMutation } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
+import { selectAuth } from "@/slices/auth";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
@@ -52,6 +53,12 @@ const StatusIndicator = ({ status }: { status?: "pending" | "uploaded" | "error"
 export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
+
+  const { session } = useAppSelector(selectAuth);
+
+  useEffect(() => {
+    if (!session) navigation.navigate("Profile");
+  }, [session, navigation]);
 
   const [uploadPhoto, { isLoading: isUploading }] = useUploadPhotoMutation();
 
