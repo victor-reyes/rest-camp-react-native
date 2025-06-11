@@ -1,0 +1,1 @@
+ALTER TABLE `photos` ADD `thumbnail_url` text NOT NULL;

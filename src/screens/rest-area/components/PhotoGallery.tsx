@@ -37,7 +37,7 @@ export function PhotoGallery({ photos, restAreaId }: Props) {
         {photos.map(photo => (
           <View key={photo.url}>
             <Image
-              source={{ uri: photo.url }}
+              source={{ uri: photo.thumbnailUrl }}
               style={styles.photo}
               placeholder={{ blurhash }}
               contentFit="cover"
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   photo: {
-    width: 200,
-    height: 150,
+    width: 160,
+    height: 120,
     borderRadius: 8,
   },
   photoTitle: {

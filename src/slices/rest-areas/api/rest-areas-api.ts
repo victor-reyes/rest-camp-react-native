@@ -53,6 +53,7 @@ export const restAreasApi = createApi({
             .sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())
             .map(photo => ({
               url: photo.url,
+              thumbnailUrl: photo.thumbnail_url,
               description: photo.description,
               restAreaId: photo.rest_area_id,
               updatedAt: new Date(photo.updated_at).getTime(),

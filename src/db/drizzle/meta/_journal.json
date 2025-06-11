@@ -15,6 +15,13 @@
       "when": 1749546405896,
       "tag": "0001_add_update_at_column",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1749620742835,
+      "tag": "0002_add_thubnail_url_column_to_photos_table",
+      "breakpoints": true
     }
   ]
 }

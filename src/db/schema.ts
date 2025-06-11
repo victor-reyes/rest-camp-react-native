@@ -39,6 +39,7 @@ export const photos = sqliteTable(
   "photos",
   {
     url: text().notNull(),
+    thumbnailUrl: text("thumbnail_url").notNull(),
     description: text(),
     restAreaId: text("rest_area_id")
       .notNull()
