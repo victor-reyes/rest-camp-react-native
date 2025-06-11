@@ -41,12 +41,14 @@ export const restAreasApi = createApi({
             numberOfCarSpaces: 0,
             numberOfTruckSpaces: 0,
             updatedAt: new Date(restArea.updated_at).getTime(),
+            deleted: restArea.deleted,
           })),
           services: restAreasWithServices.flatMap(restArea =>
             restArea.services.map(service => ({
               name: service.name,
               restAreaId: service.rest_area_id,
               updatedAt: new Date(restArea.updated_at).getTime(),
+              deleted: restArea.deleted,
             })),
           ),
           photos: photos
@@ -57,6 +59,7 @@ export const restAreasApi = createApi({
               description: photo.description,
               restAreaId: photo.rest_area_id,
               updatedAt: new Date(photo.updated_at).getTime(),
+              deleted: photo.deleted,
             })),
         };
 
