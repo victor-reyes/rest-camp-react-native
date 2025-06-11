@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, Text, StyleSheet, Pressable, FlatList, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
@@ -10,7 +10,8 @@ import { useAppSelector } from "@/app/store";
 import { selectRestAreaById, useUploadPhotoMutation } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
-import { selectAuth } from "@/slices/auth";
+import { ProfileModal } from "./components/ProfileModal";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
@@ -54,12 +55,6 @@ export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
 
-  const { session } = useAppSelector(selectAuth);
-
-  useEffect(() => {
-    if (!session) navigation.navigate("Profile");
-  }, [session, navigation]);
-
   const [uploadPhoto, { isLoading: isUploading }] = useUploadPhotoMutation();
 
   const restArea = useAppSelector(state => selectRestAreaById(state, restAreaId));
@@ -101,82 +96,85 @@ export function UploadPhotosScreen({ route }: Props) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.description}>
-          <Text>Ladda upp bilder för rastplats</Text>
-          <Text style={{ fontWeight: "bold" }}> {restArea?.name || "Rastplats Namn"}</Text>
-        </Text>
+    <BottomSheetModalProvider>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.description}>
+            <Text>Ladda upp bilder för rastplats</Text>
+            <Text style={{ fontWeight: "bold" }}> {restArea?.name || "Rastplats Namn"}</Text>
+          </Text>
 
-        <View style={styles.actionButtons}>
-          <Button
-            title="Kamera"
-            fit
-            disabled={isUploading}
-            icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
-            onPress={() => handlePress("camera")}
-          />
-          <Button
-            title="Galleri"
-            fit
-            disabled={isUploading}
-            icon={<FontAwesome5 name="images" size={24} color="#155196" />}
-            onPress={() => handlePress("gallery")}
-          />
-        </View>
-      </View>
-
-      <FlatList
-        data={selectedPhotos}
-        keyExtractor={item => item.uri}
-        numColumns={NUM_COLS}
-        renderItem={({ item }) => (
-          <View style={styles.photoContainer}>
-            <Image
-              source={{ uri: item.uri }}
-              style={[styles.photo, { opacity: item.status === "pending" ? 0.5 : 1 }]}
-              contentFit="cover"
+          <View style={styles.actionButtons}>
+            <Button
+              title="Kamera"
+              fit
+              disabled={isUploading}
+              icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
+              onPress={() => handlePress("camera")}
             />
-            <StatusIndicator status={item.status} />
-            {!isUploading && (
-              <Pressable
-                style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
-                onPress={() => handleRemovePhoto(item.uri)}>
-                <Feather name="x" size={18} color="#fff" />
-              </Pressable>
-            )}
+            <Button
+              title="Galleri"
+              fit
+              disabled={isUploading}
+              icon={<FontAwesome5 name="images" size={24} color="#155196" />}
+              onPress={() => handlePress("gallery")}
+            />
           </View>
-        )}
-        contentContainerStyle={{ padding: 8 }}
-        columnWrapperStyle={{ justifyContent: "space-between", width: `${100 / NUM_COLS}%` }}
-        ListHeaderComponent={
-          selectedPhotos.length > 0 ?
-            <Text style={styles.sectionTitle}>Valda bilder ({selectedPhotos.length})</Text>
-          : null
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>Inga bilder valda än</Text>
-            <Text style={styles.emptyStateSubtext}>
-              Använd knapparna ovan för att lägga till bilder från kamera eller galleri
-            </Text>
-          </View>
-        }
-      />
+        </View>
 
-      <View style={styles.bottomActions}>
-        <View style={styles.bottomButton}>
-          <Button title="Avbryt" onPress={handleCancel} />
+        <FlatList
+          data={selectedPhotos}
+          keyExtractor={item => item.uri}
+          numColumns={NUM_COLS}
+          renderItem={({ item }) => (
+            <View style={styles.photoContainer}>
+              <Image
+                source={{ uri: item.uri }}
+                style={[styles.photo, { opacity: item.status === "pending" ? 0.5 : 1 }]}
+                contentFit="cover"
+              />
+              <StatusIndicator status={item.status} />
+              {!isUploading && (
+                <Pressable
+                  style={({ pressed }) => [styles.removeButton, { opacity: pressed ? 0.7 : 1 }]}
+                  onPress={() => handleRemovePhoto(item.uri)}>
+                  <Feather name="x" size={18} color="#fff" />
+                </Pressable>
+              )}
+            </View>
+          )}
+          contentContainerStyle={{ padding: 8 }}
+          columnWrapperStyle={{ justifyContent: "space-between", width: `${100 / NUM_COLS}%` }}
+          ListHeaderComponent={
+            selectedPhotos.length > 0 ?
+              <Text style={styles.sectionTitle}>Valda bilder ({selectedPhotos.length})</Text>
+            : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>Inga bilder valda än</Text>
+              <Text style={styles.emptyStateSubtext}>
+                Använd knapparna ovan för att lägga till bilder från kamera eller galleri
+              </Text>
+            </View>
+          }
+        />
+
+        <View style={styles.bottomActions}>
+          <View style={styles.bottomButton}>
+            <Button title="Avbryt" onPress={handleCancel} />
+          </View>
+          <View style={styles.bottomButton}>
+            <Button
+              disabled={selectedPhotos.length === 0}
+              title={`Ladda upp${selectedPhotos.length > 0 ? ` (${selectedPhotos.length})` : ""}`}
+              onPress={handleUpload}
+            />
+          </View>
         </View>
-        <View style={styles.bottomButton}>
-          <Button
-            disabled={selectedPhotos.length === 0}
-            title={`Ladda upp${selectedPhotos.length > 0 ? ` (${selectedPhotos.length})` : ""}`}
-            onPress={handleUpload}
-          />
-        </View>
+        <ProfileModal />
       </View>
-    </View>
+    </BottomSheetModalProvider>
   );
 }
 
