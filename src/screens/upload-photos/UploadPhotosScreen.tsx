@@ -7,7 +7,7 @@ import { Button } from "@/components/Button";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAppSelector } from "@/app/store";
-import { selectRestAreaById, useAddPhotoMutation } from "@/slices/rest-areas";
+import { selectRestAreaById, useUploadPhotoMutation } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -53,7 +53,7 @@ export function UploadPhotosScreen({ route }: Props) {
   const { restAreaId } = route.params;
   const navigation = useNavigation();
 
-  const [addPhoto, { isLoading: isUploading }] = useAddPhotoMutation();
+  const [uploadPhoto, { isLoading: isUploading }] = useUploadPhotoMutation();
 
   const restArea = useAppSelector(state => selectRestAreaById(state, restAreaId));
 
@@ -84,7 +84,7 @@ export function UploadPhotosScreen({ route }: Props) {
       selectedPhotos.map(async ({ uri }) => {
         handleSetStatus(uri, "pending");
 
-        const { error } = await addPhoto({ restAreaId, uri });
+        const { error } = await uploadPhoto({ restAreaId, uri });
 
         handleSetStatus(uri, error ? "error" : "uploaded");
       }),

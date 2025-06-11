@@ -78,7 +78,7 @@ export const restAreasApi = createApi({
         }
       },
     }),
-    addPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
+    uploadPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
       invalidatesTags: ["RestAreas"],
       queryFn: async ({ restAreaId, uri, description }) => {
         const [compressedBuffer, thumbnailBuffer] = await Promise.all([
@@ -126,4 +126,4 @@ async function compressImageToBuffer(uri: string, options: CompressorOptions) {
   return fetch(compressedUri).then(res => res.arrayBuffer());
 }
 
-export const { useRestAreasQuery, useAddPhotoMutation } = restAreasApi;
+export const { useRestAreasQuery, useUploadPhotoMutation } = restAreasApi;
