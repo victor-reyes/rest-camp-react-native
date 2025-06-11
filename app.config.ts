@@ -26,6 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       NSLocationWhenInUseUsageDescription:
         "This app requires access to your location to show your position on the map.",
+      ITSAppUsesNonExemptEncryption: false,
     },
   },
   android: {
