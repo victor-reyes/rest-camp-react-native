@@ -3,7 +3,7 @@ import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
 import { Navigation } from "./navigation";
 import { Provider } from "react-redux";
-import { store } from "@/app/store";
+import { store, useAppDispatch } from "@/app/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
@@ -11,6 +11,8 @@ import { Alert } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
 import { db, migrations } from "@/db/";
 import Toast from "react-native-toast-message";
+import { supabase } from "./lib/supabase";
+import { setSession } from "./slices/auth";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -40,6 +42,7 @@ export function App() {
   return (
     <Provider store={store}>
       <SystemBars style={"dark"} />
+      <Auth />
       <GestureHandlerRootView>
         <Navigation
           linking={{
@@ -55,4 +58,20 @@ export function App() {
       <Toast position="bottom" />
     </Provider>
   );
+}
+
+function Auth() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => dispatch(setSession(session)));
+
+    const subscription = supabase.auth.onAuthStateChange((_, session) => {
+      dispatch(setSession(session));
+    }).data.subscription;
+
+    return () => subscription.unsubscribe();
+  }, [dispatch]);
+
+  return null;
 }

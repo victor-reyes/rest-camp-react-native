@@ -1,8 +1,7 @@
-import { supabase } from "@/lib/supabase";
 import { useCallback, useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { selectAuth, setSession, clearError } from "@/slices/auth";
+import { selectAuth, clearError } from "@/slices/auth";
 import Toast from "react-native-toast-message";
 import { AuthenticationError } from "@/slices/auth/types";
 import { SignedIn, SignedOut } from "./components";
@@ -10,13 +9,6 @@ import { SignedIn, SignedOut } from "./components";
 export function ProfileScreen() {
   const dispatch = useAppDispatch();
   const { session, isLoading, error } = useAppSelector(selectAuth);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => dispatch(setSession(session)));
-    supabase.auth.onAuthStateChange((_, session) => {
-      dispatch(setSession(session));
-    });
-  }, [dispatch]);
 
   const showToast = useCallback(
     (errorMessage: AuthenticationError) =>
