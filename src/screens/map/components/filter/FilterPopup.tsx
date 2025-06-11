@@ -65,11 +65,11 @@ export function FilterPopup({ children: trigger }: Props) {
             ))}
 
             <View style={styles.buttonsContainer}>
-              <Pressable style={styles.button} onPress={() => setOpen(false)}>
-                <Text style={styles.buttonText}>Använd</Text>
-              </Pressable>
               <Pressable style={styles.button} onPress={() => dispatch(filtersCleared())}>
                 <Text style={styles.buttonText}>Rensa</Text>
+              </Pressable>
+              <Pressable style={styles.button} onPress={() => setOpen(false)}>
+                <Text style={styles.buttonText}>Använd</Text>
               </Pressable>
             </View>
           </View>
