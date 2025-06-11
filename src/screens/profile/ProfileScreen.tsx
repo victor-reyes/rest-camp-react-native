@@ -25,22 +25,17 @@ export function ProfileScreen() {
     if (error) showToast(error);
   }, [error, showToast]);
 
-  if (isLoading)
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#155196" />
-      </View>
-    );
-
   return (
-    <>
-      <View style={styles.container}>
-        {session ?
+    <View style={styles.container}>
+      <View style={styles.cardContainer}>
+        {isLoading ?
+          <ActivityIndicator size="large" color="#155196" />
+        : session ?
           <SignedIn userId={session.user.id} email={session.user.email} />
         : <SignedOut />}
       </View>
       <Toast position="bottom" />
-    </>
+    </View>
   );
 }
 
@@ -48,11 +43,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "stretch",
+    alignItems: "center",
+    alignContent: "center",
+    alignSelf: "center",
+  },
+  cardContainer: {
+    minWidth: 320,
+    minHeight: 200,
+    paddingVertical: 24,
+    paddingHorizontal: 32,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
     backgroundColor: "#fff",
-    gap: 8,
-    padding: 16,
-    alignSelf: "stretch",
   },
 });
 

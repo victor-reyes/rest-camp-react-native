@@ -23,10 +23,9 @@ export function SignedOut() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
-    justifyContent: "center",
-    alignItems: "stretch",
+    alignSelf: "stretch",
+    alignItems: "center",
     gap: 16,
   },
   text: {

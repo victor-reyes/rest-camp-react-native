@@ -76,11 +76,10 @@ export function SignedIn({ userId, email }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
-    justifyContent: "center",
-    alignItems: "stretch",
+    padding: 32,
     gap: 16,
+    alignSelf: "stretch",
+    alignItems: "center",
   },
   userContainer: {
     alignItems: "flex-start",
