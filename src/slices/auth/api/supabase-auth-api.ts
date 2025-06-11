@@ -23,7 +23,7 @@ export const supabaseAuthApi = {
   },
   async signOut(): Promise<void> {
     try {
-      const { error } = await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut({ scope: "local" });
       if (error) console.error(`Error signing out: ${error.message}`);
     } catch (error) {
       console.error("Error during sign out:", error);
