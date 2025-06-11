@@ -32,7 +32,8 @@ export function ParkingHeader({ name, updatedAt, latitude, longitude }: Props) {
 const styles = StyleSheet.create({
   headerContainer: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingTop: 0,
+    paddingBottom: 8,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#eeeeee",

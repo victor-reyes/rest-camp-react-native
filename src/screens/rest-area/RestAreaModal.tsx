@@ -43,7 +43,7 @@ function RestAreaModalComponent({ id, onClose }: Props) {
     return () => subscription?.remove();
   }, [id, isFocused]);
 
-  const animationConfigs = useBottomSheetTimingConfigs({ duration: 1500 });
+  const animationConfigs = useBottomSheetTimingConfigs({ duration: 500 });
 
   return (
     restArea && (
@@ -54,6 +54,7 @@ function RestAreaModalComponent({ id, onClose }: Props) {
         onChange={handleSheetChanges}
         onDismiss={onClose}
         enablePanDownToClose
+        handleStyle={{ paddingBottom: 0, paddingTop: 8 }}
         animationConfigs={animationConfigs}>
         <BottomSheetView>
           <RestAreaCard restArea={restArea} />
