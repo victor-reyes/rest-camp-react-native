@@ -46,6 +46,16 @@ export function FilterPopup({ children: trigger }: Props) {
     }
   }, [open, popupPosition]);
 
+  const handleClearFilters = () => {
+    dispatch(filtersCleared());
+    setOpen(false);
+  };
+
+  const handleUseFilters = () => setOpen(false);
+
+  const numFilters = filters.length;
+  const isAnyFilterActive = numFilters > 0;
+
   return (
     <>
       {open && (
@@ -65,10 +75,16 @@ export function FilterPopup({ children: trigger }: Props) {
             ))}
 
             <View style={styles.buttonsContainer}>
-              <Pressable style={styles.button} onPress={() => dispatch(filtersCleared())}>
+              <Pressable
+                style={[
+                  styles.button,
+                  isAnyFilterActive ? styles.cancelButton : styles.disabledButton,
+                ]}
+                onPress={handleClearFilters}
+                disabled={!isAnyFilterActive}>
                 <Text style={styles.buttonText}>Rensa</Text>
               </Pressable>
-              <Pressable style={styles.button} onPress={() => setOpen(false)}>
+              <Pressable style={styles.button} onPress={handleUseFilters}>
                 <Text style={styles.buttonText}>Använd</Text>
               </Pressable>
             </View>
@@ -143,6 +159,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 4,
     borderRadius: 12,
+  },
+  cancelButton: {
+    backgroundColor: "#d9534f",
+  },
+  disabledButton: {
+    backgroundColor: "#ccc",
   },
   buttonText: {
     color: "#fff",
