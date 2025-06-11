@@ -1,6 +1,11 @@
 import { useAppSelector } from "@/app/store";
 import { selectRestAreaById } from "@/slices/rest-areas";
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetView,
+  useBottomSheetTimingConfigs,
+} from "@gorhom/bottom-sheet";
 import { memo, useCallback, useEffect, useRef } from "react";
 import { RestAreaCard } from "./components";
 import { BackHandler } from "react-native";
@@ -38,6 +43,8 @@ function RestAreaModalComponent({ id, onClose }: Props) {
     return () => subscription?.remove();
   }, [id, isFocused]);
 
+  const animationConfigs = useBottomSheetTimingConfigs({ duration: 1500 });
+
   return (
     restArea && (
       <BottomSheetModal
@@ -46,7 +53,8 @@ function RestAreaModalComponent({ id, onClose }: Props) {
         backdropComponent={renderBackdrop}
         onChange={handleSheetChanges}
         onDismiss={onClose}
-        enablePanDownToClose>
+        enablePanDownToClose
+        animationConfigs={animationConfigs}>
         <BottomSheetView>
           <RestAreaCard restArea={restArea} />
         </BottomSheetView>
