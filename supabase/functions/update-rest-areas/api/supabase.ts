@@ -16,47 +16,45 @@ export const getSupabaseClient = () => {
         .limit(1)
         .maybeSingle();
 
-      if (response.error) {
+      if (response.error)
         throw new Error(`Error fetching last updated time: ${response.error.message}`);
-      }
 
       return response.data?.updated_at ?? "1025-01-01T01:31:12.540Z";
     },
+
     async upsertRestArea(restAreaWithServicesAndPhotos: RestAreaWithServicesAndPhotos) {
       const { services, photos, ...restArea } = restAreaWithServicesAndPhotos;
 
-      const { data, error } = await supabase
+      const { data: insertedRestArea, error: insertRestAreaError } = await supabase
         .from("rest_areas")
-        .upsert(restArea, { onConflict: "trafikverket_id" })
+        .upsert(restArea, { onConflict: "trafikverket_id", ignoreDuplicates: false })
         .select("id")
         .single();
 
-      if (error) {
-        console.error("Error inserting or updating rest area:", error);
-        throw error;
-      }
+      if (insertRestAreaError) throw insertRestAreaError;
 
-      const id = data?.id;
+      const id = insertedRestArea?.id;
       if (!id) throw new Error("Failed to insert or update rest area");
 
-      const { error: serviceError } = await supabase.from("services").upsert(
-        services.map(service => ({ ...service, rest_area_id: id })),
-        { onConflict: "name, rest_area_id" },
-      );
-      if (serviceError) {
-        console.error("Error inserting or updating service:", serviceError);
-        throw serviceError;
-      }
+      const { error: deleteServicesError } = await supabase
+        .from("services")
+        .delete()
+        .eq("rest_area_id", id);
 
-      const { error: photoError } = await supabase.from("photos").upsert(
+      if (deleteServicesError) throw deleteServicesError;
+
+      const { error: insertServiceError } = await supabase
+        .from("services")
+        .insert(services.map(service => ({ ...service, rest_area_id: id })));
+
+      if (insertServiceError) throw insertServiceError;
+
+      const { error: insertPhotoError } = await supabase.from("photos").upsert(
         photos.map(photo => ({ ...photo, rest_area_id: id })),
-        { onConflict: "url" },
+        { onConflict: "url", ignoreDuplicates: true },
       );
 
-      if (photoError) {
-        console.error("Error inserting or updating photo:", photoError);
-        throw photoError;
-      }
+      if (insertPhotoError) throw insertPhotoError;
     },
   };
 };
