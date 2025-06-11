@@ -38,12 +38,6 @@ export function SignedIn({ userId, email }: Props) {
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
-    const response = await supabase.from("rest_areas").select("*, reviews(*, profiles(*))");
-
-    if (response.error) {
-      console.error("Error fetching rest areas:", response.error);
-    }
-    console.log("Rest areas data:", JSON.stringify(response.data, null, 2));
   }, [userId]);
 
   useEffect(() => {
