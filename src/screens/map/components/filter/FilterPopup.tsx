@@ -54,7 +54,7 @@ export function FilterPopup({ children: trigger }: Props) {
   const handleUseFilters = () => setOpen(false);
 
   const numFilters = filters.length;
-  const isAnyFilterActive = numFilters > 0;
+  const hasActiveFilters = numFilters > 0;
 
   return (
     <>
@@ -76,15 +76,18 @@ export function FilterPopup({ children: trigger }: Props) {
 
             <View style={styles.buttonsContainer}>
               <Pressable
-                style={[
+                style={({ pressed }) => [
                   styles.button,
-                  isAnyFilterActive ? styles.cancelButton : styles.disabledButton,
+                  hasActiveFilters ? styles.cancelButton : styles.disabledButton,
+                  pressed && styles.pressedButton,
                 ]}
                 onPress={handleClearFilters}
-                disabled={!isAnyFilterActive}>
-                <Text style={styles.buttonText}>Rensa</Text>
+                disabled={!hasActiveFilters}>
+                <Text style={styles.buttonText}>Rensa ({numFilters})</Text>
               </Pressable>
-              <Pressable style={styles.button} onPress={handleUseFilters}>
+              <Pressable
+                style={({ pressed }) => [styles.button, pressed && styles.pressedButton]}
+                onPress={handleUseFilters}>
                 <Text style={styles.buttonText}>Använd</Text>
               </Pressable>
             </View>
@@ -166,6 +169,7 @@ const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: "#ccc",
   },
+  pressedButton: { opacity: 0.7 },
   buttonText: {
     color: "#fff",
     textAlign: "center",
