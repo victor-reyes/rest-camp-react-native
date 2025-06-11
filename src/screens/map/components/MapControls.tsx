@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
-import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet } from "react-native";
 import { FilterPopup } from "./filter/FilterPopup";
 
 interface Props {
@@ -21,7 +21,7 @@ export function MapControls({ onLocationUpdate }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <>
       <FilterPopup>
         <FontAwesome name="filter" size={24} color="#aaa" />
       </FilterPopup>
@@ -30,17 +30,11 @@ export function MapControls({ onLocationUpdate }: Props) {
         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
         <MaterialIcons name="gps-fixed" size={24} color="gray" />
       </Pressable>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 8,
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-  },
   button: {
     backgroundColor: "#ffffffee",
     padding: 8,

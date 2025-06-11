@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { useCallback, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
 import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { RestAreaModal } from "../rest-area/RestAreaModal";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 
@@ -39,10 +40,17 @@ export function MapScreen() {
 
   const handleOnProfilePress = () => navigation.navigate("Profile");
 
+  const insets = useSafeAreaInsets();
+
   return (
     <BottomSheetModalProvider>
       <View style={styles.container} onLayout={onLayout}>
-        <Pressable onPress={handleOnProfilePress} style={[styles.profileButton]}>
+        <Pressable
+          onPress={handleOnProfilePress}
+          style={[
+            styles.profileButton,
+            { top: insets.top + Platform.select({ android: 12, default: 0 }) },
+          ]}>
           <FontAwesome5 name="user" size={18} color="gray" />
         </Pressable>
         <MapView
@@ -65,7 +73,13 @@ export function MapScreen() {
               />,
           )}
         </MapView>
-        <MapControls onLocationUpdate={handleOnLocationUpdate} />
+        <View
+          style={[
+            styles.mapControlsContainer,
+            { bottom: insets.bottom + Platform.select({ android: 12, default: 0 }) },
+          ]}>
+          <MapControls onLocationUpdate={handleOnLocationUpdate} />
+        </View>
         <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
       </View>
     </BottomSheetModalProvider>
@@ -82,8 +96,7 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     position: "absolute",
-    top: 36,
-    right: 18,
+    right: 16,
     zIndex: 1,
     backgroundColor: "#ffffffee",
     padding: 8,
@@ -97,5 +110,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+  },
+  mapControlsContainer: {
+    position: "absolute",
+    right: 16,
+    gap: 8,
   },
 });
