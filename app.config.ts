@@ -75,5 +75,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         cameraPermission: "Appen behöver tillgång till kameran för att ta bilder på rastplatser.",
       },
     ],
+    "react-native-compressor",
   ],
 });

@@ -3,6 +3,8 @@ import { updateRestAreas } from "../utils";
 import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "react-native-compressor";
+import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
@@ -75,25 +77,32 @@ export const restAreasApi = createApi({
     addPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
       invalidatesTags: ["RestAreas"],
       queryFn: async ({ restAreaId, uri, description }) => {
-        const arrayBuffer = await fetch(uri).then(res => res.arrayBuffer());
-        const fileExt = uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
-        const path = `id${restAreaId}-${Date.now()}.${fileExt}`;
+        const [compressedBuffer, thumbnailBuffer] = await Promise.all([
+          compressImageToBuffer(uri, { maxWidth: 1200, quality: 0.7 }),
+          compressImageToBuffer(uri, { maxWidth: 400, quality: 0.7 }),
+        ]);
 
-        const { data: storageData, error: storageError } = await supabase.storage
-          .from("photos")
-          .upload(path, arrayBuffer, { contentType: "image/jpeg" });
+        const { storage } = supabase;
+        const path = `${restAreaId}-${Date.now()}.jpeg`;
+        const options = { contentType: "image/jpeg" };
+        const [photoResponse, thumbnailResponse] = await Promise.all([
+          storage.from("photos").upload(path, compressedBuffer, options),
+          storage.from("photos").upload(`thumbnails-${path}`, thumbnailBuffer, options),
+        ]);
 
-        if (storageError) {
-          console.error("Storage upload error:", storageError);
-          return { error: storageError };
+        if (photoResponse.error || thumbnailResponse.error) {
+          console.error("Storage upload error:", photoResponse.error || thumbnailResponse.error);
+          return { error: photoResponse.error || thumbnailResponse.error };
         }
 
-        const url = supabase.storage.from("photos").getPublicUrl(storageData.path).data.publicUrl;
+        const [url, thumbnailUrl] = [photoResponse, thumbnailResponse].map(
+          res => supabase.storage.from("photos").getPublicUrl(res.data.path).data.publicUrl,
+        );
 
         const { error: insertError } = await supabase.from("photos").insert({
           rest_area_id: restAreaId,
           url,
-          thumbnail_url: url,
+          thumbnail_url: thumbnailUrl,
           description: description,
         });
 
@@ -107,5 +116,10 @@ export const restAreasApi = createApi({
     }),
   }),
 });
+
+async function compressImageToBuffer(uri: string, options: CompressorOptions) {
+  const compressedUri = await Image.compress(uri, options);
+  return fetch(compressedUri).then(res => res.arrayBuffer());
+}
 
 export const { useRestAreasQuery, useAddPhotoMutation } = restAreasApi;
