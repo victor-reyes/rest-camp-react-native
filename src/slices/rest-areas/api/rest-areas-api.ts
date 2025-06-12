@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { updateRestAreas } from "../utils";
 import { loadRestAreas } from "../rest-area-slice";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "react-native-compressor";
 import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
