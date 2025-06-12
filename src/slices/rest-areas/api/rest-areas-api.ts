@@ -22,8 +22,8 @@ export const restAreasApi = createApi({
           { data: restAreasWithServices, error: restAreaError },
           { data: photos, error: photosError },
         ] = await Promise.all([
-          supabase.from("rest_areas").select("*, services(*)").gte("updated_at", lastChecked),
-          supabase.from("photos").select("*").gte("updated_at", lastChecked),
+          supabase.from("rest_areas_with_services").select().gte("updated_at", lastChecked),
+          supabase.from("photos").select().gte("updated_at", lastChecked),
         ]);
 
         if (restAreaError) return { error: restAreaError };

@@ -1,38 +1,41 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
-  public: {
+  v1: {
     Tables: {
+      [_ in never]: never;
+    };
+    Views: {
       photos: {
         Row: {
-          deleted: boolean;
+          deleted: boolean | null;
           description: string | null;
           owner_id: string | null;
-          rest_area_id: string;
+          rest_area_id: string | null;
           review_id: string | null;
-          thumbnail_url: string;
-          updated_at: string;
-          url: string;
+          thumbnail_url: string | null;
+          updated_at: string | null;
+          url: string | null;
         };
         Insert: {
-          deleted?: boolean;
+          deleted?: boolean | null;
           description?: string | null;
           owner_id?: string | null;
-          rest_area_id: string;
+          rest_area_id?: string | null;
           review_id?: string | null;
-          thumbnail_url: string;
-          updated_at?: string;
-          url: string;
+          thumbnail_url?: string | null;
+          updated_at?: string | null;
+          url?: string | null;
         };
         Update: {
-          deleted?: boolean;
+          deleted?: boolean | null;
           description?: string | null;
           owner_id?: string | null;
-          rest_area_id?: string;
+          rest_area_id?: string | null;
           review_id?: string | null;
-          thumbnail_url?: string;
-          updated_at?: string;
-          url?: string;
+          thumbnail_url?: string | null;
+          updated_at?: string | null;
+          url?: string | null;
         };
         Relationships: [
           {
@@ -46,7 +49,7 @@ export type Database = {
             foreignKeyName: "photos_rest_area_id_fkey";
             columns: ["rest_area_id"];
             isOneToOne: false;
-            referencedRelation: "rest_areas";
+            referencedRelation: "rest_areas_with_services";
             referencedColumns: ["id"];
           },
           {
@@ -62,7 +65,7 @@ export type Database = {
         Row: {
           avatar_url: string | null;
           full_name: string | null;
-          id: string;
+          id: string | null;
           location: string | null;
           updated_at: string | null;
           username: string | null;
@@ -70,7 +73,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null;
           full_name?: string | null;
-          id: string;
+          id?: string | null;
           location?: string | null;
           updated_at?: string | null;
           username?: string | null;
@@ -78,79 +81,56 @@ export type Database = {
         Update: {
           avatar_url?: string | null;
           full_name?: string | null;
-          id?: string;
+          id?: string | null;
           location?: string | null;
           updated_at?: string | null;
           username?: string | null;
         };
         Relationships: [];
       };
-      rest_areas: {
+      rest_areas_with_services: {
         Row: {
-          deleted: boolean;
+          deleted: boolean | null;
           description: string | null;
-          id: string;
-          latitude: number;
+          id: string | null;
+          latitude: number | null;
           local_description: string | null;
-          longitude: number;
-          name: string;
-          status: string;
-          trafikverket_id: string;
-          updated_at: string;
-        };
-        Insert: {
-          deleted?: boolean;
-          description?: string | null;
-          id?: string;
-          latitude: number;
-          local_description?: string | null;
-          longitude: number;
-          name: string;
-          status: string;
-          trafikverket_id: string;
-          updated_at: string;
-        };
-        Update: {
-          deleted?: boolean;
-          description?: string | null;
-          id?: string;
-          latitude?: number;
-          local_description?: string | null;
-          longitude?: number;
-          name?: string;
-          status?: string;
-          trafikverket_id?: string;
-          updated_at?: string;
+          longitude: number | null;
+          name: string | null;
+          services: Json | null;
+          status: string | null;
+          trafikverket_id: string | null;
+          updated_at: string | null;
         };
         Relationships: [];
       };
       reviews: {
         Row: {
-          deleted: boolean;
-          id: string;
-          owner_id: string;
+          deleted: boolean | null;
+          id: string | null;
+          owner_id: string | null;
           recension: string | null;
-          rest_area_id: string;
-          score: number;
-          updated_at: string;
+          rest_area_id: string | null;
+          score: number | null;
+          updated_at: string | null;
         };
         Insert: {
-          deleted?: boolean;
-          id?: string;
-          owner_id?: string;
+          deleted?: boolean | null;
+          id?: string | null;
+          owner_id?: string | null;
           recension?: string | null;
-          rest_area_id: string;
-          score: number;
-          updated_at?: string;
+          rest_area_id?: string | null;
+          score?: number | null;
+          updated_at?: string | null;
         };
         Update: {
-          deleted?: boolean;
-          id?: string;
-          owner_id?: string;
+          deleted?: boolean | null;
+          id?: string | null;
+          owner_id?: string | null;
           recension?: string | null;
-          rest_area_id?: string;
-          score?: number;
-          updated_at?: string;
+          rest_area_id?: string | null;
+          score?: number | null;
+          updated_at?: string | null;
         };
         Relationships: [
           {
@@ -164,37 +144,11 @@ export type Database = {
             foreignKeyName: "reviews_rest_area_id_fkey";
             columns: ["rest_area_id"];
             isOneToOne: false;
-            referencedRelation: "rest_areas";
+            referencedRelation: "rest_areas_with_services";
             referencedColumns: ["id"];
           },
         ];
       };
-      services: {
-        Row: {
-          name: Database["public"]["Enums"]["service"];
-          rest_area_id: string;
-        };
-        Insert: {
-          name: Database["public"]["Enums"]["service"];
-          rest_area_id: string;
-        };
-        Update: {
-          name?: Database["public"]["Enums"]["service"];
-          rest_area_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "services_rest_area_id_fkey";
-            columns: ["rest_area_id"];
-            isOneToOne: false;
-            referencedRelation: "rest_areas";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-    };
-    Views: {
-      [_ in never]: never;
     };
     Functions: {
       [_ in never]: never;
@@ -347,7 +301,7 @@ export type CompositeTypes<
   : never;
 
 export const Constants = {
-  public: {
+  v1: {
     Enums: {
       service: [
         "refuseBin",
