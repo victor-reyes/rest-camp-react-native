@@ -22,6 +22,7 @@ export function RestAreaCard({ restArea }: Props) {
       <Description
         description={restArea.description || undefined}
         locationDescription={restArea.localDescription || undefined}
+        status={restArea.status}
       />
       <Services services={restArea.services.map(service => service.name)} />
       <PhotoGallery restAreaId={restArea.id} photos={restArea.photos} />
