@@ -16,8 +16,10 @@ export function Description({ description, locationDescription, status }: Props)
           <Text style={styles.statusText}>{getStatusText(status)}</Text>
         </View>
       </View>
-      {description && <Text style={styles.descriptionText}>{description}</Text>}
-      {locationDescription && <Text style={styles.locationText}>🧭 {locationDescription}</Text>}
+      <View>
+        {description && <Text style={styles.descriptionText}>{description}</Text>}
+        {locationDescription && <Text style={styles.locationText}>🧭 {locationDescription}</Text>}
+      </View>
     </View>
   );
 }
@@ -25,13 +27,13 @@ export function Description({ description, locationDescription, status }: Props)
 const getStatusText = (status: Status) => {
   switch (status) {
     case "inOperation":
-      return "Ok";
+      return "Öppen";
     case "limitedOperation":
       return "Begränsad";
     case "outOfService":
       return "Ur drift";
     default:
-      return "Unknown Status";
+      return "Okänd status";
   }
 };
 
@@ -67,23 +69,20 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     borderRadius: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     paddingVertical: 2,
   },
   statusText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#fff",
   },
   descriptionText: {
     fontSize: 14,
-    lineHeight: 20,
     color: "#333333",
-    marginBottom: 8,
   },
   locationText: {
     fontSize: 14,
     color: "#666666",
-    marginLeft: 4,
   },
 });
