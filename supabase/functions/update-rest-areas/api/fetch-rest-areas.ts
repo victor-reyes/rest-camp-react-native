@@ -63,6 +63,7 @@ function transformToSql(raw: RestAreaApiResponse) {
         url: photo.Url,
         description: photo.Title,
         thumbnail_url: photo.Url,
+        updated_at: item.ModifiedTime,
       })),
     };
   });
