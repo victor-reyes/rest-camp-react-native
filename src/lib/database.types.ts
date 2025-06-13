@@ -98,7 +98,7 @@ export type Database = {
           longitude: number | null;
           name: string | null;
           services: Json | null;
-          status: string | null;
+          status: Database["v1"]["Enums"]["status"] | null;
           trafikverket_id: string | null;
           updated_at: string | null;
         };
@@ -163,6 +163,7 @@ export type Database = {
         | "touristInformation"
         | "restaurant"
         | "petrolStation";
+      status: "inOperation" | "limitedOperation" | "outOfService";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -313,6 +314,7 @@ export const Constants = {
         "restaurant",
         "petrolStation",
       ],
+      status: ["inOperation", "limitedOperation", "outOfService"],
     },
   },
 } as const;

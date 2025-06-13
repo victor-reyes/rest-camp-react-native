@@ -1,10 +1,10 @@
 import { MergeDeep } from "type-fest";
-import { Database as DatabaseGenerated } from "./database.types";
-import { SERVICES } from ".";
+import { Constants, Database as DatabaseGenerated } from "./database.types";
 
 // Override the type for a specific column in a view:
 
-type Service = (typeof SERVICES)[number];
+type Service = (typeof Constants.v1.Enums.service)[number];
+type Status = (typeof Constants.v1.Enums.status)[number];
 
 export type Database = MergeDeep<
   DatabaseGenerated,
@@ -36,7 +36,7 @@ export type Database = MergeDeep<
             name: string;
             latitude: number;
             longitude: number;
-            status: "open" | "closed";
+            status: Status;
             updated_at: string;
             deleted: boolean;
             services: {
