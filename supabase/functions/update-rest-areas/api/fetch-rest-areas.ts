@@ -38,11 +38,11 @@ function getBody(datetime: string) {
 </REQUEST>`;
 }
 
-function transformToSql(raw: RestAreaApiResponse) {
+function transformToSql(raw: RestAreaApiResponse): RestAreaWithServicesAndPhotos[] {
   const responce = ResponseSchema.parse(raw);
   const data = responce.RESPONSE.RESULT[0].Parking || [];
 
-  const restAreas = data.map((item): RestAreaWithServicesAndPhotos => {
+  return data.map(item => {
     const localDescription = [item.LocationDescription, item.DistanceToNearestCity]
       .filter(Boolean)
       .join(" ");
@@ -67,6 +67,4 @@ function transformToSql(raw: RestAreaApiResponse) {
       })),
     };
   });
-
-  return restAreas;
 }
