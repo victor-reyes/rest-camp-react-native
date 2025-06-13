@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     color: "#333333",
   },
   locationText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666666",
   },
 });

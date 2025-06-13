@@ -25,7 +25,8 @@ export function PhotoGallery({ photos, restAreaId }: Props) {
         <Button
           title="Lägg till bilder"
           fit
-          icon={<FontAwesome6 name="plus" size={24} color="#155196" />}
+          iconSize={18}
+          icon={<FontAwesome6 name="plus" size={18} color="#155196" />}
           onPress={handleAddPhotos}
         />
       </View>
