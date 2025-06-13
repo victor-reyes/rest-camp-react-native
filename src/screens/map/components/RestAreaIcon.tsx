@@ -15,6 +15,7 @@ function RestAreaIconConponent({
   style,
   ...props
 }: Props) {
+  const color = props.color || "#155196";
   return (
     <View style={[{ width: width * 1.12, height: height * 1.12 }, style]}>
       <Svg
@@ -28,7 +29,7 @@ function RestAreaIconConponent({
           d="M1.5.04h21c.79 0 1.46.67 1.46 1.47v20.98a1.5 1.5 0 0 1-1.47 1.47H1.51A1.49 1.49 0 0 1 .03 22.5v-21A1.5 1.5 0 0 1 1.5.04"
         />
         <Path
-          fill="#155196"
+          fill={color}
           d="M1.5.8h21a.71.71 0 0 1 .7.7v21a.71.71 0 0 1-.7.7h-21a.75.75 0 0 1-.7-.7v-21a.71.71 0 0 1 .7-.7"
         />
         <Path fill="#fff" d="M4.51 19.48V4.52H19.5v14.97z" />

@@ -69,6 +69,7 @@ export function MapScreen() {
                 key={point.id}
                 id={point.id}
                 coords={{ latitude: point.latitude, longitude: point.longitude }}
+                status={point.status}
                 onRestAreaPress={handleOnRestAreaPress}
               />,
           )}
