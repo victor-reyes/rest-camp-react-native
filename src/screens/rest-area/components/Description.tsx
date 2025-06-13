@@ -11,7 +11,7 @@ export function Description({ description, locationDescription, status }: Props)
   return (
     <View style={styles.section}>
       <View style={styles.titleContainer}>
-        <Text style={styles.sectionTitle}>Information</Text>
+        <Text style={styles.sectionTitle}>Information:</Text>
         <View style={[styles.statusContainer, { backgroundColor: getStatusColor(status) }]}>
           <Text style={styles.statusText}>{getStatusText(status)}</Text>
         </View>
