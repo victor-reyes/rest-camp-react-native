@@ -17,10 +17,11 @@ export type RestArea = typeof restAreas.$inferSelect & {
   services: (typeof services.$inferSelect)[];
   photos: (typeof photos.$inferSelect)[];
 };
+export type Status = RestArea["status"];
 
 export type Photo = typeof photos.$inferSelect;
 export type ServiceSelect = typeof services.$inferSelect;
-export type Service = (typeof services.$inferSelect)["name"];
+export type Service = ServiceSelect["name"];
 
 export type RestAreaInsert = typeof restAreas.$inferInsert;
 export type ServiceInsert = typeof services.$inferInsert;

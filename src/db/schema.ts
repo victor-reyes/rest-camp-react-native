@@ -1,4 +1,4 @@
-import { SERVICES } from "@/lib";
+import { SERVICES, STATUSES } from "@/lib/types";
 import { relations } from "drizzle-orm";
 import { int, primaryKey, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
@@ -9,7 +9,7 @@ export const restAreas = sqliteTable("rest_areas", {
   longitude: real().notNull(),
   description: text(),
   localDescription: text("local_description"),
-  status: text().notNull(),
+  status: text({ enum: STATUSES }).notNull(),
   updatedAt: int("updated_at", { mode: "number" }).notNull(),
 });
 export const restAreaRelations = relations(restAreas, ({ many }) => ({

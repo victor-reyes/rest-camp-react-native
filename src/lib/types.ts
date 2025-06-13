@@ -3,8 +3,11 @@ import { Constants, Database as DatabaseGenerated } from "./database.types";
 
 // Override the type for a specific column in a view:
 
-type Service = (typeof Constants.v1.Enums.service)[number];
-type Status = (typeof Constants.v1.Enums.status)[number];
+export const SERVICES = Constants.v1.Enums.service;
+export const STATUSES = Constants.v1.Enums.status;
+
+type Service = (typeof SERVICES)[number];
+type Status = (typeof STATUSES)[number];
 
 export type Database = MergeDeep<
   DatabaseGenerated,

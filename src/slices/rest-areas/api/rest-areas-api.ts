@@ -37,7 +37,7 @@ export const restAreasApi = createApi({
             longitude: restArea.longitude,
             description: restArea.description || "",
             localDescription: restArea.local_description || "",
-            status: restArea.status === "open" ? "open" : "closed",
+            status: restArea.status,
             numberOfCarSpaces: 0,
             numberOfTruckSpaces: 0,
             updatedAt: new Date(restArea.updated_at).getTime(),
