@@ -53,7 +53,7 @@ function transformToSql(raw: RestAreaApiResponse) {
       longitude: item.Geometry.longitude,
       description: item.Description,
       local_description: localDescription,
-      status: item.OpenStatus,
+      status: item.OperationStatus ?? (item.OpenStatus === "open" ? "inOperation" : "outOfService"),
       updated_at: item.ModifiedTime,
       deleted: item.Deleted,
       services: [...item.Equipment, ...(item.Facility || [])].map(service => ({

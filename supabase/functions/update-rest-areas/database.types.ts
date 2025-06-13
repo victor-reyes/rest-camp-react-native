@@ -94,7 +94,7 @@ export type Database = {
           local_description: string | null;
           longitude: number;
           name: string;
-          status: string;
+          status: "inOperation" | "limitedOperation" | "outOfService";
           trafikverket_id: string;
           updated_at: string;
         };
@@ -106,7 +106,7 @@ export type Database = {
           local_description?: string | null;
           longitude: number;
           name: string;
-          status: string;
+          status: "inOperation" | "limitedOperation" | "outOfService";
           trafikverket_id: string;
           updated_at: string;
         };
@@ -118,7 +118,7 @@ export type Database = {
           local_description?: string | null;
           longitude?: number;
           name?: string;
-          status?: string;
+          status?: "inOperation" | "limitedOperation" | "outOfService";
           trafikverket_id?: string;
           updated_at?: string;
         };
