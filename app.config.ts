@@ -10,7 +10,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   name: "Rastplatser",
   slug: "Rastplatser",
-  version: "1.0.0",
+  version: "1.0.6",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
@@ -24,8 +24,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_IOS_API_KEY,
     },
     infoPlist: {
-      NSLocationWhenInUseUsageDescription:
-        "This app requires access to your location to show your position on the map.",
+      NSLocationWhenInUseUsageDescription: `
+      Appen behöver tillgång till din plats för att kunna visa rastplatser nära dig och navigera kartan till din position.
+      `.trim(),
       ITSAppUsesNonExemptEncryption: false,
     },
   },
