@@ -12,7 +12,7 @@ export function MapControls({ onLocationUpdate }: Props) {
     const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       if (!canAskAgain)
-        Alert.alert("Location permission denied", "Please enable location permission in settings.");
+        Alert.alert("Platstillstånd nekat", "Vänligen aktivera platstillstånd i inställningar.");
       return;
     }
 
