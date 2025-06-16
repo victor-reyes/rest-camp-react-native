@@ -1,8 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
-import { Alert, Pressable, StyleSheet } from "react-native";
+import { Linking, Pressable, StyleSheet } from "react-native";
 import { FilterPopup } from "./filter/FilterPopup";
+import Toast from "react-native-toast-message";
 
 interface Props {
   onLocationUpdate: (coords: { latitude: number; longitude: number }) => void;
@@ -12,7 +13,10 @@ export function MapControls({ onLocationUpdate }: Props) {
     const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       if (!canAskAgain)
-        Alert.alert("Platstillstånd nekat", "Vänligen aktivera platstillstånd i inställningar.");
+        Toast.show({
+          type: "info",
+          text1: "Platstillstånd nekades",
+        });
       return;
     }
 
