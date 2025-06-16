@@ -16,6 +16,8 @@ export function MapControls({ onLocationUpdate }: Props) {
         Toast.show({
           type: "info",
           text1: "Platstillstånd nekades",
+          text2: "Pressa på knappen för att gå till inställningar.",
+          onPress: () => Linking.openSettings(),
         });
       return;
     }
