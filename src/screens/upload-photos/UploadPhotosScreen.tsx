@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Pressable, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+  Linking,
+} from "react-native";
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -12,6 +20,7 @@ import { selectRestAreaById, useUploadPhotoMutation } from "@/slices/rest-areas"
 import * as ImagePicker from "expo-image-picker";
 import { ProfileModal } from "./components/ProfileModal";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
@@ -62,6 +71,30 @@ export function UploadPhotosScreen({ route }: Props) {
   const [selectedPhotos, setSelectedPhotos] = useState<SelectedPhoto[]>([]);
 
   const handlePress = async (type: "camera" | "gallery") => {
+    const permission =
+      type === "camera" ?
+        await ImagePicker.requestCameraPermissionsAsync()
+      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      if (permission.canAskAgain) {
+        Toast.show({
+          type: "info",
+          text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`,
+          bottomOffset: 100,
+        });
+      } else {
+        Toast.show({
+          type: "info",
+          text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`,
+          text2: `Pressa på knappen för att gå till inställningar.`,
+          bottomOffset: 100,
+          onPress: () => Linking.openSettings(),
+        });
+      }
+      return;
+    }
+
     const result =
       type === "camera" ?
         await ImagePicker.launchCameraAsync(OPTIONS)
