@@ -207,6 +207,7 @@ export function UploadPhotosScreen({ route }: Props) {
         </View>
         <ProfileModal />
       </View>
+      <Toast position="bottom" />
     </BottomSheetModalProvider>
   );
 }
