@@ -1,4 +1,4 @@
-import type { RestAreaWithServicesAndPhotos } from "../../api/supabase";
+import type { RestAreaWithServicesAndPhotos } from "../../../api/supabase";
 import { LazyImage } from "@/components/LazyImage";
 
 type Props = { restArea: RestAreaWithServicesAndPhotos };

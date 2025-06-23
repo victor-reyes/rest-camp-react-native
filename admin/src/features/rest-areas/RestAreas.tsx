@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supaApi, type RestAreaWithServicesAndPhotos } from "../../api/supabase";
-import { RestArea } from "./RestArea";
+import { RestArea } from "./components";
+
 
 export function RestAreas() {
   const [restAreas, setRestAreas] = useState<RestAreaWithServicesAndPhotos[]>([]);
