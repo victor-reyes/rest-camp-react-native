@@ -2,8 +2,8 @@ import type { RestAreaWithInfo } from "@/api/supabase";
 import { equalByCoordinates, equalById } from "./utils";
 
 export function addRestAreas(
-  areas: RestAreaWithInfo[],
-  newAreas: RestAreaWithInfo[],
+  areas: ReadonlyArray<RestAreaWithInfo>,
+  newAreas: ReadonlyArray<RestAreaWithInfo>,
 ): {
   added: RestAreaWithInfo[];
   unprocessed: RestAreaWithInfo[];
