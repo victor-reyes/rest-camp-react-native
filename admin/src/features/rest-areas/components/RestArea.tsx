@@ -1,7 +1,7 @@
-import type { RestAreaWithServicesAndPhotos } from "../../../api/supabase";
+import type { RestAreaWithInfo } from "@/api/supabase";
 import { LazyImage } from "@/components/LazyImage";
 
-type Props = { restArea: RestAreaWithServicesAndPhotos };
+type Props = { restArea: RestAreaWithInfo };
 
 export function RestArea({ restArea }: Props) {
   return (

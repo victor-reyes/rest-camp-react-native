@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { supaApi, type RestAreaWithServicesAndPhotos } from "@/api/supabase";
+import { supaApi, type RestAreaWithInfo } from "@/api/supabase";
 import { RestArea, SortMenu, type OrderBy } from "./components";
 
 const DEFAULT_ORDER: OrderBy = { sort: "name", direction: "asc" };
 export function RestAreas() {
-  const [restAreas, setRestAreas] = useState<RestAreaWithServicesAndPhotos[]>([]);
+  const [restAreas, setRestAreas] = useState<RestAreaWithInfo[]>([]);
   const [orderBy, setOrderBy] = useState<OrderBy>(DEFAULT_ORDER);
 
-  const [sortedRestAreas, setSortedRestAreas] = useState<RestAreaWithServicesAndPhotos[]>([]);
+  const [sortedRestAreas, setSortedRestAreas] = useState<RestAreaWithInfo[]>([]);
 
   useEffect(() => {
     async function fetchRestAreas() {
