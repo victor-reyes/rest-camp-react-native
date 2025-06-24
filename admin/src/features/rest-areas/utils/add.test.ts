@@ -3,7 +3,7 @@ import assert from "node:assert";
 import { addRestAreas } from "./add";
 import type { RestAreaWithInfo } from "@/api/supabase";
 
-const mockAreaTemplate: RestAreaWithInfo = {
+const mockArea: RestAreaWithInfo = {
   id: "test",
   name: "Test Area",
   latitude: 10.0,
@@ -19,66 +19,67 @@ const mockAreaTemplate: RestAreaWithInfo = {
 };
 
 describe("addRestAreas", () => {
-  const existingAreas: RestAreaWithInfo[] = [
-    { ...mockAreaTemplate, trafikverket_id: "existing1", latitude: 10, longitude: 20 },
-    { ...mockAreaTemplate, trafikverket_id: "existing2", latitude: 30, longitude: 40 },
-    { ...mockAreaTemplate, trafikverket_id: "existing3", latitude: 50, longitude: 60 },
-    { ...mockAreaTemplate, trafikverket_id: "existing4", latitude: 70, longitude: 80 },
-    { ...mockAreaTemplate, trafikverket_id: "existing5", latitude: 90, longitude: 100, deleted: true },
-  ];
+  const mockAreas = [
+    { ...mockArea, trafikverket_id: "existing1", latitude: 10, longitude: 20 },
+    { ...mockArea, trafikverket_id: "existing2", latitude: 30, longitude: 40 },
+    { ...mockArea, trafikverket_id: "existing3", latitude: 50, longitude: 60 },
+    { ...mockArea, trafikverket_id: "existing4", latitude: 70, longitude: 80 },
+    { ...mockArea, trafikverket_id: "existing5", latitude: 90, longitude: 100, deleted: true },
+  ] as const;
+
   describe("when adding new rest areas", () => {
     test("should return empty added when no new areas", () => {
-      const { added, unprocessed } = addRestAreas(existingAreas, []);
-      assert.strictEqual(added.length, 0);
-      assert.strictEqual(unprocessed.length, 0);
+      const existedAreas = [...mockAreas];
+
+      const expected = { added: [], unprocessed: [] };
+      const result = addRestAreas(existedAreas, []);
+      console.log(`Result is: ${JSON.stringify(result)}`);
+      assert.deepStrictEqual(result, expected);
     });
     test("should add all unique new areas", () => {
       const uniqueAreas = [
-        { ...mockAreaTemplate, trafikverket_id: "new1", latitude: 1, longitude: 2 },
-        { ...mockAreaTemplate, trafikverket_id: "new2", latitude: 3, longitude: 4 },
-        { ...mockAreaTemplate, trafikverket_id: "new3", latitude: 5, longitude: 6 },
+        { ...mockArea, trafikverket_id: "new1", latitude: 1, longitude: 2 },
+        { ...mockArea, trafikverket_id: "new2", latitude: 3, longitude: 4 },
+        { ...mockArea, trafikverket_id: "new3", latitude: 5, longitude: 6 },
       ];
-      const { added, unprocessed } = addRestAreas(existingAreas, uniqueAreas);
-      assert.strictEqual(added.length, 3);
-      assert.strictEqual(unprocessed.length, 0);
-      assert.deepStrictEqual(added[0], uniqueAreas[0]);
-      assert.deepStrictEqual(added[1], uniqueAreas[1]);
-      assert.deepStrictEqual(added[2], uniqueAreas[2]);
+      const expected = { added: [...uniqueAreas], unprocessed: [] };
+      const result = addRestAreas(mockAreas, uniqueAreas);
+      assert.deepStrictEqual(result, expected);
     });
     test("should return unprocessed areas if there are duplicates by trafikverket_id", () => {
-      const duplicateId = { ...existingAreas[0], trafikverket_id: "existing1" };
-      const newArea = { ...mockAreaTemplate, trafikverket_id: "new1", latitude: 1, longitude: 2 };
+      const existedAreas = [...mockAreas];
+      const duplicatedArea = { ...mockAreas[0], trafikverket_id: "existing1" };
+      const newArea = { ...mockArea, trafikverket_id: "new1", latitude: 1, longitude: 2 };
+      const newAreas = [duplicatedArea, newArea];
 
-      const newAreas = [duplicateId, newArea];
-      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
-      console.log(`Adds length: ${added.length}`);
-      console.log(`Unprocessed length: ${unprocessed.length}`);
-      assert.strictEqual(added.length, 1);
-      assert.strictEqual(unprocessed.length, 1);
-      assert.deepStrictEqual(added[0], newArea);
-      assert.deepStrictEqual(unprocessed[0], duplicateId);
+      const expected = { added: [{ ...newArea }], unprocessed: [{ ...duplicatedArea }] };
+      const result = addRestAreas(existedAreas, newAreas);
+
+      assert.deepStrictEqual(result, expected);
     });
     test("should return unprocessed areas if there are duplicates by coordinates", () => {
-      const duplicateCoordinates = { ...existingAreas[0], latitude: 10, longitude: 20 };
-      const newArea = { ...mockAreaTemplate, trafikverket_id: "new1", latitude: 1, longitude: 2 };
-      const newAreas = [duplicateCoordinates, newArea];
-      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
-      assert.strictEqual(added.length, 1);
-      assert.strictEqual(unprocessed.length, 1);
-      assert.deepStrictEqual(added[0], newArea);
-      assert.deepStrictEqual(unprocessed[0], duplicateCoordinates);
+      const duplicateByCoordinates = { ...mockAreas[0], latitude: 10, longitude: 20 };
+      const newArea = { ...mockArea, trafikverket_id: "new1", latitude: 1, longitude: 2 };
+      const newAreas = [duplicateByCoordinates, newArea];
+
+      const expected = { added: [{ ...newArea }], unprocessed: [{ ...duplicateByCoordinates }] };
+      const result = addRestAreas(mockAreas, newAreas);
+
+      assert.deepStrictEqual(result, expected);
     });
     test("should only add first unique area if multiple new areas have same coordinates or id", () => {
-      const newArea = { ...mockAreaTemplate, trafikverket_id: "duplicate", latitude: 1, longitude: 2 };
+      const newArea = { ...mockArea, trafikverket_id: "duplicate", latitude: 1, longitude: 2 };
       const duplicateArea1 = { ...newArea, trafikverket_id: "duplicate2" };
       const duplicateArea2 = { ...newArea, latitude: 3, longitude: 4 };
       const newAreas = [newArea, duplicateArea1, duplicateArea2];
 
-      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
-      assert.strictEqual(added.length, 1);
-      assert.strictEqual(unprocessed.length, 2);
-      assert.deepStrictEqual(added[0], newArea);
-      assert.deepStrictEqual(unprocessed, [duplicateArea1, duplicateArea2]);
+      const expected = {
+        added: [{ ...newArea }],
+        unprocessed: [{ ...duplicateArea1 }, { ...duplicateArea2 }],
+      };
+      const result = addRestAreas(mockAreas, newAreas);
+
+      assert.deepStrictEqual(result, expected);
     });
   });
 });

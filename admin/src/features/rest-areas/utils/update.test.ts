@@ -3,7 +3,7 @@ import assert from "node:assert";
 import { updateRestAreas } from "./update";
 import type { RestAreaWithInfo } from "@/api/supabase";
 
-const mockAreaTemplate: RestAreaWithInfo = {
+const mockArea: RestAreaWithInfo = {
   id: "test",
   name: "Test Area",
   latitude: 10.0,
@@ -16,47 +16,58 @@ const mockAreaTemplate: RestAreaWithInfo = {
   updated_at: "2023-10-01T12:00:00Z",
   services: [],
   photos: [],
-};
+} as const;
 
 describe("updateRestAreas", () => {
   const mockAreas = [
-    { ...mockAreaTemplate, trafikverket_id: "1", name: "Area 1" },
-    { ...mockAreaTemplate, trafikverket_id: "2", name: "Area 2" },
-    { ...mockAreaTemplate, trafikverket_id: "3", name: "Area 3" },
+    { ...mockArea, trafikverket_id: "1", name: "Area 1" },
+    { ...mockArea, trafikverket_id: "2", name: "Area 2" },
+    { ...mockArea, trafikverket_id: "3", name: "Area 3" },
   ] as const;
 
   test("should find updates for matching IDs", () => {
-    const updatedArea: RestAreaWithInfo = { ...mockAreas[0], name: "Updated Area 1" };
-    const { updated, unprocessed } = updateRestAreas(mockAreas, [updatedArea]);
+    const existedAreas = [...mockAreas];
+    const updatedAreas = [{ ...mockAreas[0], name: "Updated Area 1" }];
 
-    assert.strictEqual(updated.length, 1);
-    assert.deepStrictEqual(updated[0], { id: updatedArea.id, versions: [updatedArea] });
-    assert.strictEqual(unprocessed.length, 0);
+    const expected = {
+      updated: [{ id: updatedAreas[0].id, versions: [...updatedAreas] }],
+      unprocessed: [],
+    };
+    const result = updateRestAreas(existedAreas, updatedAreas);
+
+    assert.deepStrictEqual(result, expected);
   });
 
   test("should mark non-matching areas as unprocessed", () => {
-    const newArea: RestAreaWithInfo = { ...mockAreas[1], trafikverket_id: "4" };
-    const { updated, unprocessed } = updateRestAreas(mockAreas, [newArea]);
+    const existedAreas = [...mockAreas];
+    const nonMatchingAreas = [{ ...mockAreas[1], trafikverket_id: "4" }];
 
-    assert.strictEqual(updated.length, 0);
-    assert.strictEqual(unprocessed.length, 1);
-    assert.strictEqual(unprocessed[0].trafikverket_id, "4");
+    const expected = { updated: [], unprocessed: [...nonMatchingAreas] };
+    const result = updateRestAreas(existedAreas, nonMatchingAreas);
+
+    assert.deepStrictEqual(result, expected);
   });
 
   test("should handle empty arrays", () => {
-    const { updated, unprocessed } = updateRestAreas([], []);
+    const result = updateRestAreas([], []);
+    const expected = { updated: [], unprocessed: [] };
 
-    assert.strictEqual(updated.length, 0);
-    assert.strictEqual(unprocessed.length, 0);
+    assert.deepStrictEqual(result, expected);
   });
 
   test("should handle multiple versions of same area", () => {
-    const version1: RestAreaWithInfo = { ...mockAreas[0], name: "Version 1" };
-    const version2: RestAreaWithInfo = { ...mockAreas[0], name: "Version 2" };
-    const { updated, unprocessed } = updateRestAreas([mockAreas[0]], [version1, version2]);
+    const versions = [
+      { ...mockAreas[0], name: "Version 1" },
+      { ...mockAreas[0], name: "Version 2" },
+    ];
+    const existedAreas = [{ ...mockAreas[0] }];
 
-    assert.strictEqual(updated.length, 1);
-    assert.deepStrictEqual(updated[0], { id: mockAreas[0].id, versions: [version1, version2] });
-    assert.strictEqual(unprocessed.length, 0);
+    const expected = {
+      updated: [{ id: mockAreas[0].id, versions: [...versions] }],
+      unprocessed: [],
+    };
+    const result = updateRestAreas(existedAreas, versions);
+
+    assert.deepStrictEqual(result, expected);
   });
 });
