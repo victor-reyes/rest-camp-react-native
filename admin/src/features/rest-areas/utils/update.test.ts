@@ -30,8 +30,7 @@ describe("updateRestAreas", () => {
     const { updated, unprocessed } = updateRestAreas(mockAreas, [updatedArea]);
 
     assert.strictEqual(updated.length, 1);
-    assert.strictEqual(updated[0].versions.length, 2);
-    assert.strictEqual(updated[0].versions[0].name, "Updated Area 1");
+    assert.deepStrictEqual(updated[0], { id: updatedArea.id, versions: [updatedArea] });
     assert.strictEqual(unprocessed.length, 0);
   });
 
@@ -57,7 +56,7 @@ describe("updateRestAreas", () => {
     const { updated, unprocessed } = updateRestAreas([mockAreas[0]], [version1, version2]);
 
     assert.strictEqual(updated.length, 1);
-    assert.strictEqual(updated[0].versions.length, 3);
+    assert.deepStrictEqual(updated[0], { id: mockAreas[0].id, versions: [version1, version2] });
     assert.strictEqual(unprocessed.length, 0);
   });
 });

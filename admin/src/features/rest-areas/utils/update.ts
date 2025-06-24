@@ -8,11 +8,11 @@ export function updateRestAreas(
   updated: { versions: RestAreaWithInfo[] }[];
   unprocessed: RestAreaWithInfo[];
 } {
-  const updated: { versions: RestAreaWithInfo[] }[] = [];
+  const updated: { id: string; versions: RestAreaWithInfo[] }[] = [];
 
   for (const area of areas) {
     const versions = newAreas.filter(newArea => equalByTrafikverketId(newArea, area));
-    if (versions.length > 0) updated.push({ versions: [...versions, area] });
+    if (versions.length > 0) updated.push({ id: area.id, versions });
   }
 
   const processedIds = new Set(updated.flatMap(item => item.versions.map(v => v.id)));
