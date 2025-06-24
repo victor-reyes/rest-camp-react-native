@@ -10,9 +10,12 @@ export const supaApi = () => {
   return {
     async getRestAreas() {
       const { data, error } = await supabase.from("rest_areas").select(
-        ` *, 
+        ` 
+          *, 
           services(*), 
-          photos(*)`,
+          photos(*), 
+          reviews(*)
+        `,
       );
       if (error) throw error;
       return data;
