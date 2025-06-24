@@ -16,7 +16,6 @@ const mockAreaTemplate: RestAreaWithInfo = {
   updated_at: "2023-10-01T12:00:00Z",
   services: [],
   photos: [],
-  reviews: [],
 };
 
 describe("updateRestAreas", () => {
