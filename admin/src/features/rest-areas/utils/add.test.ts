@@ -33,41 +33,40 @@ describe("addRestAreas", () => {
       assert.strictEqual(unprocessed.length, 0);
     });
     test("should add all unique new areas", () => {
-      const unique = [
+      const uniqueAreas = [
         { ...restArea, trafikverket_id: "new1", latitude: 1, longitude: 2 },
         { ...restArea, trafikverket_id: "new2", latitude: 3, longitude: 4 },
         { ...restArea, trafikverket_id: "new3", latitude: 5, longitude: 6 },
       ];
-      const { added, unprocessed } = addRestAreas(existingAreas, unique);
+      const { added, unprocessed } = addRestAreas(existingAreas, uniqueAreas);
       assert.strictEqual(added.length, 3);
       assert.strictEqual(unprocessed.length, 0);
-      assert.deepStrictEqual(added[0], unique[0]);
-      assert.deepStrictEqual(added[1], unique[1]);
-      assert.deepStrictEqual(added[2], unique[2]);
+      assert.deepStrictEqual(added[0], uniqueAreas[0]);
+      assert.deepStrictEqual(added[1], uniqueAreas[1]);
+      assert.deepStrictEqual(added[2], uniqueAreas[2]);
     });
     test("should return unprocessed areas if there are duplicates by trafikverket_id", () => {
-      const duplicate = [
-        { ...existingAreas[0], trafikverket_id: "existing1" },
-        { ...restArea, trafikverket_id: "new1", latitude: 1, longitude: 2 },
-      ];
-      const { added, unprocessed } = addRestAreas(existingAreas, duplicate);
+      const duplicateId = { ...existingAreas[0], trafikverket_id: "existing1" };
+      const newArea = { ...restArea, trafikverket_id: "new1", latitude: 1, longitude: 2 };
+
+      const newAreas = [duplicateId, newArea];
+      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
       console.log(`Adds length: ${added.length}`);
       console.log(`Unprocessed length: ${unprocessed.length}`);
       assert.strictEqual(added.length, 1);
       assert.strictEqual(unprocessed.length, 1);
-      assert.deepStrictEqual(added[0], duplicate[1]);
-      assert.deepStrictEqual(unprocessed[0], duplicate[0]);
+      assert.deepStrictEqual(added[0], newArea);
+      assert.deepStrictEqual(unprocessed[0], duplicateId);
     });
     test("should return unprocessed areas if there are duplicates by coordinates", () => {
-      const duplicate = [
-        { ...existingAreas[0], trafikverket_id: "different_id" },
-        { ...restArea, trafikverket_id: "new1", latitude: 1, longitude: 2 },
-      ];
-      const { added, unprocessed } = addRestAreas(existingAreas, duplicate);
+      const duplicateCoordinates = { ...existingAreas[0], latitude: 10, longitude: 20 };
+      const newArea = { ...restArea, trafikverket_id: "new1", latitude: 1, longitude: 2 };
+      const newAreas = [duplicateCoordinates, newArea];
+      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
       assert.strictEqual(added.length, 1);
       assert.strictEqual(unprocessed.length, 1);
-      assert.deepStrictEqual(added[0], duplicate[1]);
-      assert.deepStrictEqual(unprocessed[0], duplicate[0]);
+      assert.deepStrictEqual(added[0], newArea);
+      assert.deepStrictEqual(unprocessed[0], duplicateCoordinates);
     });
   });
 });
