@@ -1,5 +1,5 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
-import { equalByTrafikverketsId } from "./utils";
+import { equalByTrafikverketId } from "./utils";
 
 export function updateRestAreas(
   areas: ReadonlyArray<RestAreaWithInfo>,
@@ -11,7 +11,7 @@ export function updateRestAreas(
   const updated: { versions: RestAreaWithInfo[] }[] = [];
 
   for (const area of areas) {
-    const versions = newAreas.filter(newArea => equalByTrafikverketsId(newArea, area));
+    const versions = newAreas.filter(newArea => equalByTrafikverketId(newArea, area));
     if (versions.length > 0) updated.push({ versions: [...versions, area] });
   }
 

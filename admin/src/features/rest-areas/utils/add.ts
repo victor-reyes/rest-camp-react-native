@@ -1,5 +1,5 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
-import { equalByCoordinates, equalByTrafikverketsId } from "./utils";
+import { equalByCoordinates, equalByTrafikverketId } from "./utils";
 
 export function addRestAreas(
   areas: ReadonlyArray<RestAreaWithInfo>,
@@ -13,7 +13,7 @@ export function addRestAreas(
 
   for (const newArea of newAreas) {
     const exist = [...areas, ...added].some(
-      area => equalByTrafikverketsId(area, newArea) || equalByCoordinates(area, newArea),
+      area => equalByTrafikverketId(area, newArea) || equalByCoordinates(area, newArea),
     );
 
     if (!exist) added.push(newArea);
