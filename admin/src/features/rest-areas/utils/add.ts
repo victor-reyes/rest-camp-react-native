@@ -12,7 +12,9 @@ export function addRestAreas(
   const unprocessed: RestAreaWithInfo[] = [];
 
   for (const newArea of newAreas) {
-    const exist = areas.some(area => equalById(area, newArea) || equalByCoordinates(area, newArea));
+    const exist = [...areas, ...added].some(
+      area => equalById(area, newArea) || equalByCoordinates(area, newArea),
+    );
 
     if (!exist) added.push(newArea);
     else unprocessed.push(newArea);

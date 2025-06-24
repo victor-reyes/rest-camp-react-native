@@ -68,5 +68,17 @@ describe("addRestAreas", () => {
       assert.deepStrictEqual(added[0], newArea);
       assert.deepStrictEqual(unprocessed[0], duplicateCoordinates);
     });
+    test("should only add first unique area if multiple new areas have same coordinates or id", () => {
+      const newArea = { ...restArea, trafikverket_id: "duplicate", latitude: 1, longitude: 2 };
+      const duplicateArea1 = { ...newArea, trafikverket_id: "duplicate2" };
+      const duplicateArea2 = { ...newArea, latitude: 3, longitude: 4 };
+      const newAreas = [newArea, duplicateArea1, duplicateArea2];
+
+      const { added, unprocessed } = addRestAreas(existingAreas, newAreas);
+      assert.strictEqual(added.length, 1);
+      assert.strictEqual(unprocessed.length, 2);
+      assert.deepStrictEqual(added[0], newArea);
+      assert.deepStrictEqual(unprocessed, [duplicateArea1, duplicateArea2]);
+    });
   });
 });
