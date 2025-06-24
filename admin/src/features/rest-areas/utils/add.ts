@@ -1,4 +1,5 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
+import { equalByCoordinates, equalById } from "./utils";
 
 export function addRestAreas(
   areas: RestAreaWithInfo[],
@@ -19,9 +20,3 @@ export function addRestAreas(
 
   return { added, unprocessed };
 }
-
-const equalById = (a: RestAreaWithInfo, b: RestAreaWithInfo) =>
-  a.trafikverket_id === b.trafikverket_id;
-
-const equalByCoordinates = (a: RestAreaWithInfo, b: RestAreaWithInfo) =>
-  a.latitude === b.latitude && a.longitude === b.longitude;
