@@ -5,7 +5,7 @@ export function updateRestAreas(
   areas: ReadonlyArray<RestAreaWithInfo>,
   newAreas: ReadonlyArray<RestAreaWithInfo>,
 ): {
-  updated: { versions: RestAreaWithInfo[] }[];
+  updated: { id: string; versions: RestAreaWithInfo[] }[];
   unprocessed: RestAreaWithInfo[];
 } {
   const updated: { id: string; versions: RestAreaWithInfo[] }[] = [];

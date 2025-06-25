@@ -5,7 +5,7 @@ export function mergeRestAreas(
   areas: ReadonlyArray<RestAreaWithInfo>,
   newAreas: ReadonlyArray<RestAreaWithInfo>,
 ): {
-  merged: { versions: RestAreaWithInfo[] }[];
+  merged: { id: string; versions: RestAreaWithInfo[] }[];
   unprocessed: RestAreaWithInfo[];
 } {
   const merged: { id: string; versions: RestAreaWithInfo[] }[] = [];
