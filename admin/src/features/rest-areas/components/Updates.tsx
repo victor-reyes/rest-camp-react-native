@@ -1,6 +1,6 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState, type ReactNode } from "react";
-import { AddAction, UpdatedAction } from "./Actions";
+import { AddAction, MergedAction, UpdatedAction } from "./Actions";
 
 type Props = {
   defaultCurrent: RestAreaWithInfo[];
@@ -59,6 +59,11 @@ export function Updates({ defaultCurrent, defaultNew }: Props) {
           newRestAreas={newAreas}
           onCommit={handleOnCommit}
         />
+      );
+      break;
+    case "MERGED":
+      actionContent = (
+        <MergedAction existingRestAreas={areas} newRestAreas={newAreas} onCommit={handleOnCommit} />
       );
       break;
   }

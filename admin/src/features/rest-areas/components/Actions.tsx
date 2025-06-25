@@ -1,6 +1,6 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { RestArea } from "./RestArea";
-import { addRestAreas, updateRestAreas } from "../utils";
+import { addRestAreas, mergeRestAreas, updateRestAreas } from "../utils";
 
 type Props = {
   existingRestAreas: RestAreaWithInfo[];
@@ -58,6 +58,34 @@ export function UpdatedAction({ existingRestAreas, newRestAreas, onCommit }: Pro
         {updated.map(updated => (
           <li key={updated.versions[0].id}>
             {updated.versions.map((area, index) => (
+              <RestArea restArea={area} key={index} />
+            ))}
+          </li>
+        ))}
+      </ul>
+      <Unprocessed restAreas={unprocessed} />
+    </div>
+  );
+}
+
+export function MergedAction({ existingRestAreas, newRestAreas, onCommit }: Props) {
+  const { merged, unprocessed } = mergeRestAreas(existingRestAreas, newRestAreas);
+
+  const handleClick = () => {
+    const updatedAreas = merged.map(({ versions }) => versions[0]);
+    onCommit({ added: [], updated: updatedAreas, unprocessed });
+  };
+
+  return (
+    <div className="space-y-4">
+      <CommitButton text="Bekräfta ändringar" onClick={handleClick} />
+      <h3 className="text-lg font-semibold text-green-700">
+        Sammanfogade Rastplatser ({merged.length})
+      </h3>
+      <ul>
+        {merged.map(merged => (
+          <li key={merged.id}>
+            {merged.versions.map((area, index) => (
               <RestArea restArea={area} key={index} />
             ))}
           </li>
