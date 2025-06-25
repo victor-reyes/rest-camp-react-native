@@ -1,1 +1,1 @@
-export * from "./RestAreas";
+export * from "./components/RestAreas";

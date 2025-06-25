@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from "react";
 import "./App.css";
-import { RestAreas } from "./features/rest-areas";
+import { Dashboard } from "./screens";
 
 export function App() {
   return (
     <Main>
       <Header />
-      <RestAreas />
+      <Dashboard />
     </Main>
   );
 }
