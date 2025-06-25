@@ -56,7 +56,7 @@ export function UpdatedAction({ existingRestAreas, newRestAreas, onCommit }: Pro
       </h3>
       <ul>
         {updated.map(updated => (
-          <li key={updated.versions[0].id}>
+          <li key={updated.id}>
             {updated.versions.map((area, index) => (
               <RestArea restArea={area} key={index} />
             ))}
