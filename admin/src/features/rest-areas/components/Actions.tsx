@@ -1,6 +1,7 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { RestArea } from "./RestArea";
 import { addRestAreas, mergeRestAreas, updateRestAreas } from "../utils";
+import { Card } from "@/components";
 
 type Props = {
   existingRestAreas: RestAreaWithInfo[];
@@ -55,13 +56,18 @@ export function UpdatedAction({ existingRestAreas, newRestAreas, onCommit }: Pro
         Updaterade Rastplatser ({updated.length})
       </h3>
       <ul>
-        {updated.map(updated => (
-          <li key={updated.id}>
-            {updated.versions.map((area, index) => (
-              <RestArea restArea={area} key={index} />
-            ))}
-          </li>
-        ))}
+        {updated.map(updated => {
+          const currentVersion = existingRestAreas.find(area => area.id === updated.id)!;
+          return (
+            <li key={updated.id}>
+              <RestArea restArea={currentVersion} />
+              <span className="text-gray-500 text-sm">Uppdaterad versioner:</span>
+              {updated.versions.map((area, index) => (
+                <RestArea restArea={area} key={index} />
+              ))}
+            </li>
+          );
+        })}
       </ul>
       <Unprocessed restAreas={unprocessed} />
     </div>
@@ -83,13 +89,20 @@ export function MergedAction({ existingRestAreas, newRestAreas, onCommit }: Prop
         Sammanfogade Rastplatser ({merged.length})
       </h3>
       <ul>
-        {merged.map(merged => (
-          <li key={merged.id}>
-            {merged.versions.map((area, index) => (
-              <RestArea restArea={area} key={index} />
-            ))}
-          </li>
-        ))}
+        {merged.map(merged => {
+          const currentVersion = existingRestAreas.find(area => area.id === merged.id)!;
+          return (
+            <li key={merged.id}>
+              <Card>
+                <RestArea restArea={currentVersion} />
+                <span className="text-gray-500 text-sm">Sammanfogade versioner:</span>
+                {merged.versions.map((area, index) => (
+                  <RestArea restArea={area} key={index} />
+                ))}
+              </Card>
+            </li>
+          );
+        })}
       </ul>
       <Unprocessed restAreas={unprocessed} />
     </div>
