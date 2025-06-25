@@ -25,7 +25,7 @@ export function AddAction({ existingRestAreas, newRestAreas, onCommit }: Props) 
         text="Bekräfta ändringar"
         onClick={() => onCommit({ added, updated: [], unprocessed })}
       />
-      <h3 className="text-lg font-semibold text-green-700">Nya Rastplatser</h3>
+      <h3 className="text-lg font-semibold text-green-700">Nya Rastplatser ({added.length})</h3>
       <ul>
         {added.map(area => (
           <li key={area.id}>
@@ -39,6 +39,8 @@ export function AddAction({ existingRestAreas, newRestAreas, onCommit }: Props) 
 }
 
 export function UpdatedAction({ existingRestAreas, newRestAreas, onCommit }: Props) {
+  console.log("Existing length:", existingRestAreas.length);
+  console.log("New length:", newRestAreas.length);
   const { updated, unprocessed } = updateRestAreas(existingRestAreas, newRestAreas);
 
   const handleClick = () => {
@@ -49,12 +51,14 @@ export function UpdatedAction({ existingRestAreas, newRestAreas, onCommit }: Pro
   return (
     <div className="space-y-4">
       <CommitButton text="Bekräfta ändringar" onClick={handleClick} />
-      <h3 className="text-lg font-semibold text-green-700">Updaterade Rastplatser</h3>
+      <h3 className="text-lg font-semibold text-green-700">
+        Updaterade Rastplatser ({updated.length})
+      </h3>
       <ul>
         {updated.map(updated => (
           <li key={updated.versions[0].id}>
-            {updated.versions.map(area => (
-              <RestArea restArea={area} />
+            {updated.versions.map((area, index) => (
+              <RestArea restArea={area} key={index} />
             ))}
           </li>
         ))}

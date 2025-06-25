@@ -27,7 +27,7 @@ export function Dashboard() {
         <RestAreas restAreas={restAreas} />
       </TabsContent>
       <TabsContent value="updates">
-        <Updates currentRestAreas={restAreas} newRestAreas={newAreas} />
+        <Updates defaultCurrent={restAreas} defaultNew={newAreas} />
       </TabsContent>
     </Tabs>
   );

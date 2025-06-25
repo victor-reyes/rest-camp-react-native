@@ -1,20 +1,20 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState, type ReactNode } from "react";
-import { AddAction } from "./Actions";
+import { AddAction, UpdatedAction } from "./Actions";
 
 type Props = {
-  currentRestAreas: RestAreaWithInfo[];
-  newRestAreas: RestAreaWithInfo[];
+  defaultCurrent: RestAreaWithInfo[];
+  defaultNew: RestAreaWithInfo[];
 };
 
 const ACTIONS = ["ADDED", "UPDATED", "MERGED", "COMMITTED"] as const;
 type Action = (typeof ACTIONS)[number];
 
-export function Updates({ currentRestAreas, newRestAreas }: Props) {
+export function Updates({ defaultCurrent, defaultNew }: Props) {
   const [action, setAction] = useState<Action>("ADDED");
 
-  const [areas, setAreas] = useState(currentRestAreas);
-  const [newAreas, setNewAreas] = useState(newRestAreas);
+  const [areas, setAreas] = useState(defaultCurrent);
+  const [newAreas, setNewAreas] = useState(defaultNew);
 
   const handleOnCommit = ({
     added,
@@ -33,10 +33,12 @@ export function Updates({ currentRestAreas, newRestAreas }: Props) {
         }),
         ...added,
       ];
+      console.log(`prev: ${prev.length}, updated: ${updated.length}, added: ${added.length}`);
       return updatedAreas;
     });
 
-    setNewAreas(prev => prev.filter(area => !unprocessed.some(u => u.id === area.id)));
+    console.log("# of unprocessed areas:", unprocessed.length);
+    setNewAreas(prev => prev.filter(area => unprocessed.some(u => u.id === area.id)));
     setAction(prev => {
       const nextIndex = (ACTIONS.indexOf(prev) + 1) % ACTIONS.length;
       return ACTIONS[nextIndex];
@@ -47,7 +49,12 @@ export function Updates({ currentRestAreas, newRestAreas }: Props) {
   switch (action) {
     case "ADDED":
       actionContent = (
-        <AddAction
+        <AddAction existingRestAreas={areas} newRestAreas={newAreas} onCommit={handleOnCommit} />
+      );
+      break;
+    case "UPDATED":
+      actionContent = (
+        <UpdatedAction
           existingRestAreas={areas}
           newRestAreas={newAreas}
           onCommit={handleOnCommit}
