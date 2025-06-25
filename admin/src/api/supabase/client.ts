@@ -9,14 +9,15 @@ export const supaApi = () => {
 
   return {
     async getRestAreas() {
-      const { data, error } = await supabase.from("rest_areas").select(
-        ` 
-          *, 
-          services(*), 
-          photos(*), 
-          reviews(*)
-        `,
-      );
+      const { data, error } = await supabase
+        .from("rest_areas")
+        .select(
+          ` *, 
+            services(*),
+            photos(*),
+            reviews(*)`,
+        )
+        .order("updated_at", { ascending: true });
       if (error) throw error;
       return data;
     },
