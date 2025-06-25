@@ -1,5 +1,6 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { LazyImage } from "@/components/LazyImage";
+import { cn } from "@/lib/utils";
 
 type Props = { restArea: RestAreaWithInfo };
 
@@ -7,25 +8,36 @@ export function RestArea({ restArea }: Props) {
   return (
     <div className="p-4 border rounded shadow-sm space-y-4">
       <div className="flex justify-between items-center">
-        <div>
+        <div className="space-y-4">
           <h2 className="text-xl font-semibold">{restArea.name}</h2>
           <p className="text-gray-500 text-xs">
-            Updaterad:{" "}
-            {new Date(restArea.updated_at).toLocaleDateString("sv-SE", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {`Uppdaterad: ${getDateString(restArea.updated_at)}`}
           </p>
+
+          <span
+            className={cn(
+              "text-sm font-semibold text-white py-1 px-4 m-1 rounded-2xl",
+              restArea.status === "inOperation" ? "bg-green-700"
+              : restArea.status === "limitedOperation" ? "bg-yellow-700"
+              : "bg-red-700",
+            )}>
+            Status:{" "}
+            {restArea.status === "inOperation" ?
+              "I drift"
+            : restArea.status === "limitedOperation" ?
+              "Begränsad drift"
+            : "Ej i drift"}
+          </span>
         </div>
         {restArea.deleted && (
           <span className="bg-red-500 text-sm py-2 px-4 rounded-2xl text-white">Raderad</span>
         )}
       </div>
-      <p className="text-gray-700">{restArea.description}</p>
-      {/* <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
+      {restArea.description && <p className="text-gray-700">Beskrivning: {restArea.description}</p>}
+      {restArea.local_description && (
+        <p className="text-gray-700">Lokal beskrivning: {restArea.local_description}</p>
+      )}
+      <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
         {restArea.photos.length === 0 && (
           <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
         )}
@@ -34,7 +46,7 @@ export function RestArea({ restArea }: Props) {
             <LazyImage src={photo.url} alt={photo.description || ""} />
           </li>
         ))}
-      </ul> */}
+      </ul>
       <div>
         <span className="font-semibold">Tjänster:</span>
         <div className="flex flex-row flex-wrap gap-2">
@@ -59,3 +71,12 @@ const SERVICE_NAME_MAP: Record<string, string> = {
   playground: "Lekplats",
   petrolStation: "Drivmedel",
 };
+
+const getDateString = (date: string) =>
+  new Date(date).toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
