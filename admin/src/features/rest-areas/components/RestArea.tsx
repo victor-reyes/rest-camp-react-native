@@ -25,7 +25,7 @@ export function RestArea({ restArea }: Props) {
         )}
       </div>
       <p className="text-gray-700">{restArea.description}</p>
-      <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
+      {/* <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
         {restArea.photos.length === 0 && (
           <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
         )}
@@ -34,7 +34,7 @@ export function RestArea({ restArea }: Props) {
             <LazyImage src={photo.url} alt={photo.description || ""} />
           </li>
         ))}
-      </ul>
+      </ul> */}
       <div>
         <span className="font-semibold">Tjänster:</span>
         <div className="flex flex-row flex-wrap gap-2">
