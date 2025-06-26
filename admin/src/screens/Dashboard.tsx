@@ -2,7 +2,7 @@ import { supaApi, type RestAreaWithInfo } from "@/api/supabase";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useEffect, useState } from "react";
 import { RestAreas } from "../features/rest-areas/components/RestAreas";
-import { Updates } from "@/features/rest-areas/components/Updates";
+import { Merger } from "@/features/rest-areas/components/Merger";
 
 export function Dashboard() {
   const [restAreas, setRestAreas] = useState<RestAreaWithInfo[]>([]);
@@ -13,21 +13,26 @@ export function Dashboard() {
       const data = (await supaApi().getRestAreas()).filter(area => !area.deleted);
       setRestAreas([]);
       setNewAreas(data);
+      console.log(`Fetched ${data.length} rest areas`);
     }
     fetchRestAreas();
   }, []);
 
+  console.log("Current new areas:", newAreas.length);
+
   return (
-    <Tabs defaultValue="current" className="p-2 max-w-[800px] mx-auto">
+    <Tabs defaultValue="updates" className="p-2 max-w-[800px] mx-auto">
       <TabsList className="mx-auto">
         <TabsTrigger value="current">Mina Rastplatser</TabsTrigger>
         <TabsTrigger value="updates">Uppdaterade Rastplatser</TabsTrigger>
       </TabsList>
       <TabsContent value="current">
-        <RestAreas restAreas={restAreas} />
+        <RestAreas restAreas={newAreas} />
       </TabsContent>
       <TabsContent value="updates">
-        <Updates defaultCurrent={restAreas} defaultNew={newAreas} />
+        {newAreas.length > 0 ?
+          <Merger defaultCurrent={restAreas} defaultNew={newAreas} />
+        : <p>Inga nya områden att bearbeta</p>}
       </TabsContent>
     </Tabs>
   );
