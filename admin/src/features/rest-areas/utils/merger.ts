@@ -89,7 +89,7 @@ export const merger = {
           action: unprocessed.length > 0 ? "ready" : "done",
           current: current
             .map(area => {
-              const update = updated.find(u => u.original.id === area.id)!;
+              const update = updated.find(u => u.original.id === area.id);
               return update ? update.versions[0] : area;
             })
             .sort(sortByUpdatedAt),
@@ -101,7 +101,7 @@ export const merger = {
           action: unprocessed.length > 0 ? "ready" : "done",
           current: current
             .map(area => {
-              const update = updated.find(u => u.original.id === area.id)!;
+              const update = updated.find(u => u.original.id === area.id);
               return update ? update.versions[0] : area;
             })
             .sort(sortByUpdatedAt),
