@@ -22,7 +22,8 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
       alert("All areas processed");
       return;
     }
-    const mergedState = merger.merge(mergeState);
+
+    const mergedState = merger.updateState(mergeState);
     const nextBatch = merger.getNextBatch(mergedState);
     if (nextBatch.error) {
       alert(`Error: ${nextBatch.error.message}`);

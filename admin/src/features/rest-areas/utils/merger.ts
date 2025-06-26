@@ -71,7 +71,7 @@ export const merger = {
         return { error: { message: "Unprocessed action detected" } };
     }
   },
-  merge: (merge: MergeState): MergeState => {
+  updateState: (merge: MergeState): MergeState => {
     const { action, current, updated, unprocessed } = merge;
 
     switch (action) {
