@@ -17,6 +17,7 @@ export const supaApi = () => {
             photos(*),
             reviews(*)`,
         )
+        .eq("deleted", false)
         .order("updated_at", { ascending: true });
       if (error) throw error;
       return data;
