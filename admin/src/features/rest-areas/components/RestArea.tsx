@@ -40,7 +40,7 @@ export function RestArea({ restArea }: Props) {
           <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
         )}
         {restArea.photos.map(photo => (
-          <li key={photo.url} className="rounded-xl overflow-hidden w-[200px] h-32 ">
+          <li key={photo.url} className="rounded-xl overflow-hidden w-[100px] min-h-16">
             <LazyImage src={photo.url} alt={photo.description || ""} />
           </li>
         ))}
