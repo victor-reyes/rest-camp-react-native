@@ -44,13 +44,13 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
         {mergeState.updated.map(update => (
           <li key={update.original.id}>
             <Card>
-              <strong>Original:</strong> <RestArea restArea={update.original} />
+              <RestArea restArea={update.original} />
               {update.versions.length > 0 && (
                 <>
                   <strong>Versioner:</strong>
-                  <ul>
+                  <ul className="flex flex-row gap-4 mt-4 flex-wrap justify-center">
                     {update.versions.map(version => (
-                      <li key={version.id}>
+                      <li key={version.id} className="border rounded-lg py-2 px-4 grow">
                         <RestArea restArea={version} />
                       </li>
                     ))}
