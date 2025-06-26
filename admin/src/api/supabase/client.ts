@@ -21,5 +21,21 @@ export const supaApi = () => {
       if (error) throw error;
       return data;
     },
+
+    async getUpdates(after_update_at: string) {
+      const { data, error } = await supabase
+        .schema("log")
+        .from("rest_areas")
+        .select(
+          ` *, 
+            services(*),
+            photos(*)`,
+        )
+        .eq("processed", false)
+        .gt("updated_at", after_update_at)
+        .order("updated_at", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
   };
 };
