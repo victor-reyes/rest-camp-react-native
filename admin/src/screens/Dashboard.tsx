@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useEffect, useState } from "react";
 import { RestAreas } from "../features/rest-areas/components/RestAreas";
 import { Merger } from "@/features/rest-areas/components/Merger";
+import { sortByUpdatedAt } from "@/features/rest-areas/utils/utils";
 
 export function Dashboard() {
   const [restAreas, setRestAreas] = useState<RestAreaWithInfo[]>([]);
@@ -10,10 +11,11 @@ export function Dashboard() {
 
   useEffect(() => {
     async function fetchRestAreas() {
-      const data = (await supaApi().getRestAreas()).filter(area => !area.deleted);
-      setRestAreas([]);
-      setNewAreas(data);
-      console.log(`Fetched ${data.length} rest areas`);
+      const currentAreas = (await supaApi().getRestAreas()).filter(area => !area.deleted);
+      const latestUpdatedAt = currentAreas.sort(sortByUpdatedAt)[0]?.updated_at;
+      const updatedAreas = await supaApi().getUpdates(latestUpdatedAt);
+      setRestAreas(currentAreas);
+      setNewAreas(updatedAreas);
     }
     fetchRestAreas();
   }, []);
@@ -21,13 +23,13 @@ export function Dashboard() {
   console.log("Current new areas:", newAreas.length);
 
   return (
-    <Tabs defaultValue="updates" className="p-2 max-w-[800px] mx-auto">
+    <Tabs defaultValue="updates" className="p-2 max-w-[1200px] mx-auto">
       <TabsList className="mx-auto">
         <TabsTrigger value="current">Mina Rastplatser</TabsTrigger>
         <TabsTrigger value="updates">Uppdaterade Rastplatser</TabsTrigger>
       </TabsList>
       <TabsContent value="current">
-        <RestAreas restAreas={newAreas} />
+        <RestAreas restAreas={restAreas} />
       </TabsContent>
       <TabsContent value="updates">
         {newAreas.length > 0 ?
