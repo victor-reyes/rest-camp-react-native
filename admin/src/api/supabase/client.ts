@@ -23,7 +23,7 @@ export const supaApi = () => {
       return data;
     },
 
-    async getUpdates(after_update_at: string) {
+    async getUpdates(after_update_at?: string) {
       const { data, error } = await supabase
         .schema("log")
         .from("rest_areas")
