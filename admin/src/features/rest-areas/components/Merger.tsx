@@ -41,6 +41,12 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
         {getActionText(mergeState)}
       </button>
 
+      <p className="text-gray-500 mt-2">
+        {mergeState.unprocessed.length > 0 ?
+          <span>{mergeState.unprocessed.length} områden kvar att bearbeta.</span>
+        : <span>Inga fler områden kvar att bearbeta.</span>}
+      </p>
+
       <ul className="mt-4 space-y-4">
         {mergeState.updated.map(update => (
           <li key={update.original.id}>
@@ -66,14 +72,13 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
   );
 }
 
-const getActionText = (mergeState: MergeState) => {
-  const { action, unprocessed } = mergeState;
-  const numOfUnprocessed = unprocessed.length;
-  const numOfUpdated = mergeState.updated.length;
+const getActionText = (mergeState: MergeState): string => {
+  const { action, updated } = mergeState;
+  const numOfUpdated = action === "skip" ? updated.flatMap(u => u.versions).length : updated.length;
 
   switch (action) {
     case "ready":
-      return `Redo att bearbeta  ${numOfUnprocessed} områden`;
+      return `Starta uppdateringen`;
     case "add":
       return `Lägger till ${numOfUpdated} nya områden`;
     case "update":
