@@ -142,5 +142,6 @@ const isMergeAction = (
   currentAreas: ReadonlyArray<RestAreaWithInfo>,
   newArea: Readonly<RestAreaWithInfo>,
 ) =>
+  !newArea.deleted &&
   currentAreas.some(area => equalByCoordinates(area, newArea)) &&
   !currentAreas.some(area => equalByTrafikverketId(area, newArea));
