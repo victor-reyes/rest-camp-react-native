@@ -2,6 +2,7 @@ import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState } from "react";
 import { merger, type MergeState } from "../utils/merger";
 import { RestArea } from "./RestArea";
+import { Card } from "@/components";
 
 type Props = {
   defaultCurrent: RestAreaWithInfo[];
@@ -39,22 +40,24 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
         {getActionText(mergeState)}
       </button>
 
-      <ul>
+      <ul className="mt-4 space-y-4">
         {mergeState.updated.map(update => (
           <li key={update.original.id}>
-            <strong>Original:</strong> <RestArea restArea={update.original} />
-            {update.versions.length > 0 && (
-              <>
-                <strong>Versioner:</strong>
-                <ul>
-                  {update.versions.map(version => (
-                    <li key={version.id}>
-                      <RestArea restArea={version} />
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
+            <Card>
+              <strong>Original:</strong> <RestArea restArea={update.original} />
+              {update.versions.length > 0 && (
+                <>
+                  <strong>Versioner:</strong>
+                  <ul>
+                    {update.versions.map(version => (
+                      <li key={version.id}>
+                        <RestArea restArea={version} />
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </Card>
           </li>
         ))}
       </ul>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { type RestAreaWithInfo } from "@/api/supabase";
 import { RestArea, SortMenu, type OrderBy } from ".";
+import { Card } from "@/components/Card";
 
 const DEFAULT_ORDER: OrderBy = { sort: "name", direction: "asc" };
 
@@ -38,7 +39,11 @@ export function RestAreas({ restAreas }: Props) {
       <SortMenu defaultOrder={orderBy} onOrderChange={setOrderBy} />
       <ul className="space-y-4">
         {sortedRestAreas.map(area => (
-          <RestArea key={area.id!} restArea={area} />
+          <li key={area.id!}>
+            <Card>
+              <RestArea restArea={area} />
+            </Card>
+          </li>
         ))}
       </ul>
     </div>

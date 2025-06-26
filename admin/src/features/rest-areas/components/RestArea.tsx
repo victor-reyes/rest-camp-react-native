@@ -6,7 +6,7 @@ type Props = { restArea: RestAreaWithInfo };
 
 export function RestArea({ restArea }: Props) {
   return (
-    <div className="p-4 border rounded shadow-sm space-y-4">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">{restArea.name}</h2>
