@@ -6,17 +6,15 @@ type Props = { restArea: RestAreaWithInfo };
 
 export function RestArea({ restArea }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h2 className="text-xl font-semibold">{restArea.name}</h2>
-          <p className="text-gray-500 text-xs">
-            {`Uppdaterad: ${getDateString(restArea.updated_at)}`}
-          </p>
+          <p className="text-gray-500">{`Uppdaterad: ${getDateString(restArea.updated_at)}`}</p>
 
           <span
             className={cn(
-              "text-sm font-semibold text-white py-1 px-4 m-1 rounded-2xl",
+              "font-semibold text-white py-1 px-4 m-1 rounded-2xl",
               restArea.status === "inOperation" ? "bg-green-700"
               : restArea.status === "limitedOperation" ? "bg-yellow-700"
               : "bg-red-700",
@@ -30,7 +28,7 @@ export function RestArea({ restArea }: Props) {
           </span>
         </div>
         {restArea.deleted && (
-          <span className="bg-red-500 text-sm py-2 px-4 rounded-2xl text-white">Raderad</span>
+          <span className="bg-red-500 py-2 px-4 rounded-2xl text-white">Raderad</span>
         )}
       </div>
       {restArea.description && <p className="text-gray-700">Beskrivning: {restArea.description}</p>}
@@ -42,7 +40,7 @@ export function RestArea({ restArea }: Props) {
           <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
         )}
         {restArea.photos.map(photo => (
-          <li key={photo.url} className="rounded-xl overflow-hidden min-w-[300px] h-46 ">
+          <li key={photo.url} className="rounded-xl overflow-hidden w-[200px] h-32 ">
             <LazyImage src={photo.url} alt={photo.description || ""} />
           </li>
         ))}
