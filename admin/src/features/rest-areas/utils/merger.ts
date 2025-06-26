@@ -6,7 +6,7 @@ type AreasUpdate = {
   versions: RestAreaWithInfo[];
 };
 
-export type Action = "ready" | "add" | "update" | "merge" | "done";
+export type Action = "ready" | "add" | "update" | "merge" | "skip" | "done";
 
 export type MergeState = {
   action: Action;
@@ -67,6 +67,18 @@ export const merger = {
         } while (unprocessed.length > 0 && isMergeAction(current, unprocessed[0]));
         return { result: { ...merge, action: "merge" } };
       }
+      case "skip": {
+        do {
+          const newArea = unprocessed.shift()!;
+          const existing = updated.find(area => equalByCoordinates(area.original, newArea));
+          if (existing) existing.versions.push(newArea);
+          else {
+            const original = current.find(area => equalByCoordinates(area, newArea))!;
+            updated.push({ original, versions: [newArea] });
+          }
+        } while (unprocessed.length > 0 && isSkipAction(current, unprocessed[0]));
+        return { result: { ...merge, action: "skip" } };
+      }
       default:
         return { error: { message: "Unprocessed action detected" } };
     }
@@ -107,6 +119,15 @@ export const merger = {
             .sort(sortByUpdatedAt),
           updated: [],
         };
+      case "skip":
+        return {
+          ...merge,
+          action: unprocessed.length > 0 ? "ready" : "done",
+          unprocessed: unprocessed.filter(area =>
+            updated.flatMap(u => u.versions).some(v => v.id !== area.id),
+          ),
+          updated: [],
+        };
       default:
         throw new Error("Invalid action type");
     }
@@ -121,6 +142,7 @@ const getNextAction = (
   if (isAddAction(currentAreas, newArea)) return "add";
   if (isUpdateAction(currentAreas, newArea)) return "update";
   if (isMergeAction(currentAreas, newArea)) return "merge";
+  if (isSkipAction(currentAreas, newArea)) return "skip";
 
   throw new Error("Unprocessed action detected");
 };
@@ -145,3 +167,11 @@ const isMergeAction = (
   !newArea.deleted &&
   currentAreas.some(area => equalByCoordinates(area, newArea)) &&
   !currentAreas.some(area => equalByTrafikverketId(area, newArea));
+
+const isSkipAction = (
+  currentAreas: ReadonlyArray<RestAreaWithInfo>,
+  newArea: Readonly<RestAreaWithInfo>,
+) =>
+  newArea.deleted &&
+  !currentAreas.some(area => equalByTrafikverketId(area, newArea)) &&
+  currentAreas.some(area => equalByCoordinates(area, newArea));

@@ -82,5 +82,7 @@ const getActionText = (mergeState: MergeState) => {
       return `Slår samman ${numOfUpdated} överlappande områden`;
     case "done":
       return "Alla områden har bearbetats";
+    case "skip":
+      return `Tar bort och hoppar över ${numOfUpdated} updaterade områden`;
   }
 };
