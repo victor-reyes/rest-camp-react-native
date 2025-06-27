@@ -8,22 +8,6 @@ import {
 import type { Status } from "../../types";
 import { cn } from "@/lib/utils";
 
-{
-  /* <span
-            className={cn(
-              "font-semibold text-white py-1 px-4 m-1 rounded-2xl",
-              restArea.status === "inOperation" ? "bg-green-700"
-              : restArea.status === "limitedOperation" ? "bg-yellow-700"
-              : "bg-red-700",
-            )}>
-            Status:{" "}
-            {restArea.status === "inOperation" ?
-              "I drift"
-            : restArea.status === "limitedOperation" ?
-              "Begränsad drift"
-            : "Ej i drift"}
-          </span> */
-}
 
 type Props = { status: Status; isEditing?: boolean; onChange?: (status: Status) => void };
 
