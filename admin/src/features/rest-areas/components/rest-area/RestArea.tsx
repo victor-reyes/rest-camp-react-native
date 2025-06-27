@@ -1,9 +1,9 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
-import { LazyImage } from "@/components/LazyImage";
 import { RestAreaName } from "./RestAreaName";
 import { RestAreaUpdatedAt } from "./RestAreaUpdatedAt";
 import { RestAreaStatus } from "./RestAreaStatus";
 import { RestAreaDescription } from "./RestAreaDescription";
+import { RestAreaGallery } from "./RestAreaGallery";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -51,16 +51,7 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
         isEditing={isEditing}
         onChange={handleLocalDescriptionChange}
       />
-      <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
-        {restArea.photos.length === 0 && (
-          <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
-        )}
-        {restArea.photos.map(photo => (
-          <li key={photo.url} className="rounded-xl overflow-hidden w-[100px] min-h-16">
-            <LazyImage src={photo.url} alt={photo.description || ""} />
-          </li>
-        ))}
-      </ul>
+      <RestAreaGallery photos={restArea.photos} />
       <div>
         <span className="font-semibold">Tjänster:</span>
         <div className="flex flex-row flex-wrap gap-2">
