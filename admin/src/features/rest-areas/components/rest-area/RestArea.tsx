@@ -2,6 +2,7 @@ import type { RestAreaWithInfo } from "@/api/supabase";
 import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
 import { RestAreaName } from "./RestAreaName";
+import { RestAreaUpdatedAt } from "./RestAreaUpdatedAt";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -11,12 +12,17 @@ type Props = {
 
 export function RestArea({ restArea, isEditing = false, onChange }: Props) {
   const handleNameChange = (name: string) => console.log(name);
+  const handleUpdatedAtChange = (updatedAt: string) => console.log(updatedAt);
   return (
     <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
         <div className="space-y-2">
           <RestAreaName name={restArea.name} isEditing={isEditing} onChange={handleNameChange} />
-          <p className="text-gray-500">{`Uppdaterad: ${getDateString(restArea.updated_at)}`}</p>
+          <RestAreaUpdatedAt
+            updatedAt={restArea.updated_at}
+            isEditing={isEditing}
+            onChange={handleUpdatedAtChange}
+          />
 
           <span
             className={cn(
@@ -75,12 +81,3 @@ const SERVICE_NAME_MAP: Record<string, string> = {
   playground: "Lekplats",
   petrolStation: "Drivmedel",
 };
-
-const getDateString = (date: string) =>
-  new Date(date).toLocaleDateString("sv-SE", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
