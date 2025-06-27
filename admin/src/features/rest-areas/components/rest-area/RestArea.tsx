@@ -4,6 +4,7 @@ import { RestAreaUpdatedAt } from "./RestAreaUpdatedAt";
 import { RestAreaStatus } from "./RestAreaStatus";
 import { RestAreaDescription } from "./RestAreaDescription";
 import { RestAreaGallery } from "./RestAreaGallery";
+import { RestAreaServices } from "./RestAreaServices";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -17,6 +18,8 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
   const handleStatusChange = (status: string) => console.log(status);
   const handleDescriptionChange = (description: string) => console.log(description);
   const handleLocalDescriptionChange = (localDescription: string) => console.log(localDescription);
+  const handleServiceRemove = (service: string) => console.log(service);
+  const handleServiceAdd = (service: string) => console.log(service);
 
   return (
     <div className="space-y-2 text-xs">
@@ -52,27 +55,13 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
         onChange={handleLocalDescriptionChange}
       />
       <RestAreaGallery photos={restArea.photos} />
-      <div>
-        <span className="font-semibold">Tjänster:</span>
-        <div className="flex flex-row flex-wrap gap-2">
-          {restArea.services.map(service => (
-            <div key={service.name} className="text-gray-600">
-              {SERVICE_NAME_MAP[service.name] || service.name}
-            </div>
-          ))}
-        </div>
-      </div>
+
+      <RestAreaServices
+        services={restArea.services}
+        isEditing={isEditing}
+        onRemove={handleServiceRemove}
+        onAdd={handleServiceAdd}
+      />
     </div>
   );
 }
-
-const SERVICE_NAME_MAP: Record<string, string> = {
-  refuseBin: "Sophantering",
-  toilet: "Toalett",
-  restaurant: "Restaurang",
-  dumpingStation: "Latrintömning",
-  picnicFacilities: "Rastplatsmöbler",
-  touristInformation: "Turistinformation",
-  playground: "Lekplats",
-  petrolStation: "Drivmedel",
-};
