@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { type RestAreaWithInfo } from "@/api/supabase";
-import { RestArea, SortMenu, type OrderBy } from ".";
+import { SortMenu, type OrderBy } from ".";
 import { Card } from "@/components/Card";
+import { RestArea } from "./rest-area";
 
 const DEFAULT_ORDER: OrderBy = { sort: "name", direction: "asc" };
 

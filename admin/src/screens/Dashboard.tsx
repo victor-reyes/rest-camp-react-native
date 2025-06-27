@@ -21,6 +21,7 @@ export function Dashboard() {
   }, []);
 
   console.log("Current new areas:", newAreas.length);
+  console.log("Current rest areas:", restAreas.length);
 
   return (
     <Tabs defaultValue="updates" className="p-2 max-w-[1200px] mx-auto">

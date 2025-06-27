@@ -1,5 +1,5 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
-import { RestArea } from "./RestArea";
+import { RestArea } from "./rest-area";
 import { addRestAreas, mergeRestAreas, updateRestAreas } from "../utils";
 import { Card } from "@/components";
 

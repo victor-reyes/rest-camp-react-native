@@ -1,7 +1,7 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { equalByTrafikverketId, equalByCoordinates, sortByUpdatedAt } from "./utils";
 
-type AreasUpdate = {
+export type AreasUpdate = {
   original: RestAreaWithInfo;
   versions: RestAreaWithInfo[];
 };

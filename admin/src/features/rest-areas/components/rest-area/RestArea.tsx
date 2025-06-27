@@ -1,15 +1,21 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
+import { RestAreaName } from "./RestAreaName";
 
-type Props = { restArea: RestAreaWithInfo };
+type Props = {
+  restArea: RestAreaWithInfo;
+  isEditing?: boolean;
+  onChange?: (restArea: RestAreaWithInfo) => void;
+};
 
-export function RestArea({ restArea }: Props) {
+export function RestArea({ restArea, isEditing = false, onChange }: Props) {
+  const handleNameChange = (name: string) => console.log(name);
   return (
     <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold">{restArea.name}</h2>
+          <RestAreaName name={restArea.name} isEditing={isEditing} onChange={handleNameChange} />
           <p className="text-gray-500">{`Uppdaterad: ${getDateString(restArea.updated_at)}`}</p>
 
           <span

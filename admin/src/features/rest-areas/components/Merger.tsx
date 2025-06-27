@@ -1,7 +1,7 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState } from "react";
 import { merger, type AreasUpdate, type MergeState } from "../utils/merger";
-import { RestArea } from "./RestArea";
+import { RestArea } from "./rest-area";
 import { Card } from "@/components";
 
 type Props = {
@@ -96,7 +96,7 @@ const RestAreaUpdate = ({ update }: { update: AreasUpdate }) => {
         </div>
       </div>
 
-      <RestArea restArea={update.original} />
+      <RestArea restArea={update.original} isEditing={isEditing} />
 
       {update.versions.length > 0 && (
         <button
