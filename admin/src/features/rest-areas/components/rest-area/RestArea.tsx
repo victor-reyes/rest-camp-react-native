@@ -1,9 +1,9 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { LazyImage } from "@/components/LazyImage";
-import { cn } from "@/lib/utils";
 import { RestAreaName } from "./RestAreaName";
 import { RestAreaUpdatedAt } from "./RestAreaUpdatedAt";
 import { RestAreaStatus } from "./RestAreaStatus";
+import { RestAreaDescription } from "./RestAreaDescription";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -15,6 +15,9 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
   const handleNameChange = (name: string) => console.log(name);
   const handleUpdatedAtChange = (updatedAt: string) => console.log(updatedAt);
   const handleStatusChange = (status: string) => console.log(status);
+  const handleDescriptionChange = (description: string) => console.log(description);
+  const handleLocalDescriptionChange = (localDescription: string) => console.log(localDescription);
+
   return (
     <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
@@ -36,10 +39,18 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
           <span className="bg-red-500 py-2 px-4 rounded-2xl text-white">Raderad</span>
         )}
       </div>
-      {restArea.description && <p className="text-gray-700">Beskrivning: {restArea.description}</p>}
-      {restArea.local_description && (
-        <p className="text-gray-700">Lokal beskrivning: {restArea.local_description}</p>
-      )}
+      <RestAreaDescription
+        label="Beskrivning"
+        text={restArea.description}
+        isEditing={isEditing}
+        onChange={handleDescriptionChange}
+      />
+      <RestAreaDescription
+        label="Lokal information"
+        text={restArea.local_description}
+        isEditing={isEditing}
+        onChange={handleLocalDescriptionChange}
+      />
       <ul className="scrollable overflow-x-auto flex flex-row gap-2 w-full">
         {restArea.photos.length === 0 && (
           <li className="border rounded-xl p-2 text-gray-600">Inga foton tillgängliga</li>
