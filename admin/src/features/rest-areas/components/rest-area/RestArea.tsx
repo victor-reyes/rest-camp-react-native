@@ -3,6 +3,7 @@ import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
 import { RestAreaName } from "./RestAreaName";
 import { RestAreaUpdatedAt } from "./RestAreaUpdatedAt";
+import { RestAreaStatus } from "./RestAreaStatus";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -13,6 +14,7 @@ type Props = {
 export function RestArea({ restArea, isEditing = false, onChange }: Props) {
   const handleNameChange = (name: string) => console.log(name);
   const handleUpdatedAtChange = (updatedAt: string) => console.log(updatedAt);
+  const handleStatusChange = (status: string) => console.log(status);
   return (
     <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
@@ -24,20 +26,11 @@ export function RestArea({ restArea, isEditing = false, onChange }: Props) {
             onChange={handleUpdatedAtChange}
           />
 
-          <span
-            className={cn(
-              "font-semibold text-white py-1 px-4 m-1 rounded-2xl",
-              restArea.status === "inOperation" ? "bg-green-700"
-              : restArea.status === "limitedOperation" ? "bg-yellow-700"
-              : "bg-red-700",
-            )}>
-            Status:{" "}
-            {restArea.status === "inOperation" ?
-              "I drift"
-            : restArea.status === "limitedOperation" ?
-              "Begränsad drift"
-            : "Ej i drift"}
-          </span>
+          <RestAreaStatus
+            status={restArea.status}
+            isEditing={isEditing}
+            onChange={handleStatusChange}
+          />
         </div>
         {restArea.deleted && (
           <span className="bg-red-500 py-2 px-4 rounded-2xl text-white">Raderad</span>
