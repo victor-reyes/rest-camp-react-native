@@ -7,6 +7,7 @@ import { RestAreaGallery } from "./RestAreaGallery";
 import { RestAreaServices } from "./RestAreaServices";
 import type { Service, Status } from "../../types";
 import { useEffect, useState } from "react";
+import { RestAreaDeleted } from "./RestAreaDeleted";
 
 type Props = {
   restArea: RestAreaWithInfo;
@@ -24,6 +25,7 @@ export function RestArea({ restArea: defaultRestArea, isEditing = false, onChang
   const handleUpdatedAtChange = (updatedAt: string) =>
     setRestArea(prev => ({ ...prev, updated_at: updatedAt }));
   const handleStatusChange = (status: Status) => setRestArea(prev => ({ ...prev, status }));
+  const handleDeletedChange = (deleted: boolean) => setRestArea(prev => ({ ...prev, deleted }));
   const handleDescriptionChange = (description: string) =>
     setRestArea(prev => ({ ...prev, description }));
   const handleLocalDescriptionChange = (localDescription: string) =>
@@ -56,9 +58,11 @@ export function RestArea({ restArea: defaultRestArea, isEditing = false, onChang
             onChange={handleStatusChange}
           />
         </div>
-        {restArea.deleted && (
-          <span className="bg-red-500 py-2 px-4 rounded-2xl text-white">Raderad</span>
-        )}
+        <RestAreaDeleted
+          isDeleted={restArea.deleted}
+          onChange={handleDeletedChange}
+          isEditing={isEditing}
+        />
       </div>
       <RestAreaDescription
         label="Beskrivning"
