@@ -1,6 +1,6 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState } from "react";
-import { merger, type Action, type AreasUpdate, type MergeState } from "../utils/merger";
+import { merger, type Action, type AreasUpdate, type MergeState } from "../utils";
 import { RestArea } from "./rest-area";
 import { Card } from "@/components";
 import { VersionedRestArea } from "./rest-area/VersionedRestArea";
