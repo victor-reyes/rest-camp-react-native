@@ -66,7 +66,9 @@ export function Textarea({ input, placeholder, isEditing, onChange, className }:
 
   return (
     <div className="group flex items-center gap-2 px-3 py-2">
-      <h2 className={cn("whitespace-pre-line", className)}>{internalValue}</h2>
+      <h2 className={cn("whitespace-pre-line", className)}>
+        {internalValue || <span className="text-gray-300">Ingen text...</span>}
+      </h2>
       {isEditing && (
         <ButtonIcon onClick={handleStartEdit} title="Ändra">
           <Edit2 />
