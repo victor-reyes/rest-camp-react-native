@@ -3,7 +3,7 @@ import { equalByTrafikverketId, equalByCoordinates, sortByUpdatedAt } from "./ut
 
 export type AreasUpdate = {
   original: RestAreaWithInfo;
-  versions: RestAreaWithInfo[];
+  latest: RestAreaWithInfo;
 };
 
 export type Action = "ready" | "add" | "update" | "merge" | "skip" | "done";
@@ -36,10 +36,10 @@ export const merger = {
       case "add": {
         do {
           const newArea = unprocessed.shift()!;
-          updated.push({ original: newArea, versions: [] });
+          updated.push({ original: newArea, latest: newArea });
         } while (
           unprocessed.length > 0 &&
-          isAddAction([...current, ...updated.flatMap(a => a.original)], unprocessed[0])
+          isAddAction([...current, ...updated.map(a => a.original)], unprocessed[0])
         );
         return { result: { ...merge, action: "add" } };
       }
@@ -47,10 +47,10 @@ export const merger = {
         do {
           const newArea = unprocessed.shift()!;
           const existing = updated.find(area => equalByTrafikverketId(area.original, newArea));
-          if (existing) existing.versions.push(newArea);
+          if (existing) throw new Error("Unexpected update for existing area");
           else {
             const original = current.find(area => equalByTrafikverketId(area, newArea))!;
-            updated.push({ original, versions: [newArea] });
+            updated.push({ original, latest: newArea });
           }
         } while (unprocessed.length > 0 && isUpdateAction(current, unprocessed[0]));
         return { result: { ...merge, action: "update" } };
@@ -59,10 +59,10 @@ export const merger = {
         do {
           const newArea = unprocessed.shift()!;
           const existing = updated.find(area => equalByCoordinates(area.original, newArea));
-          if (existing) existing.versions.push(newArea);
+          if (existing) throw new Error("Unexpected update for existing area");
           else {
             const original = current.find(area => equalByCoordinates(area, newArea))!;
-            updated.push({ original, versions: [newArea] });
+            updated.push({ original, latest: newArea });
           }
         } while (unprocessed.length > 0 && isMergeAction(current, unprocessed[0]));
         return { result: { ...merge, action: "merge" } };
@@ -71,10 +71,10 @@ export const merger = {
         do {
           const newArea = unprocessed.shift()!;
           const existing = updated.find(area => equalByCoordinates(area.original, newArea));
-          if (existing) existing.versions.push(newArea);
+          if (existing) throw new Error("Unexpected update for existing area");
           else {
             const original = current.find(area => equalByCoordinates(area, newArea))!;
-            updated.push({ original, versions: [newArea] });
+            updated.push({ original, latest: newArea });
           }
         } while (unprocessed.length > 0 && isSkipAction(current, unprocessed[0]));
         return { result: { ...merge, action: "skip" } };
@@ -102,7 +102,7 @@ export const merger = {
           current: current
             .map(area => {
               const update = updated.find(u => u.original.id === area.id);
-              return update ? update.versions[0] : area;
+              return update ? update.latest : area;
             })
             .sort(sortByUpdatedAt),
           updated: [],
@@ -114,7 +114,7 @@ export const merger = {
           current: current
             .map(area => {
               const update = updated.find(u => u.original.id === area.id);
-              return update ? update.versions[0] : area;
+              return update ? update.latest : area;
             })
             .sort(sortByUpdatedAt),
           updated: [],
@@ -124,7 +124,7 @@ export const merger = {
           ...merge,
           action: unprocessed.length > 0 ? "ready" : "done",
           unprocessed: unprocessed.filter(area =>
-            updated.flatMap(u => u.versions).some(v => v.id !== area.id),
+            updated.flatMap(u => u.latest).some(v => v.id !== area.id),
           ),
           updated: [],
         };
