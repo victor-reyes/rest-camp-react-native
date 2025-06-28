@@ -13,9 +13,9 @@ export const supaApi = () => {
         .from("rest_areas")
         .select(
           ` *, 
-            services(*),
-            photos(*),
-            reviews(*)`,
+            services(name),
+            photos(url, thumbnail_url, description)
+          `,
         )
         .eq("deleted", false)
         .order("updated_at", { ascending: true });
@@ -29,8 +29,9 @@ export const supaApi = () => {
         .from("rest_areas")
         .select(
           ` *, 
-            services(*),
-            photos(*)`,
+            services(name),
+            photos(url, thumbnail_url, description)
+          `,
         )
         .eq("processed", false)
         .gt("updated_at", after_update_at)
