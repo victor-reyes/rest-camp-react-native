@@ -8,6 +8,8 @@ import { RestAreaServices } from "./RestAreaServices";
 import type { Service, Status } from "../../types";
 import { useEffect, useState } from "react";
 import { RestAreaDeleted } from "./RestAreaDeleted";
+import { ButtonIcon } from "@/components";
+import { Plus, Undo } from "lucide-react";
 
 type Props = {
   versions: RestAreaWithInfo[];
@@ -36,11 +38,11 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
     setRestAreas(prev => prev.map((area, i) => (i === lastIndex ? { ...area, status } : area)));
   const handleDeletedChange = (deleted: boolean) =>
     setRestAreas(prev => prev.map((area, i) => (i === lastIndex ? { ...area, deleted } : area)));
-  const handleDescriptionChange = (description: string) =>
+  const handleDescriptionChange = (description: string | null) =>
     setRestAreas(prev =>
       prev.map((area, i) => (i === lastIndex ? { ...area, description } : area)),
     );
-  const handleLocalDescriptionChange = (localDescription: string) =>
+  const handleLocalDescriptionChange = (localDescription: string | null) =>
     setRestAreas(prev =>
       prev.map((area, i) =>
         i === lastIndex ? { ...area, local_description: localDescription } : area,
@@ -74,60 +76,93 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
       <div className="flex justify-between items-center">
         <div className="space-y-2">
           {restAreas.map(({ name, id }, i) => (
-            <RestAreaName
-              key={id}
-              name={name}
-              isEditing={i === lastIndex && isEditing}
-              onChange={handleNameChange}
-            />
+            <div key={id} className="flex flex-row items-center gap-2">
+              <RestAreaName
+                name={name}
+                isEditing={i === lastIndex && isEditing}
+                onChange={handleNameChange}
+              />
+              {isEditing &&
+                (i === lastIndex ?
+                  <UndoBtn onClick={() => handleNameChange(versions[lastIndex].name)} />
+                : <PlusBtn onClick={() => handleNameChange(name)} />)}
+            </div>
           ))}
 
           {restAreas.map(({ updated_at, id }, i) => (
-            <RestAreaUpdatedAt
-              key={id}
-              updatedAt={updated_at}
-              isEditing={i === lastIndex && isEditing}
-              onChange={handleUpdatedAtChange}
-            />
+            <div key={id} className="flex flex-row items-center gap-2">
+              <RestAreaUpdatedAt
+                key={id}
+                updatedAt={updated_at}
+                isEditing={i === lastIndex && isEditing}
+                onChange={handleUpdatedAtChange}
+              />
+              {isEditing &&
+                (i === lastIndex ?
+                  <UndoBtn onClick={() => handleUpdatedAtChange(versions[lastIndex].updated_at)} />
+                : <PlusBtn onClick={() => handleUpdatedAtChange(updated_at)} />)}
+            </div>
           ))}
 
           {restAreas.map(({ status, id }, i) => (
-            <RestAreaStatus
-              key={id}
-              status={status}
-              isEditing={i === lastIndex && isEditing}
-              onChange={handleStatusChange}
-            />
+            <div key={id} className="flex flex-row items-center gap-2">
+              <RestAreaStatus
+                status={status}
+                isEditing={i === lastIndex && isEditing}
+                onChange={handleStatusChange}
+              />
+              {isEditing &&
+                (i === lastIndex ?
+                  <UndoBtn onClick={() => handleStatusChange(versions[lastIndex].status)} />
+                : <PlusBtn onClick={() => handleStatusChange(status)} />)}
+            </div>
           ))}
         </div>
         <div className="flex flex-col gap-2">
           {restAreas.map(({ deleted }, i) => (
-            <RestAreaDeleted
-              key={i}
-              isDeleted={deleted}
-              onChange={handleDeletedChange}
-              isEditing={i === lastIndex && isEditing}
-            />
+            <div key={i} className="flex flex-row items-center gap-2">
+              <RestAreaDeleted
+                isDeleted={deleted}
+                onChange={handleDeletedChange}
+                isEditing={i === lastIndex && isEditing}
+              />
+              {isEditing &&
+                (i === lastIndex ?
+                  <UndoBtn onClick={() => handleDeletedChange(versions[lastIndex].deleted)} />
+                : <PlusBtn onClick={() => handleDeletedChange(deleted)} />)}
+            </div>
           ))}
         </div>
       </div>
       {restAreas.map(({ description, id }, i) => (
-        <RestAreaDescription
-          key={id}
-          label="Beskrivning"
-          text={description}
-          isEditing={i === lastIndex && isEditing}
-          onChange={handleDescriptionChange}
-        />
+        <div key={id} className="flex flex-row items-center gap-2">
+          <RestAreaDescription
+            label="Beskrivning"
+            text={description}
+            isEditing={i === lastIndex && isEditing}
+            onChange={handleDescriptionChange}
+          />
+          {isEditing &&
+            (i === lastIndex ?
+              <UndoBtn onClick={() => handleDescriptionChange(versions[lastIndex].description)} />
+            : <PlusBtn onClick={() => handleDescriptionChange(description)} />)}
+        </div>
       ))}
       {restAreas.map(({ local_description, id }, i) => (
-        <RestAreaDescription
-          key={id}
-          label="Lokal information"
-          text={local_description}
-          isEditing={i === lastIndex && isEditing}
-          onChange={handleLocalDescriptionChange}
-        />
+        <div key={id} className="flex flex-row items-center gap-2">
+          <RestAreaDescription
+            label="Lokal information"
+            text={local_description}
+            isEditing={i === lastIndex && isEditing}
+            onChange={handleLocalDescriptionChange}
+          />
+          {isEditing &&
+            (i === lastIndex ?
+              <UndoBtn
+                onClick={() => handleLocalDescriptionChange(versions[lastIndex].local_description)}
+              />
+            : <PlusBtn onClick={() => handleLocalDescriptionChange(local_description)} />)}
+        </div>
       ))}
       <RestAreaGallery photos={restAreas[lastIndex].photos} />
 
@@ -144,3 +179,14 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
     </div>
   );
 }
+
+const UndoBtn = ({ onClick }: { onClick: () => void }) => (
+  <ButtonIcon onClick={onClick} title="Ångra ändring">
+    <Undo />
+  </ButtonIcon>
+);
+const PlusBtn = ({ onClick }: { onClick: () => void }) => (
+  <ButtonIcon onClick={onClick} title="Lägg till version">
+    <Plus />
+  </ButtonIcon>
+);
