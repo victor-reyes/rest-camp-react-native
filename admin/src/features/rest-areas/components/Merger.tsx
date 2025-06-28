@@ -1,8 +1,9 @@
 import type { RestAreaWithInfo } from "@/api/supabase";
 import { useState } from "react";
-import { merger, type AreasUpdate, type MergeState } from "../utils/merger";
+import { merger, type Action, type AreasUpdate, type MergeState } from "../utils/merger";
 import { RestArea } from "./rest-area";
 import { Card } from "@/components";
+import { VersionedRestArea } from "./rest-area/VersionedRestArea";
 
 type Props = {
   defaultCurrent: RestAreaWithInfo[];
@@ -51,7 +52,7 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
         {mergeState.updated.map(update => (
           <li key={update.original.id}>
             <Card>
-              <RestAreaUpdate update={update} />
+              <RestAreaUpdate action={mergeState.action} update={update} />
             </Card>
           </li>
         ))}
@@ -62,7 +63,7 @@ export function Merger({ defaultCurrent, defaultNew }: Props) {
 
 const getActionText = (mergeState: MergeState): string => {
   const { action, updated } = mergeState;
-  const numOfUpdated = action === "skip" ? updated.flatMap(u => u.versions).length : updated.length;
+  const numOfUpdated = updated.length;
 
   switch (action) {
     case "ready":
@@ -80,9 +81,13 @@ const getActionText = (mergeState: MergeState): string => {
   }
 };
 
-const RestAreaUpdate = ({ update }: { update: AreasUpdate }) => {
+type RestAreaUpdateProps = {
+  action: Action;
+  update: AreasUpdate;
+};
+const RestAreaUpdate = ({ action, update }: RestAreaUpdateProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [showVersions, setShowVersions] = useState(false);
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -96,27 +101,9 @@ const RestAreaUpdate = ({ update }: { update: AreasUpdate }) => {
         </div>
       </div>
 
-      <RestArea restArea={update.original} isEditing={isEditing} />
-
-      {update.versions.length > 0 && (
-        <button
-          onClick={() => setShowVersions(!showVersions)}
-          className="bg-blue-700 text-white px-3 py-1 rounded hover:bg-blue-800">
-          {showVersions ? "Dölj versioner" : "Visa versioner"}
-        </button>
-      )}
-      {update.versions.length > 0 && showVersions && (
-        <>
-          <strong>Versioner:</strong>
-          <ul className="flex flex-row gap-4 mt-4 flex-wrap justify-center">
-            {update.versions.map(version => (
-              <li key={version.id} className="border rounded-lg py-2 px-4 grow">
-                <RestArea restArea={version} />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+      {action === "add" ?
+        <RestArea restArea={update.latest} isEditing={isEditing} />
+      : <VersionedRestArea versions={[update.original, update.latest]} isEditing={isEditing} />}
     </>
   );
 };
