@@ -20,37 +20,60 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
 
   const lastIndex = versions.length - 1;
 
-  const [restArea, setRestArea] = useState(versions[lastIndex]);
+  const [restAreas, setRestAreas] = useState(versions);
 
   useEffect(() => {
-    setRestArea(versions[lastIndex]);
-  }, [versions, lastIndex]);
+    setRestAreas(versions);
+  }, [versions]);
 
-  const handleNameChange = (name: string) => setRestArea(prev => ({ ...prev, name }));
+  const handleNameChange = (name: string) =>
+    setRestAreas(prev => prev.map((area, i) => (i === lastIndex ? { ...area, name } : area)));
   const handleUpdatedAtChange = (updatedAt: string) =>
-    setRestArea(prev => ({ ...prev, updated_at: updatedAt }));
-  const handleStatusChange = (status: Status) => setRestArea(prev => ({ ...prev, status }));
-  const handleDeletedChange = (deleted: boolean) => setRestArea(prev => ({ ...prev, deleted }));
+    setRestAreas(prev =>
+      prev.map((area, i) => (i === lastIndex ? { ...area, updated_at: updatedAt } : area)),
+    );
+  const handleStatusChange = (status: Status) =>
+    setRestAreas(prev => prev.map((area, i) => (i === lastIndex ? { ...area, status } : area)));
+  const handleDeletedChange = (deleted: boolean) =>
+    setRestAreas(prev => prev.map((area, i) => (i === lastIndex ? { ...area, deleted } : area)));
   const handleDescriptionChange = (description: string) =>
-    setRestArea(prev => ({ ...prev, description }));
+    setRestAreas(prev =>
+      prev.map((area, i) => (i === lastIndex ? { ...area, description } : area)),
+    );
   const handleLocalDescriptionChange = (localDescription: string) =>
-    setRestArea(prev => ({ ...prev, local_description: localDescription }));
+    setRestAreas(prev =>
+      prev.map((area, i) =>
+        i === lastIndex ? { ...area, local_description: localDescription } : area,
+      ),
+    );
   const handleServiceRemove = (service: Service) =>
-    setRestArea(prev => ({
-      ...prev,
-      services: prev.services.filter(s => s.name !== service.name),
-    }));
+    setRestAreas(prev =>
+      prev.map((area, i) =>
+        i === lastIndex ?
+          {
+            ...area,
+            services: area.services.filter(s => s.name !== service.name),
+          }
+        : area,
+      ),
+    );
   const handleServiceAdd = (service: Service) =>
-    setRestArea(prev => ({
-      ...prev,
-      services: [...prev.services, service],
-    }));
+    setRestAreas(prev =>
+      prev.map((area, i) =>
+        i === lastIndex ?
+          {
+            ...area,
+            services: [...area.services, service],
+          }
+        : area,
+      ),
+    );
 
   return (
     <div className="space-y-2 text-xs">
       <div className="flex justify-between items-center">
         <div className="space-y-2">
-          {versions.map(({ name, id }, i) => (
+          {restAreas.map(({ name, id }, i) => (
             <RestAreaName
               key={id}
               name={name}
@@ -59,7 +82,7 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
             />
           ))}
 
-          {versions.map(({ updated_at, id }, i) => (
+          {restAreas.map(({ updated_at, id }, i) => (
             <RestAreaUpdatedAt
               key={id}
               updatedAt={updated_at}
@@ -68,7 +91,7 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
             />
           ))}
 
-          {versions.map(({ status, id }, i) => (
+          {restAreas.map(({ status, id }, i) => (
             <RestAreaStatus
               key={id}
               status={status}
@@ -78,7 +101,7 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
           ))}
         </div>
         <div className="flex flex-col gap-2">
-          {versions.map(({ deleted }, i) => (
+          {restAreas.map(({ deleted }, i) => (
             <RestAreaDeleted
               key={i}
               isDeleted={deleted}
@@ -88,7 +111,7 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
           ))}
         </div>
       </div>
-      {versions.map(({ description, id }, i) => (
+      {restAreas.map(({ description, id }, i) => (
         <RestAreaDescription
           key={id}
           label="Beskrivning"
@@ -97,7 +120,7 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
           onChange={handleDescriptionChange}
         />
       ))}
-      {versions.map(({ local_description, id }, i) => (
+      {restAreas.map(({ local_description, id }, i) => (
         <RestAreaDescription
           key={id}
           label="Lokal information"
@@ -106,9 +129,9 @@ export function VersionedRestArea({ versions, isEditing = false, onChange }: Pro
           onChange={handleLocalDescriptionChange}
         />
       ))}
-      <RestAreaGallery photos={restArea.photos} />
+      <RestAreaGallery photos={restAreas[lastIndex].photos} />
 
-      {versions.map(({ id, services }, i) => (
+      {restAreas.map(({ id, services }, i) => (
         <RestAreaServices
           key={id}
           restAreaId={id}
