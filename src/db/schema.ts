@@ -21,9 +21,7 @@ export const services = sqliteTable(
   "services",
   {
     name: text({ enum: SERVICES }).notNull(),
-    restAreaId: text("rest_area_id")
-      .notNull()
-      .references(() => restAreas.id),
+    restAreaId: text("rest_area_id").notNull(),
     updatedAt: int("updated_at", { mode: "number" }).notNull(),
   },
   table => [primaryKey({ columns: [table.name, table.restAreaId] })],
@@ -41,9 +39,7 @@ export const photos = sqliteTable(
     url: text().notNull(),
     thumbnailUrl: text("thumbnail_url").notNull(),
     description: text(),
-    restAreaId: text("rest_area_id")
-      .notNull()
-      .references(() => restAreas.id),
+    restAreaId: text("rest_area_id").notNull(),
     updatedAt: int("updated_at", { mode: "number" }).notNull(),
   },
   table => [primaryKey({ columns: [table.url, table.restAreaId] })],

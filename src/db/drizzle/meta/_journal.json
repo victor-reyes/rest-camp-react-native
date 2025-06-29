@@ -22,6 +22,13 @@
       "when": 1749620742835,
       "tag": "0002_add_thubnail_url_column_to_photos_table",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1751194677443,
+      "tag": "0003_remove_foreign_key_constraints",
+      "breakpoints": true
     }
   ]
 }
