@@ -81,17 +81,17 @@ export const restAreasApi = createApi({
     uploadPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
       invalidatesTags: ["RestAreas"],
       queryFn: async ({ restAreaId, uri, description }) => {
-        const [compressedBuffer, thumbnailBuffer] = await Promise.all([
-          compressImageToBuffer(uri, { maxWidth: 1200, quality: 0.7 }),
-          compressImageToBuffer(uri, { maxWidth: 400, quality: 0.7 }),
-        ]);
-
-        const { storage } = supabase;
         const path = `${restAreaId}-${Date.now()}.jpeg`;
         const options = { contentType: "image/jpeg" };
+
+        const { storage } = supabase;
         const [photoResponse, thumbnailResponse] = await Promise.all([
-          storage.from("photos").upload(path, compressedBuffer, options),
-          storage.from("photos").upload(`thumbnails-${path}`, thumbnailBuffer, options),
+          compressImageToBuffer(uri, { maxWidth: 1200, quality: 0.7 }).then(res =>
+            storage.from("photos").upload(path, res, options),
+          ),
+          compressImageToBuffer(uri, { maxWidth: 400, quality: 0.7 }).then(res =>
+            storage.from("photos").upload(`thumbnails-${path}`, res, options),
+          ),
         ]);
 
         if (photoResponse.error || thumbnailResponse.error) {
@@ -100,7 +100,7 @@ export const restAreasApi = createApi({
         }
 
         const [url, thumbnailUrl] = [photoResponse, thumbnailResponse].map(
-          res => supabase.storage.from("photos").getPublicUrl(res.data.path).data.publicUrl,
+          res => storage.from("photos").getPublicUrl(res.data.path).data.publicUrl,
         );
 
         const { error: insertError } = await supabase.from("photos").insert({
