@@ -11,6 +11,7 @@ export const restAreas = sqliteTable("rest_areas", {
   localDescription: text("local_description"),
   status: text({ enum: STATUSES }).notNull(),
   updatedAt: int("updated_at", { mode: "number" }).notNull(),
+  deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
 });
 export const restAreaRelations = relations(restAreas, ({ many }) => ({
   services: many(services),
@@ -23,6 +24,7 @@ export const services = sqliteTable(
     name: text({ enum: SERVICES }).notNull(),
     restAreaId: text("rest_area_id").notNull(),
     updatedAt: int("updated_at", { mode: "number" }).notNull(),
+    deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
   },
   table => [primaryKey({ columns: [table.name, table.restAreaId] })],
 );
@@ -41,6 +43,7 @@ export const photos = sqliteTable(
     description: text(),
     restAreaId: text("rest_area_id").notNull(),
     updatedAt: int("updated_at", { mode: "number" }).notNull(),
+    deleted: int("deleted", { mode: "boolean" }).notNull().default(false),
   },
   table => [primaryKey({ columns: [table.url, table.restAreaId] })],
 );
