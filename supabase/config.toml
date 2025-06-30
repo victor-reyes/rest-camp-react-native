@@ -10,7 +10,7 @@ enabled = true
 port = 54321
 # Schemas to expose in your API. Tables, views and stored procedures in this schema will get API
 # endpoints. `public` and `graphql_public` schemas are included by default.
-schemas = ["public", "graphql_public"]
+schemas = ["public", "graphql_public", "v1", "log"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size
@@ -257,6 +257,13 @@ redirect_uri = ""
 url = ""
 # If enabled, the nonce check will be skipped. Required for local sign in with Google auth.
 skip_nonce_check = false
+[auth.external.google]
+enabled = true
+client_id = "532615947113-4ntqv29n3d9m18sthoaulhtiqei0s52u.apps.googleusercontent.com,532615947113-quijpritk1v0sm2t231t885crsgisv1r.apps.googleusercontent.com"
+secret = ""
+url = ""
+redirect_uri = ""
+skip_nonce_check = true
 
 # Use Firebase Auth as a third-party provider alongside Supabase Auth.
 [auth.third_party.firebase]
