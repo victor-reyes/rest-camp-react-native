@@ -1,11 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import { RestAreaWithServicesAndPhotos } from "../types.ts";
 
+const LOG_SCHEMA = "log";
 export const getSupabaseClient = () => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = createClient(supabaseUrl, serviceRoleKey, { db: { schema: LOG_SCHEMA } });
 
   return {
     async getLastUpdatedAt(): Promise<string> {
@@ -27,7 +28,7 @@ export const getSupabaseClient = () => {
 
       const { data: insertedRestArea, error: insertRestAreaError } = await supabase
         .from("rest_areas")
-        .upsert(restArea, { onConflict: "trafikverket_id", ignoreDuplicates: false })
+        .insert(restArea)
         .select("id")
         .single();
 
@@ -49,11 +50,11 @@ export const getSupabaseClient = () => {
 
       if (insertServiceError) throw insertServiceError;
 
-      const { error: insertPhotoError } = await supabase.from("photos").upsert(
-        photos.map(photo => ({ ...photo, rest_area_id: id })),
-        { onConflict: "url", ignoreDuplicates: true },
-      );
+      const { error: insertPhotoError } = await supabase
+        .from("photos")
+        .insert(photos.map(photo => ({ ...photo, rest_area_id: id })));
 
+      if (insertPhotoError) console.log("Inserted or updated photos:", insertPhotoError);
       if (insertPhotoError) throw insertPhotoError;
     },
   };
