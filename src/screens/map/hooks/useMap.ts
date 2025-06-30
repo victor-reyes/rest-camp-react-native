@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Region } from "react-native-maps";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";
-import { useRestAreas } from "./useRestAreas";
-import { loadRestAreas, useRestAreasQuery } from "@/slices/rest-areas";
-import { useAppDispatch } from "@/app/store";
+import {
+  useFetchPhotosQuery,
+  useFetchRestAreasWithServicesQuery,
+  useLoadRestAreasQuery,
+} from "@/slices/rest-areas";
+import { useAppSelector } from "@/app/store";
+import { selectFilters } from "@/slices/filters";
 
 export function useMap(initialRegion: Region) {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(loadRestAreas());
-  }, [dispatch]);
+  useFetchRestAreasWithServicesQuery();
+  useFetchPhotosQuery();
 
-  useRestAreasQuery();
+  const filters = useAppSelector(selectFilters);
+  const { data } = useLoadRestAreasQuery(filters);
 
-  const restAreas = useRestAreas();
   const [region, setRegion] = useState(initialRegion);
   const { mapDimensions, onLayout } = useMapDimensions();
-  const points = usePoints(restAreas, mapDimensions, region);
+  const points = usePoints(data, mapDimensions, region);
 
   return {
     setRegion,

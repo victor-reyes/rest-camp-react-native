@@ -4,28 +4,34 @@ import { Services } from "./Services";
 import { ParkingHeader } from "./RestAreaHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
-import { RestArea } from "@/slices/rest-areas";
+import { useGetRestAreaQuery } from "@/slices/rest-areas";
 
 export interface Props {
-  restArea: RestArea;
+  id: string;
 }
 
-export function RestAreaCard({ restArea }: Props) {
+export function RestAreaCard({ id }: Props) {
+  const { data: restArea } = useGetRestAreaQuery(id);
+
   return (
     <View style={styles.container}>
-      <ParkingHeader
-        name={restArea.name}
-        updatedAt={restArea.updatedAt}
-        latitude={restArea.latitude}
-        longitude={restArea.longitude}
-      />
-      <Description
-        description={restArea.description || undefined}
-        locationDescription={restArea.localDescription || undefined}
-        status={restArea.status}
-      />
-      <Services services={restArea.services.map(service => service.name)} />
-      <PhotoGallery restAreaId={restArea.id} photos={restArea.photos} />
+      {restArea && (
+        <>
+          <ParkingHeader
+            name={restArea.name}
+            updatedAt={restArea.updatedAt}
+            latitude={restArea.latitude}
+            longitude={restArea.longitude}
+          />
+          <Description
+            description={restArea.description || undefined}
+            locationDescription={restArea.localDescription || undefined}
+            status={restArea.status}
+          />
+        </>
+      )}
+      <Services restAreaId={id} />
+      <PhotoGallery restAreaId={id} />
     </View>
   );
 }

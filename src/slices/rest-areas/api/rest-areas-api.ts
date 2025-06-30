@@ -1,35 +1,37 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { updateRestAreas } from "../utils";
-import { loadRestAreas } from "../rest-area-slice";
 import { supabase } from "@/lib";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "react-native-compressor";
 import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
+import {
+  offlineRestAreasApi,
+  PhotosData,
+  RestAreasWithServicesData,
+} from "./offline-rest-areas-api";
+
+const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
 export const restAreasApi = createApi({
   reducerPath: "restAreasApi",
   baseQuery: fakeBaseQuery(),
-  tagTypes: ["RestAreas"],
+  tagTypes: ["RestAreas", "FetchPhotos"],
   endpoints: builder => ({
-    restAreas: builder.query<Parameters<typeof updateRestAreas>[0] & { checkedAt: string }, void>({
+    fetchRestAreasWithServices: builder.query<null, void>({
       providesTags: ["RestAreas"],
-      queryFn: async () => {
-        const checkedAt = new Date().toISOString();
+      queryFn: async (_, { dispatch }) => {
+        const { data } = await dispatch(
+          offlineRestAreasApi.endpoints.getLatestRestAreaUpdatedAt.initiate(),
+        );
+        const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
 
-        const lastChecked = (await AsyncStorage.getItem("lastCheckedAt")) || "1970-01-01T00:00:00Z";
+        console.log(`Last updated at: ${updatedAt}`);
+        const { data: restAreasWithServices, error: fetchError } = await supabase
+          .from("rest_areas_with_services")
+          .select()
+          .gt("updated_at", updatedAt);
 
-        const [
-          { data: restAreasWithServices, error: restAreaError },
-          { data: photos, error: photosError },
-        ] = await Promise.all([
-          supabase.from("rest_areas_with_services").select().gte("updated_at", lastChecked),
-          supabase.from("photos").select().gte("updated_at", lastChecked),
-        ]);
+        if (fetchError) return { error: fetchError };
 
-        if (restAreaError) return { error: restAreaError };
-        if (photosError) return { error: photosError };
-
-        const restAreas: Parameters<typeof updateRestAreas>[0] = {
+        const restAreas: RestAreasWithServicesData = {
           restAreas: restAreasWithServices.map(restArea => ({
             id: restArea.id,
             name: restArea.name || "",
@@ -51,35 +53,53 @@ export const restAreasApi = createApi({
               deleted: restArea.deleted,
             })),
           ),
-          photos: photos
-            .sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())
-            .map(photo => ({
-              url: photo.url,
-              thumbnailUrl: photo.thumbnail_url,
-              description: photo.description,
-              restAreaId: photo.rest_area_id,
-              updatedAt: new Date(photo.updated_at).getTime(),
-              deleted: photo.deleted,
-            })),
         };
 
-        return { data: { ...restAreas, checkedAt } };
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        if (data) {
-          const { checkedAt, ...restAreas } = data;
+        if (restAreas.restAreas.length > 0) {
+          console.log(`# of rest areas: ${restAreas.restAreas.length}`);
 
-          const { error } = await updateRestAreas(restAreas);
-          if (!error) {
-            await AsyncStorage.setItem("lastCheckedAt", checkedAt);
-            dispatch(loadRestAreas());
-          }
+          await dispatch(
+            offlineRestAreasApi.endpoints.upsertRestAreasWithServices.initiate(restAreas),
+          );
         }
+
+        return { data: null };
+      },
+    }),
+    fetchPhotos: builder.query<null, void>({
+      providesTags: ["FetchPhotos"],
+      queryFn: async (_, { dispatch }) => {
+        const { data } = await dispatch(
+          offlineRestAreasApi.endpoints.getLatestPhotoUpdatedAt.initiate(),
+        );
+
+        const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
+        console.log(`Last photo updated at: ${updatedAt}`);
+
+        const [{ data: photoData, error: fetchError }] = await Promise.all([
+          supabase.from("photos").select().gt("updated_at", updatedAt),
+        ]);
+
+        if (fetchError) return { error: fetchError };
+
+        const photos: PhotosData = photoData.map(photo => ({
+          url: photo.url,
+          thumbnailUrl: photo.thumbnail_url,
+          description: photo.description,
+          restAreaId: photo.rest_area_id,
+          updatedAt: new Date(photo.updated_at).getTime(),
+          deleted: photo.deleted,
+        }));
+
+        if (photos.length > 0) {
+          console.log(`# of photos: ${photos.length}`);
+          await dispatch(offlineRestAreasApi.endpoints.upsertPhotos.initiate(photos));
+        }
+        return { data: null };
       },
     }),
     uploadPhoto: builder.mutation<null, { restAreaId: string; uri: string; description?: string }>({
-      invalidatesTags: ["RestAreas"],
+      invalidatesTags: ["FetchPhotos"],
       queryFn: async ({ restAreaId, uri, description }) => {
         const path = `${restAreaId}-${Date.now()}.jpeg`;
         const options = { contentType: "image/jpeg" };
@@ -126,4 +146,5 @@ async function compressImageToBuffer(uri: string, options: CompressorOptions) {
   return fetch(compressedUri).then(res => res.arrayBuffer());
 }
 
-export const { useRestAreasQuery, useUploadPhotoMutation } = restAreasApi;
+export const { useFetchRestAreasWithServicesQuery, useFetchPhotosQuery, useUploadPhotoMutation } =
+  restAreasApi;

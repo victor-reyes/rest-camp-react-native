@@ -14,8 +14,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components/Button";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useAppSelector } from "@/app/store";
-import { selectRestAreaById, useUploadPhotoMutation } from "@/slices/rest-areas";
+import { useGetRestAreaQuery, useUploadPhotoMutation } from "@/slices/rest-areas";
 
 import * as ImagePicker from "expo-image-picker";
 import { ProfileModal } from "./components/ProfileModal";
@@ -66,7 +65,9 @@ export function UploadPhotosScreen({ route }: Props) {
 
   const [uploadPhoto, { isLoading: isUploading }] = useUploadPhotoMutation();
 
-  const restArea = useAppSelector(state => selectRestAreaById(state, restAreaId));
+  const { restAreaName } = useGetRestAreaQuery(restAreaId, {
+    selectFromResult: ({ data }) => ({ restAreaName: data?.name }),
+  });
 
   const [selectedPhotos, setSelectedPhotos] = useState<SelectedPhoto[]>([]);
 
@@ -134,7 +135,7 @@ export function UploadPhotosScreen({ route }: Props) {
         <View style={styles.header}>
           <Text style={styles.description}>
             <Text>Ladda upp bilder för rastplats</Text>
-            <Text style={{ fontWeight: "bold" }}> {restArea?.name || "Rastplats Namn"}</Text>
+            <Text style={{ fontWeight: "bold" }}> {restAreaName || "Rastplats"}</Text>
           </Text>
 
           <View style={styles.actionButtons}>

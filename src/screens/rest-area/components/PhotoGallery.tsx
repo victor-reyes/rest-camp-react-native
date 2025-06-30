@@ -1,21 +1,24 @@
 import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
-import { Photo } from "@/slices/rest-areas";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Button } from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { useGetRestAreaPhotosQuery } from "@/slices/rest-areas";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 interface Props {
   restAreaId: string;
-  photos: Photo[];
 }
 
-export function PhotoGallery({ photos, restAreaId }: Props) {
+export function PhotoGallery({ restAreaId }: Props) {
   const navigation = useNavigation();
+
+  const { photos } = useGetRestAreaPhotosQuery(restAreaId, {
+    selectFromResult: ({ data }) => ({ photos: data || [] }),
+  });
 
   const handleAddPhotos = () => navigation.navigate("UploadPhotos", { restAreaId });
   return (

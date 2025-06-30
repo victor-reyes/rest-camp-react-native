@@ -1,7 +1,7 @@
 import { restAreas, photos, services } from "@/db";
 
-export type RestAreaPoint = RestArea & { type: "Point" };
-export type RestAreaCluster = {
+type RestAreaPoint = RestAreaStatus & { type: "Point" };
+type RestAreaCluster = {
   type: "Cluster";
   id: string;
   coords: {
@@ -11,12 +11,12 @@ export type RestAreaCluster = {
   count: number;
 };
 
+export type Point = RestAreaPoint | RestAreaCluster;
+
 export type Filter = Service;
 
-export type RestArea = typeof restAreas.$inferSelect & {
-  services: (typeof services.$inferSelect)[];
-  photos: (typeof photos.$inferSelect)[];
-};
+export type RestArea = typeof restAreas.$inferSelect;
+export type RestAreaStatus = Pick<RestArea, "id" | "latitude" | "longitude" | "status">;
 export type Status = RestArea["status"];
 
 export type Photo = typeof photos.$inferSelect;

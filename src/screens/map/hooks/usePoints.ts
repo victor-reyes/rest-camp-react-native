@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import { isPointCluster, useClusterer } from "react-native-clusterer";
 import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { Region } from "react-native-maps";
-import { RestAreaCluster, RestArea, RestAreaPoint } from "@/slices/rest-areas";
+import { RestAreaStatus, Point } from "@/slices/rest-areas";
 
 export function usePoints(
-  restAreas: RestArea[],
+  restAreas: RestAreaStatus[] = [],
   mapDimensions: { width: number; height: number },
   region: Region,
 ) {
-  const memorizedPoints: Supercluster.PointFeature<RestArea>[] = useMemo(
+  const memorizedPoints: Supercluster.PointFeature<RestAreaStatus>[] = useMemo(
     () =>
       restAreas.map(restArea => ({
         type: "Feature",
@@ -26,7 +26,7 @@ export function usePoints(
   const clusterOptions = { radius: 25, maxZoom: 12 };
   const [_points] = useClusterer(memorizedPoints, mapDimensions, region, clusterOptions);
 
-  const points: (RestAreaPoint | RestAreaCluster)[] = _points.map(point => {
+  const points: Point[] = _points.map(point => {
     if (isPointCluster(point))
       return {
         type: "Cluster",

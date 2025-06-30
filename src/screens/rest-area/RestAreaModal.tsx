@@ -1,5 +1,3 @@
-import { useAppSelector } from "@/app/store";
-import { selectRestAreaById } from "@/slices/rest-areas";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -13,12 +11,10 @@ import { useIsFocused } from "@react-navigation/native";
 
 type Props = { id: string | null; onClose: () => void };
 function RestAreaModalComponent({ id, onClose }: Props) {
-  const restArea = useAppSelector(state => selectRestAreaById(state, id));
-
   useEffect(() => {
-    if (restArea) bottomSheetRef.current?.present();
+    if (id) bottomSheetRef.current?.present();
     else bottomSheetRef.current?.dismiss();
-  }, [restArea]);
+  }, [id]);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handleSheetChanges = useCallback(
     (index: number) => {
@@ -46,7 +42,7 @@ function RestAreaModalComponent({ id, onClose }: Props) {
   const animationConfigs = useBottomSheetTimingConfigs({ duration: 500 });
 
   return (
-    restArea && (
+    id && (
       <BottomSheetModal
         ref={bottomSheetRef}
         snapPoints={["50%", "75%", "90%"]}
@@ -57,7 +53,7 @@ function RestAreaModalComponent({ id, onClose }: Props) {
         handleStyle={{ paddingBottom: 0, paddingTop: 8 }}
         animationConfigs={animationConfigs}>
         <BottomSheetView>
-          <RestAreaCard restArea={restArea} />
+          <RestAreaCard id={id} />
         </BottomSheetView>
       </BottomSheetModal>
     )
