@@ -6,6 +6,7 @@ import m0001 from './0001_add_update_at_column.sql';
 import m0002 from './0002_add_thubnail_url_column_to_photos_table.sql';
 import m0003 from './0003_remove_foreign_key_constraints.sql';
 import m0004 from './0004_add_deleted_column.sql';
+import m0005 from './0005_add_reviews_table.sql';
 
   export default {
     journal,
@@ -14,7 +15,8 @@ import m0004 from './0004_add_deleted_column.sql';
 m0001,
 m0002,
 m0003,
-m0004
+m0004,
+m0005
     }
   }
   

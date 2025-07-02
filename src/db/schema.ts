@@ -53,3 +53,25 @@ export const photosRelations = relations(photos, ({ one }) => ({
     references: [restAreas.id],
   }),
 }));
+
+export const reviews = sqliteTable("reviews", {
+  id: text().primaryKey(),
+  restAreaId: text("rest_area_id").notNull(),
+  user: text("user", { mode: "json" }).$type<User>().notNull(),
+  score: int().notNull(),
+  recension: text(),
+  updatedAt: int("updated_at", { mode: "number" }).notNull(),
+  deleted: int("deleted", { mode: "boolean" }).notNull(),
+});
+
+type User = {
+  fullName: string;
+  avatarUrl: string;
+};
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+  restArea: one(restAreas, {
+    fields: [reviews.restAreaId],
+    references: [restAreas.id],
+  }),
+}));
