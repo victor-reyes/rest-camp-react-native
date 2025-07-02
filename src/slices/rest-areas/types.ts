@@ -1,4 +1,4 @@
-import { restAreas, photos, services } from "@/db";
+import { restAreas, photos, services, reviews } from "@/db";
 
 type RestAreaPoint = RestAreaStatus & { type: "Point" };
 type RestAreaCluster = {
@@ -15,14 +15,24 @@ export type Point = RestAreaPoint | RestAreaCluster;
 
 export type Filter = Service;
 
-export type RestArea = typeof restAreas.$inferSelect;
-export type RestAreaStatus = Pick<RestArea, "id" | "latitude" | "longitude" | "status">;
-export type Status = RestArea["status"];
-
-export type Photo = typeof photos.$inferSelect;
+// database types
+export type RestAreaSelect = typeof restAreas.$inferSelect;
+export type PhotoSelect = typeof photos.$inferSelect;
 export type ServiceSelect = typeof services.$inferSelect;
-export type Service = ServiceSelect["name"];
+export type ReviewSelect = typeof reviews.$inferSelect;
 
 export type RestAreaInsert = typeof restAreas.$inferInsert;
 export type ServiceInsert = typeof services.$inferInsert;
 export type PhotoInsert = typeof photos.$inferInsert;
+export type ReviewInsert = typeof reviews.$inferInsert;
+
+export type RestAreaStatus = Pick<RestAreaSelect, "id" | "latitude" | "longitude" | "status">;
+export type Status = RestAreaSelect["status"];
+
+export type Photo = Omit<PhotoSelect, "deleted">;
+export type Service = ServiceSelect["name"];
+
+export type Score = {
+  score: number;
+  numberOfReviews: number;
+};
