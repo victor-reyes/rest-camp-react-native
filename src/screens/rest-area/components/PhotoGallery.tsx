@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { useGetRestAreaPhotosQuery } from "@/slices/rest-areas";
@@ -26,10 +26,12 @@ export function PhotoGallery({ restAreaId }: Props) {
       <View style={styles.sectionTitle}>
         <Text style={styles.sectionTitleText}>Bilder</Text>
         <Button
-          title="Lägg till bilder"
+          title="Lägg till"
           fit
+          style={{ backgroundColor: "#15519622", borderWidth: 0, paddingVertical: 8 }}
+          textColor="#155196"
           iconSize={18}
-          icon={<FontAwesome6 name="plus" size={18} color="#155196" />}
+          icon={<Ionicons name="camera-outline" size={18} color="#155196" />}
           onPress={handleAddPhotos}
         />
       </View>
@@ -38,11 +40,16 @@ export function PhotoGallery({ restAreaId }: Props) {
         showsHorizontalScrollIndicator={true}
         style={styles.photoScrollView}
         contentContainerStyle={styles.photoScrollViewContent}>
-        {photos.map(photo => (
-          <View key={photo.url}>
+        {photos.map((photo, index, arr) => (
+          <View
+            key={photo.url}
+            style={{
+              marginLeft: index === 0 ? 12 : 0,
+              marginRight: index === arr.length - 1 ? 12 : 0,
+            }}>
             <Image
               source={{ uri: photo.thumbnailUrl }}
-              style={styles.photo}
+              style={{ ...styles.photo }}
               placeholder={{ blurhash }}
               contentFit="cover"
               transition={300}
@@ -59,12 +66,12 @@ export function PhotoGallery({ restAreaId }: Props) {
 
 const styles = StyleSheet.create({
   section: {
-    padding: 12,
     gap: 8,
     borderBottomWidth: 1,
     borderBottomColor: "#eeeeee",
   },
   sectionTitle: {
+    padding: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
