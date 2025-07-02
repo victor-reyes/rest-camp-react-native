@@ -2,11 +2,8 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { Image } from "react-native-compressor";
 import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
-import {
-  offlineRestAreasApi,
-  PhotosData,
-  RestAreasWithServicesData,
-} from "./offline-rest-areas-api";
+import { offlineRestAreasApi, RestAreasWithServices } from "./offline-rest-areas-api";
+import { PhotoInsert, ReviewInsert } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
@@ -31,7 +28,7 @@ export const restAreasApi = createApi({
 
         if (fetchError) return { error: fetchError };
 
-        const restAreas: RestAreasWithServicesData = {
+        const restAreas: RestAreasWithServices = {
           restAreas: restAreasWithServices.map(restArea => ({
             id: restArea.id,
             name: restArea.name || "",
@@ -82,7 +79,7 @@ export const restAreasApi = createApi({
 
         if (fetchError) return { error: fetchError };
 
-        const photos: PhotosData = photoData.map(photo => ({
+        const photos: PhotoInsert[] = photoData.map(photo => ({
           url: photo.url,
           thumbnailUrl: photo.thumbnail_url,
           description: photo.description,
@@ -135,6 +132,36 @@ export const restAreasApi = createApi({
           return { error: insertError };
         }
 
+        return { data: null };
+      },
+    }),
+    fetchReviewsForRestArea: builder.query({
+      queryFn: async (restAreaId: string, { dispatch }) => {
+        const { data } = await dispatch(
+          offlineRestAreasApi.endpoints.getLatestReviewUpdatedAtByRestArea.initiate(restAreaId),
+        );
+        const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
+
+        const { data: reviewData, error: fetchError } = await supabase
+          .from("reviews_with_profiles")
+          .select()
+          .gt("updated_at", updatedAt);
+
+        if (fetchError) return { error: fetchError };
+
+        const reviews: Required<ReviewInsert>[] = reviewData.map(review => ({
+          id: review.id,
+          restAreaId: review.rest_area_id,
+          user: { fullName: review.full_name || "", avatarUrl: review.avatar_url || "" },
+          score: review.score,
+          recension: review.recension,
+          updatedAt: new Date(review.updated_at!).getTime(),
+          deleted: review.deleted,
+        }));
+
+        if (reviews.length > 0) {
+          await dispatch(offlineRestAreasApi.endpoints.upsertReviews.initiate(reviews));
+        }
         return { data: null };
       },
     }),
