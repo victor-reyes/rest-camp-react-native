@@ -1,8 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 interface Props {
   title?: string;
   icon?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  textColor?: string;
   iconSize?: number;
   disabled?: boolean;
   fit?: boolean;
@@ -12,6 +14,8 @@ interface Props {
 export function Button({
   onPress,
   title,
+  style,
+  textColor,
   icon,
   iconSize = 24,
   disabled = false,
@@ -26,10 +30,11 @@ export function Button({
         styles.button,
         pressed && styles.buttonPressed,
         fit && styles.buttonFit,
+        style,
         disabled && { opacity: 0.3, backgroundColor: "#eee" },
       ]}>
       {icon && <View style={iconSizeStyle}>{icon}</View>}
-      {title && <Text style={styles.buttonText}>{title}</Text>}
+      {title && <Text style={[styles.buttonText, textColor && { color: textColor }]}>{title}</Text>}
     </Pressable>
   );
 }
