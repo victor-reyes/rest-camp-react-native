@@ -1,7 +1,15 @@
-import { db, photos, restAreas as restAreas, services } from "@/db";
+import { db, photos, restAreas as restAreas, reviews, services } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { Filter, PhotoInsert, RestAreaInsert, RestAreaStatus, ServiceInsert } from "../types";
+import {
+  Filter,
+  PhotoInsert,
+  RestAreaInsert,
+  RestAreaStatus,
+  ReviewInsert,
+  Score,
+  ServiceInsert,
+} from "../types";
 
 export const offlineRestAreasApi = createApi({
   reducerPath: "offlineRestAreasApi",
@@ -15,7 +23,7 @@ export const offlineRestAreasApi = createApi({
           await db.query.restAreas.findMany({
             columns: { id: true, latitude: true, longitude: true, status: true },
             with: { services: true },
-            where: ({ deleted }, { ne }) => ne(deleted, true),
+            where: ({ deleted }, { eq }) => eq(deleted, false),
           })
         )
           .filter(item => filters.every(filter => item.services.some(s => s.name === filter)))
@@ -105,7 +113,8 @@ export const offlineRestAreasApi = createApi({
     getRestAreaServices: builder.query({
       queryFn: async (restAreaId: string) => {
         const data = await db.query.services.findMany({
-          where: eq(services.restAreaId, restAreaId),
+          where: (table, { eq, and }) =>
+            and(eq(table.restAreaId, restAreaId), eq(table.deleted, false)),
         });
         return { data };
       },
@@ -214,7 +223,7 @@ export const offlineRestAreasApi = createApi({
       },
     }),
 
-    upsertRestAreasWithServices: builder.mutation<null, RestAreasWithServicesData>({
+    upsertRestAreasWithServices: builder.mutation<null, RestAreasWithServices>({
       queryFn: async data => {
         try {
           await db.transaction(async tx => {
@@ -250,15 +259,67 @@ export const offlineRestAreasApi = createApi({
         ];
       },
     }),
+    getRestAreaReviews: builder.query({
+      providesTags: ["Reviews"],
+      queryFn: async restAreaId => {
+        const data = await db.query.reviews.findMany({
+          where: (table, { and, eq }) =>
+            and(eq(table.restAreaId, restAreaId), eq(table.deleted, false)),
+        });
+        return { data };
+      },
+    }),
+    getRestAreaScore: builder.query<Score, string>({
+      providesTags: ["Reviews"],
+      queryFn: async restAreaId => {
+        const data = await db.query.reviews.findMany({
+          columns: { score: true },
+          where: (table, { and, eq }) =>
+            and(eq(table.restAreaId, restAreaId), eq(table.deleted, false)),
+        });
+        const average =
+          data.length > 0 ? data.reduce((sum, review) => sum + review.score, 0) / data.length : 0;
+        return { data: { score: average, numberOfReviews: data.length } };
+      },
+    }),
+    upsertReviews: builder.mutation<null, ReviewInsert[]>({
+      queryFn: async newReviews => {
+        await db.transaction(async tx => {
+          await tx
+            .insert(reviews)
+            .values(newReviews)
+            .onConflictDoUpdate({
+              target: [reviews.id],
+              set: {
+                restAreaId: sql.raw(`excluded.${reviews.restAreaId.name}`),
+                score: sql.raw(`excluded.${reviews.score.name}`),
+                recension: sql.raw(`excluded.${reviews.recension.name}`),
+                updatedAt: sql.raw(`excluded.${reviews.updatedAt.name}`),
+                deleted: sql.raw(`excluded.${reviews.deleted.name}`),
+              },
+            });
+        });
+        return { data: null };
+      },
+    }),
+    getLatestReviewUpdatedAtByRestArea: builder.query<number | undefined, string>({
+      providesTags: ["Reviews"],
+      queryFn: async restAreaId => {
+        const data = await db.query.reviews.findFirst({
+          columns: { updatedAt: true },
+          where: (table, { eq }) => eq(table.restAreaId, restAreaId),
+          orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
+        });
+        return { data: data?.updatedAt };
+      },
+    }),
   }),
 });
 
-export type RestAreasWithServicesData = {
-  restAreas: (RestAreaInsert & { deleted: boolean })[];
-  services: (ServiceInsert & { deleted: boolean })[];
+export type RestAreasWithServices = {
+  restAreas: RestAreaInsert[];
+  services: ServiceInsert[];
 };
-
-export type PhotosData = (PhotoInsert & { deleted: boolean })[];
 
 export const {
   useLoadRestAreasQuery,
