@@ -12,24 +12,24 @@ export interface Props {
 
 export function RestAreaCard({ id }: Props) {
   const { data: restArea } = useGetRestAreaQuery(id);
+  if (!restArea) return null;
 
   return (
     <View style={styles.container}>
-      {restArea && (
-        <>
-          <ParkingHeader
-            name={restArea.name}
-            updatedAt={restArea.updatedAt}
-            latitude={restArea.latitude}
-            longitude={restArea.longitude}
-          />
-          <Description
-            description={restArea.description || undefined}
-            locationDescription={restArea.localDescription || undefined}
-            status={restArea.status}
-          />
-        </>
-      )}
+      <ParkingHeader
+        id={id}
+        name={restArea.name}
+        updatedAt={restArea.updatedAt}
+        latitude={restArea.latitude}
+        longitude={restArea.longitude}
+      />
+
+      <Description
+        description={restArea.description || undefined}
+        locationDescription={restArea.localDescription || undefined}
+        status={restArea.status}
+      />
+
       <Services restAreaId={id} />
       <PhotoGallery restAreaId={id} />
     </View>
