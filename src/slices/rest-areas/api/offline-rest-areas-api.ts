@@ -42,15 +42,14 @@ export const offlineRestAreasApi = createApi({
       providesTags: (_res, _err, id) => [{ type: "RestAreas", id }],
     }),
 
-    getLatestRestAreaUpdatedAt: builder.query<number | undefined, void>({
+    getLatestRestAreaUpdatedAt: builder.query<number, void>({
       providesTags: [{ type: "RestAreas", id: "LIST" }],
       queryFn: async () => {
-        const latestUpdatedAt = (
-          await db.query.restAreas.findFirst({
-            columns: { updatedAt: true },
-            orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
-          })
-        )?.updatedAt;
+        const data = await db.query.restAreas.findFirst({
+          columns: { updatedAt: true },
+          orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
+        });
+        const latestUpdatedAt = data?.updatedAt || 0;
         return { data: latestUpdatedAt };
       },
     }),
@@ -210,15 +209,14 @@ export const offlineRestAreasApi = createApi({
       invalidatesTags: (_res, _err, urls) => urls.map(url => ({ type: "Photos", id: url })),
     }),
 
-    getLatestPhotoUpdatedAt: builder.query<number | undefined, void>({
+    getLatestPhotoUpdatedAt: builder.query<number, void>({
       providesTags: ["Photos"],
       queryFn: async () => {
-        const latestUpdatedAt = (
-          await db.query.photos.findFirst({
-            columns: { updatedAt: true },
-            orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
-          })
-        )?.updatedAt;
+        const data = await db.query.photos.findFirst({
+          columns: { updatedAt: true },
+          orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
+        });
+        const latestUpdatedAt = data?.updatedAt || 0;
         return { data: latestUpdatedAt };
       },
     }),
@@ -302,7 +300,7 @@ export const offlineRestAreasApi = createApi({
         return { data: null };
       },
     }),
-    getLatestReviewUpdatedAtByRestArea: builder.query<number | undefined, string>({
+    getLatestReviewUpdatedAtByRestArea: builder.query<number, string>({
       providesTags: ["Reviews"],
       queryFn: async restAreaId => {
         const data = await db.query.reviews.findFirst({
@@ -310,7 +308,8 @@ export const offlineRestAreasApi = createApi({
           where: (table, { eq }) => eq(table.restAreaId, restAreaId),
           orderBy: ({ updatedAt }, { desc }) => desc(updatedAt),
         });
-        return { data: data?.updatedAt };
+        const latestUpdatedAt = data?.updatedAt || 0;
+        return { data: latestUpdatedAt };
       },
     }),
   }),
