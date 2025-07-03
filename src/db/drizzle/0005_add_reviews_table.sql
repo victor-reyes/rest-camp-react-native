@@ -8,6 +8,6 @@ CREATE TABLE `reviews` (
 	`user` text NOT NULL,
 	`score` integer NOT NULL,
 	`recension` text,
-	`updated_at` integer NOT NULL,F
+	`updated_at` integer NOT NULL,
 	`deleted` integer NOT NULL
 );
