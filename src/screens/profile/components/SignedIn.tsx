@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/app/store";
-import { Button } from "@/components/Button";
+import { Button } from "@/components";
 import { supabase } from "@/lib/supabase";
 import { signOut } from "@/slices/auth";
 import { Image } from "expo-image";

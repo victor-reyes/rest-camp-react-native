@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Button } from "@/components/Button";
+import { Button } from "@/components";
 import { useNavigation } from "@react-navigation/native";
 import { useGetRestAreaPhotosQuery } from "@/slices/rest-areas";
 

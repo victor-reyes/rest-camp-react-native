@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { openMap } from "@/navigation/open-map";
-import { MapIcon } from "@/components/icons";
+import { MapIcon } from "@/components";
 import { Score } from "./Score";
 
 interface Props {

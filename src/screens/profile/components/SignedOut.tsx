@@ -1,6 +1,5 @@
 import { useAppDispatch } from "@/app/store";
-import { Button } from "@/components/Button";
-import { Apple, GoogleIcon } from "@/components/icons";
+import { Apple, Button, GoogleIcon } from "@/components";
 import { signIn } from "@/slices/auth";
 import { Platform, StyleSheet, Text, View } from "react-native";
 
