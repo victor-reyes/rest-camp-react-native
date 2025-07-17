@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 interface Props {
   title?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
   textColor?: string;
   iconSize?: number;
@@ -31,7 +32,7 @@ export function Button({
         pressed && styles.buttonPressed,
         fit && styles.buttonFit,
         style,
-        disabled && { opacity: 0.3, backgroundColor: "#eee" },
+        disabled && { opacity: 0.33 },
       ]}>
       {icon && <View style={iconSizeStyle}>{icon}</View>}
       {title && <Text style={[styles.buttonText, textColor && { color: textColor }]}>{title}</Text>}
