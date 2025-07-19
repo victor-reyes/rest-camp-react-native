@@ -232,13 +232,8 @@ export const offlineRestAreasApi = createApi({
             await tx.delete(restAreas).where(inArray(restAreas.id, restAreaIds));
             await tx.delete(services).where(inArray(services.restAreaId, servicesIds));
 
-            const [restAreasToInsert, servicesToInsert] = [
-              data.restAreas.filter(r => !r.deleted),
-              data.services.filter(s => !s.deleted),
-            ];
-
-            if (restAreasToInsert.length > 0) await tx.insert(restAreas).values(restAreasToInsert);
-            if (servicesToInsert.length > 0) await tx.insert(services).values(servicesToInsert);
+            if (data.restAreas.length > 0) await tx.insert(restAreas).values(data.restAreas);
+            if (data.services.length > 0) await tx.insert(services).values(data.services);
           });
           return { data: null };
         } catch (error) {
@@ -289,9 +284,9 @@ export const offlineRestAreasApi = createApi({
             .onConflictDoUpdate({
               target: [reviews.id],
               set: {
-                restAreaId: sql.raw(`excluded.${reviews.restAreaId.name}`),
                 score: sql.raw(`excluded.${reviews.score.name}`),
                 recension: sql.raw(`excluded.${reviews.recension.name}`),
+                ownerId: sql.raw(`excluded.${reviews.ownerId.name}`),
                 updatedAt: sql.raw(`excluded.${reviews.updatedAt.name}`),
                 deleted: sql.raw(`excluded.${reviews.deleted.name}`),
               },

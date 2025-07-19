@@ -143,7 +143,7 @@ export const restAreasApi = createApi({
         const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
 
         const { data: reviewData, error: fetchError } = await supabase
-          .from("reviews_with_profiles")
+          .from("reviews")
           .select()
           .gt("updated_at", updatedAt);
 
@@ -152,7 +152,7 @@ export const restAreasApi = createApi({
         const reviews: Required<ReviewInsert>[] = reviewData.map(review => ({
           id: review.id,
           restAreaId: review.rest_area_id,
-          user: { fullName: review.full_name || "", avatarUrl: review.avatar_url || "" },
+          ownerId: review.owner_id,
           score: review.score,
           recension: review.recension,
           updatedAt: new Date(review.updated_at!).getTime(),
