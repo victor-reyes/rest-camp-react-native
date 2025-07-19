@@ -5,6 +5,7 @@ import { ParkingHeader } from "./RestAreaHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
 import { useGetRestAreaQuery } from "@/slices/rest-areas";
+import { LatestReviews } from "@/screens/reviews";
 
 export interface Props {
   id: string;
@@ -32,6 +33,7 @@ export function RestAreaCard({ id }: Props) {
 
       <Services restAreaId={id} />
       <PhotoGallery restAreaId={id} />
+      <LatestReviews restAreaId={id} />
     </View>
   );
 }
