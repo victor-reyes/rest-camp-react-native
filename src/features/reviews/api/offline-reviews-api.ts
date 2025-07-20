@@ -1,4 +1,4 @@
-import { client } from "@/db";
+import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { sql } from "drizzle-orm";
 import { reviews } from "../schema";
@@ -45,13 +45,7 @@ export const offlineReviewsApi = createApi({
               .values(newReviews)
               .onConflictDoUpdate({
                 target: [reviews.id],
-                set: {
-                  score: sql.raw(`excluded.${reviews.score.name}`),
-                  recension: sql.raw(`excluded.${reviews.recension.name}`),
-                  ownerId: sql.raw(`excluded.${reviews.ownerId.name}`),
-                  updatedAt: sql.raw(`excluded.${reviews.updatedAt.name}`),
-                  deleted: sql.raw(`excluded.${reviews.deleted.name}`),
-                },
+                set: conflictUpdateAllExcept(reviews, ["id"]),
               });
           });
           return { data: null };

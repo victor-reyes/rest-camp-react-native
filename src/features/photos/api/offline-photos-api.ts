@@ -1,7 +1,7 @@
-import { client } from "@/db";
+import { client, conflictUpdateAllExcept } from "@/db";
 import { photos } from "../schema";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { inArray, sql } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { PhotoInsert } from "../types";
 import { drizzle } from "drizzle-orm/expo-sqlite/driver";
 
@@ -32,12 +32,7 @@ export const offlinePhotosApi = createApi({
               .values(newPhotos)
               .onConflictDoUpdate({
                 target: [photos.url, photos.restAreaId],
-                set: {
-                  description: sql.raw(`excluded.${photos.description.name}`),
-                  updatedAt: sql.raw(`excluded.${photos.updatedAt.name}`),
-                  thumbnailUrl: sql.raw(`excluded.${photos.thumbnailUrl.name}`),
-                  deleted: sql.raw(`excluded.${photos.deleted.name}`),
-                },
+                set: conflictUpdateAllExcept(photos, ["url", "restAreaId"]),
               });
           });
           return { data: null };

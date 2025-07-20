@@ -1,4 +1,4 @@
-import { client } from "@/db";
+import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { inArray, sql } from "drizzle-orm";
 import { ServiceInsert } from "../types";
@@ -32,10 +32,7 @@ export const offlineServicesApi = createApi({
               .values(newServices)
               .onConflictDoUpdate({
                 target: [services.restAreaId, services.name],
-                set: {
-                  updatedAt: sql.raw(`excluded.${services.updatedAt.name}`),
-                  deleted: sql.raw(`excluded.${services.deleted.name}`),
-                },
+                set: conflictUpdateAllExcept(services, ["restAreaId", "name"]),
               });
           });
           return { data: null };

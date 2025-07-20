@@ -1,4 +1,4 @@
-import { client } from "@/db";
+import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { eq, inArray, sql } from "drizzle-orm";
 import { RestAreaInsert, RestAreaStatus, ServiceInsert } from "../types";
@@ -75,26 +75,16 @@ export const offlineRestAreasApi = createApi({
     upsertRestAreas: builder.mutation<string[], RestAreaInsert[]>({
       queryFn: async newRestAreas => {
         try {
-          const ids = await db.transaction(async tx =>
-            (
-              await tx
-                .insert(restAreas)
-                .values(newRestAreas)
-                .onConflictDoUpdate({
-                  target: restAreas.id,
-                  set: {
-                    name: sql.raw(`excluded.${restAreas.name.name}`),
-                    latitude: sql.raw(`excluded.${restAreas.latitude.name}`),
-                    longitude: sql.raw(`excluded.${restAreas.longitude.name}`),
-                    description: sql.raw(`excluded.${restAreas.description.name}`),
-                    localDescription: sql.raw(`excluded.${restAreas.localDescription.name}`),
-                    status: sql.raw(`excluded.${restAreas.status.name}`),
-                    updatedAt: sql.raw(`excluded.${restAreas.updatedAt.name}`),
-                    deleted: sql.raw(`excluded.${restAreas.deleted.name}`),
-                  },
-                })
-                .returning({ id: restAreas.id })
-            ).map(row => row.id),
+          const ids = await db.transaction(tx =>
+            tx
+              .insert(restAreas)
+              .values(newRestAreas)
+              .onConflictDoUpdate({
+                target: restAreas.id,
+                set: conflictUpdateAllExcept(restAreas, ["id"]),
+              })
+              .returning({ id: restAreas.id })
+              .then(rows => rows.map(row => row.id)),
           );
           return { data: ids };
         } catch (error) {
