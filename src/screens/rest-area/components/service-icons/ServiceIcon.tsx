@@ -1,4 +1,4 @@
-import { Filter } from "@/slices/rest-areas";
+import { Service } from "@/features/services";
 import { HWC } from "./HWC";
 import { Info } from "./Info";
 import { Latrine } from "./Latrine";
@@ -9,7 +9,7 @@ import { Restaurant } from "./Restaurant";
 import { Trash } from "./Trash";
 import { SvgProps } from "react-native-svg";
 
-type ServiceIconName = Filter;
+type ServiceIconName = Service;
 interface Props extends SvgProps {
   name: ServiceIconName;
   size?: number;

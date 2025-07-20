@@ -1,4 +1,4 @@
-import { Status } from "@/slices/rest-areas";
+import { Status } from "@/features/rest-areas";
 import { View, Text, StyleSheet } from "react-native";
 
 interface Props {

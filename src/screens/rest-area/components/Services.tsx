@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { ServiceIcon } from "./service-icons";
 import { ServicePopover } from "./ServicePopover";
-import { useGetRestAreaServicesQuery } from "@/slices/rest-areas";
+import { useGetRestAreaServicesQuery } from "@/features/services";
 
 interface Props {
   restAreaId: string;

@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { selectAuth, clearError } from "@/slices/auth";
+import { selectAuth, clearError } from "@/features/auth";
 import Toast from "react-native-toast-message";
-import { AuthenticationError } from "@/slices/auth/types";
+import { AuthenticationError } from "@/features/auth";
 import { SignedIn, SignedOut } from "./components";
 
 export function ProfileScreen() {

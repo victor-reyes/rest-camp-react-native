@@ -1,14 +1,11 @@
 import { useState } from "react";
+import { useAppSelector } from "@/app/store";
 import { Region } from "react-native-maps";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";
-import {
-  useFetchPhotosQuery,
-  useFetchRestAreasWithServicesQuery,
-  useLoadRestAreasQuery,
-} from "@/slices/rest-areas";
-import { useAppSelector } from "@/app/store";
-import { selectFilters } from "@/slices/filters";
+import { useFetchRestAreasWithServicesQuery, useLoadRestAreasQuery } from "@/features/rest-areas";
+import { useFetchPhotosQuery } from "@/features/photos";
+import { selectFilters } from "@/features/filters";
 
 export function useMap(initialRegion: Region) {
   useFetchRestAreasWithServicesQuery();

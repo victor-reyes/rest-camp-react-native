@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/app/store";
 import { Button } from "@/components";
 import { supabase } from "@/lib/supabase";
-import { signOut } from "@/slices/auth";
+import { signOut } from "@/features/auth";
 import { Image } from "expo-image";
 import { useCallback, useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";

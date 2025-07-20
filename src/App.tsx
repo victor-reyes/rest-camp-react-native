@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Alert } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
-import { db, migrations } from "@/db/";
+import { client, migrations } from "@/db/";
 import Toast from "react-native-toast-message";
 import { supabase } from "./lib/supabase";
-import { setSession } from "./slices/auth";
+import { setSession } from "./features/auth";
+import { drizzle } from "drizzle-orm/expo-sqlite/driver";
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -21,6 +22,8 @@ Asset.loadAsync([
 ]);
 
 SplashScreen.preventAutoHideAsync();
+
+const db = drizzle(client);
 
 export function App() {
   const { success, error } = useMigrations(db, migrations);

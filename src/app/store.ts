@@ -1,6 +1,9 @@
-import { authSlice } from "@/slices/auth";
-import { filtersSlice } from "@/slices/filters";
-import { offlineRestAreasApi, restAreasApi } from "@/slices/rest-areas";
+import { authSlice } from "@/features/auth";
+import { filtersSlice } from "@/features/filters";
+import { offlineRestAreasApi, restAreasApi } from "@/features/rest-areas";
+import { photosApi, offlinePhotosApi } from "@/features/photos";
+import { reviewsApi, offlineReviewsApi } from "@/features/reviews";
+import { servicesApi, offlineServicesApi } from "@/features/services";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import devtoolsEnhancer from "redux-devtools-expo-dev-plugin";
@@ -11,9 +14,24 @@ export const store = configureStore({
     auth: authSlice.reducer,
     [restAreasApi.reducerPath]: restAreasApi.reducer,
     [offlineRestAreasApi.reducerPath]: offlineRestAreasApi.reducer,
+    [photosApi.reducerPath]: photosApi.reducer,
+    [offlinePhotosApi.reducerPath]: offlinePhotosApi.reducer,
+    [reviewsApi.reducerPath]: reviewsApi.reducer,
+    [offlineReviewsApi.reducerPath]: offlineReviewsApi.reducer,
+    [servicesApi.reducerPath]: servicesApi.reducer,
+    [offlineServicesApi.reducerPath]: offlineServicesApi.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat([restAreasApi.middleware, offlineRestAreasApi.middleware]),
+    getDefaultMiddleware().concat([
+      restAreasApi.middleware,
+      offlineRestAreasApi.middleware,
+      photosApi.middleware,
+      offlinePhotosApi.middleware,
+      reviewsApi.middleware,
+      offlineReviewsApi.middleware,
+      servicesApi.middleware,
+      offlineServicesApi.middleware,
+    ]),
   devTools: false,
   enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devtoolsEnhancer()),
 });

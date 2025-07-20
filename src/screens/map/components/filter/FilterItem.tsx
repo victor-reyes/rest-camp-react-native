@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import { Filter } from "@/slices/rest-areas";
+
 import { ServiceIcon } from "@/screens/rest-area/components";
+import { Filter } from "@/features/filters";
 
 const filterNameMap: Record<Filter, string> = {
   refuseBin: "Sophantering",

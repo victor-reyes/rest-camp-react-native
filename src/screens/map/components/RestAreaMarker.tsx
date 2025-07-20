@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { FastMarker } from "./FastMarker";
 import { RestAreaIcon } from "./RestAreaIcon";
-import { Status } from "@/slices/rest-areas";
+import { Status } from "@/features/rest-areas";
 
 interface Props {
   id: string;

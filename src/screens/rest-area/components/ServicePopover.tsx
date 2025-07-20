@@ -1,10 +1,10 @@
-import { Filter, Service } from "@/slices/rest-areas";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Popover, { PopoverPlacement } from "react-native-popover-view";
 import { ServiceIcon } from "./service-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Service } from "@/features/services";
 
-const filterNameMap: Record<Filter, string> = {
+const filterNameMap: Record<Service, string> = {
   refuseBin: "Sophantering",
   toilet: "Toalett",
   restaurant: "Restaurang",

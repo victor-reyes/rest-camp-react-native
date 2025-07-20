@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/app/store";
 import { Apple, Button, GoogleIcon } from "@/components";
-import { signIn } from "@/slices/auth";
+import { signIn } from "@/features/auth";
 import { Platform, StyleSheet, Text, View } from "react-native";
 
 export function SignedOut() {

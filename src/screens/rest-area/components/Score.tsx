@@ -1,7 +1,7 @@
 import { formatRating } from "@/lib/formatters";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useScores } from "../hooks";
+import { useScore } from "@/features/reviews";
 
 interface Props {
   restAreaId: string;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function Score({ onClick, restAreaId }: Props) {
-  const { score, numberOfReviews, isFetching, isLoading } = useScores(restAreaId);
+  const { score, numberOfReviews, isFetching, isLoading } = useScore(restAreaId);
 
   const hasReviews = !isLoading && numberOfReviews > 0;
 

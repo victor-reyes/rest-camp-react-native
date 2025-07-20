@@ -1,6 +1,13 @@
-import { db, restAreas, photos, services } from "@/db";
-import { PhotoInsert, RestAreaInsert, ServiceInsert } from "../types";
+import { client } from "@/db";
+import { RestAreaInsert, ServiceInsert } from "../types";
+import { PhotoInsert } from "@/features/photos";
 import { inArray } from "drizzle-orm";
+import { photos } from "@/features/photos/schema";
+import { services } from "@/features/services/schema";
+import { restAreas } from "../schema";
+import { drizzle } from "drizzle-orm/expo-sqlite/driver";
+
+const db = drizzle(client);
 
 export async function updateRestAreas(data: {
   restAreas: (RestAreaInsert & { deleted: boolean })[];

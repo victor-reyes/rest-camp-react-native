@@ -14,7 +14,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useGetRestAreaQuery, useUploadPhotoMutation } from "@/slices/rest-areas";
+import { useGetRestAreaQuery } from "@/features/rest-areas";
+import { useUploadPhotoMutation } from "@/features/photos";
 
 import * as ImagePicker from "expo-image-picker";
 import { ProfileModal } from "./components/ProfileModal";

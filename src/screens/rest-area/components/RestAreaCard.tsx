@@ -4,7 +4,7 @@ import { Services } from "./Services";
 import { ParkingHeader } from "./RestAreaHeader";
 import { PhotoGallery } from "./PhotoGallery";
 import { StyleSheet } from "react-native";
-import { useGetRestAreaQuery } from "@/slices/rest-areas";
+import { useGetRestAreaQuery } from "@/features/rest-areas";
 import { LatestReviews } from "@/screens/reviews";
 
 export interface Props {

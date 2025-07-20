@@ -3,11 +3,11 @@ import { useCallback, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
-import { useMap } from "./hooks/useMap";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { RestAreaModal } from "../rest-area/RestAreaModal";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useMap } from "@/features/map";
 
 const initialRegion = { latitude: 62, latitudeDelta: 14, longitude: 18, longitudeDelta: 16 };
 

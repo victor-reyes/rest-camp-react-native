@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/app/store";
 import { ProfileScreen } from "@/screens/profile";
-import { selectAuth } from "@/slices/auth";
+import { selectAuth } from "@/features/auth";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
