@@ -1,6 +1,5 @@
 import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { sql } from "drizzle-orm";
 import { reviews } from "../schema";
 import { ReviewInsert, Score } from "../types";
 import { drizzle } from "drizzle-orm/expo-sqlite/driver";

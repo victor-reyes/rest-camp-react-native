@@ -6,9 +6,6 @@ import { Constants, Database as DatabaseGenerated } from "./database.types";
 export const SERVICES = Constants.v1.Enums.service;
 export const STATUSES = Constants.v1.Enums.status;
 
-type Service = (typeof SERVICES)[number];
-type Status = (typeof STATUSES)[number];
-
 export type Database = MergeDeep<
   DatabaseGenerated,
   {
