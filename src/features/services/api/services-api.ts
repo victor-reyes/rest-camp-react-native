@@ -10,16 +10,58 @@ export const servicesApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ["Services"],
   endpoints: builder => ({
-    fetchServicesForRestAreas: builder.query<null, void>({
+    fetchServices: builder.query<null, void>({
       providesTags: ["Services"],
       queryFn: async (_, { dispatch }) => {
-        // This endpoint would be called as part of the rest areas fetch
-        // For now, services are fetched as part of the rest_areas_with_services view
-        // This is a placeholder for future service-specific fetching logic
+        const { data } = await dispatch(
+          offlineServicesApi.endpoints.getLatestServiceUpdatedAt.initiate(),
+        );
+        const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
+
+        const { count, error } = await supabase
+          .from("services")
+          .select("*", { count: "exact", head: true })
+          .gt("updated_at", updatedAt);
+
+        if (error) return { error };
+
+        if (count === 0 || count === null) return { data: null };
+
+        const pageSize = 1000;
+        const pages = Math.ceil(count / pageSize);
+        const services = (
+          await Promise.all(
+            Array.from({ length: pages }, (_, i) =>
+              supabase
+                .from("services")
+                .select()
+                .gt("updated_at", updatedAt)
+                .range(i * pageSize, (i + 1) * pageSize - 1)
+                .then(({ data, error }) => {
+                  if (error) throw error;
+                  return data;
+                }),
+            ),
+          )
+        ).flat();
+
+        const serviceInserts: ServiceInsert[] = services.map(service => ({
+          id: service.id,
+          restAreaId: service.rest_area_id,
+          name: service.name,
+          updatedAt: new Date(service.updated_at).getTime(),
+          deleted: service.deleted,
+        }));
+
+        if (serviceInserts.length > 0) {
+          console.log(`# of services: ${serviceInserts.length}`);
+          await dispatch(offlineServicesApi.endpoints.upsertServices.initiate(serviceInserts));
+        }
+
         return { data: null };
       },
     }),
   }),
 });
 
-export const { useFetchServicesForRestAreasQuery } = servicesApi;
+export const { useFetchServicesQuery } = servicesApi;

@@ -1,6 +1,6 @@
 import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { inArray, sql } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { ServiceInsert } from "../types";
 import { services } from "../schema";
 import { drizzle } from "drizzle-orm/expo-sqlite/driver";
@@ -31,7 +31,7 @@ export const offlineServicesApi = createApi({
               .insert(services)
               .values(newServices)
               .onConflictDoUpdate({
-                target: [services.restAreaId, services.name],
+                target: services.id,
                 set: conflictUpdateAllExcept(services, ["restAreaId", "name"]),
               });
           });
@@ -59,8 +59,23 @@ export const offlineServicesApi = createApi({
       },
       invalidatesTags: (_res, _err, ids) => ids.map(id => ({ type: "Services", id })),
     }),
+    getLatestServiceUpdatedAt: builder.query<number, void>({
+      providesTags: ["Services"],
+      queryFn: async () => {
+        const data = await db.query.services.findFirst({
+          columns: { updatedAt: true },
+          orderBy: (table, { desc }) => desc(table.updatedAt),
+        });
+        const latestUpdatedAt = data ? data.updatedAt : 0;
+        return { data: latestUpdatedAt };
+      },
+    }),
   }),
 });
 
-export const { useGetRestAreaServicesQuery, useUpsertServicesMutation, useDeleteServicesMutation } =
-  offlineServicesApi;
+export const {
+  useGetRestAreaServicesQuery,
+  useUpsertServicesMutation,
+  useDeleteServicesMutation,
+  useGetLatestServiceUpdatedAtQuery,
+} = offlineServicesApi;

@@ -6,9 +6,11 @@ import { usePoints } from "./usePoints";
 import { useFetchRestAreasWithServicesQuery, useLoadRestAreasQuery } from "@/features/rest-areas";
 import { useFetchPhotosQuery } from "@/features/photos";
 import { selectFilters } from "@/features/filters";
+import { useFetchServicesQuery } from "@/features/services";
 
 export function useMap(initialRegion: Region) {
   useFetchRestAreasWithServicesQuery();
+  useFetchServicesQuery();
   useFetchPhotosQuery();
 
   const filters = useAppSelector(selectFilters);
