@@ -1,8 +1,7 @@
 import { client, conflictUpdateAllExcept } from "@/db";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { eq, inArray, sql } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { RestAreaInsert, RestAreaStatus, ServiceInsert } from "../types";
-import { Filter } from "@/features/filters";
 import { restAreas } from "../schema";
 import { services } from "@/features/services/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite/driver";
@@ -14,37 +13,15 @@ export const offlineRestAreasApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ["RestAreas", "Services"],
   endpoints: builder => ({
-    loadRestAreas: builder.query<RestAreaStatus[], Filter[]>({
+    loadRestAreas: builder.query<RestAreaStatus[], void>({
       providesTags: [{ type: "RestAreas", id: "LIST" }],
-      queryFn: async filters => {
-        // Get all rest areas
-
+      queryFn: async () => {
         const restAreas = await db.query.restAreas.findMany({
           columns: { id: true, latitude: true, longitude: true, status: true },
           where: ({ deleted }, { eq }) => eq(deleted, false),
         });
 
-        // Get services for filtering
-        const grouped = await db
-          .select({
-            restAreaId: services.restAreaId,
-            services: sql<string[]>`json_group_array(${services.name})`.as("services"),
-          })
-          .from(services)
-          .where(eq(services.deleted, false))
-          .groupBy(services.restAreaId);
-
-        const servicesByRestArea: Record<string, string[]> = Object.fromEntries(
-          grouped.map(({ restAreaId, services }) => [restAreaId, services]),
-        );
-
-        // Filter rest areas based on services
-        const filteredRestAreas = restAreas.filter(restArea => {
-          const serviceNames = servicesByRestArea[restArea.id] || [];
-          return filters.every(filter => serviceNames.includes(filter));
-        });
-
-        return { data: filteredRestAreas };
+        return { data: restAreas };
       },
     }),
     getRestArea: builder.query({

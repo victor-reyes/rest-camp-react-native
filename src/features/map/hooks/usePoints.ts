@@ -5,7 +5,7 @@ import { Region } from "react-native-maps";
 import { RestAreaStatus, Point } from "@/features/rest-areas";
 
 export function usePoints(
-  restAreas: RestAreaStatus[] = [],
+  restAreas: RestAreaStatus[],
   mapDimensions: { width: number; height: number },
   region: Region,
 ) {
