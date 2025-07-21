@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ClusterMarker, RestAreaMarker, MapControls } from "./components";
@@ -22,35 +22,36 @@ export function MapScreen() {
 
   const handleOnClusterPress = useCallback(
     async (coords: { latitude: number; longitude: number }) => {
-      const toRegion = {
-        ...coords,
-        latitudeDelta: region.latitudeDelta / 3,
-        longitudeDelta: region.longitudeDelta / 3,
-      };
-      mapRef.current?.animateToRegion(toRegion, 1500);
+      const camera = await mapRef.current?.getCamera();
+      if (!camera) return;
+      const zoom = camera.zoom ?? 1;
+      camera.zoom = zoom + 2;
+
+      camera.center = { latitude: coords.latitude, longitude: coords.longitude };
+      mapRef.current?.animateCamera(camera, { duration: 500 });
     },
-    [region],
+    [],
   );
 
   const handleOnLocationUpdate = useCallback(
     (coords: { latitude: number; longitude: number }) =>
       mapRef.current?.animateToRegion({ ...coords, latitudeDelta: 2, longitudeDelta: 2 }, 1000),
-    [mapRef],
+    [],
   );
 
-  const handleOnProfilePress = () => navigation.navigate("Profile");
+  const handleOnProfilePress = useCallback(() => navigation.navigate("Profile"), [navigation]);
 
   const insets = useSafeAreaInsets();
+  const profileButtonTop = insets.top + Platform.select({ android: 12, default: 0 });
+  const profileButtonStyle = useMemo(
+    () => [styles.profileButton, { top: profileButtonTop }],
+    [profileButtonTop],
+  );
 
   return (
     <BottomSheetModalProvider>
       <View style={styles.container} onLayout={onLayout}>
-        <Pressable
-          onPress={handleOnProfilePress}
-          style={[
-            styles.profileButton,
-            { top: insets.top + Platform.select({ android: 12, default: 0 }) },
-          ]}>
+        <Pressable onPress={handleOnProfilePress} style={profileButtonStyle}>
           <FontAwesome5 name="user" size={18} color="gray" />
         </Pressable>
         <MapView
@@ -64,11 +65,18 @@ export function MapScreen() {
           initialRegion={region}>
           {points.map(point =>
             point.type === "Cluster" ?
-              <ClusterMarker key={point.id} {...point} onClusterPress={handleOnClusterPress} />
+              <ClusterMarker
+                key={point.id}
+                latitude={point.latitude}
+                longitude={point.longitude}
+                count={point.count}
+                onClusterPress={handleOnClusterPress}
+              />
             : <RestAreaMarker
                 key={point.id}
                 id={point.id}
-                coords={{ latitude: point.latitude, longitude: point.longitude }}
+                latitude={point.latitude}
+                longitude={point.longitude}
                 status={point.status}
                 onRestAreaPress={handleOnRestAreaPress}
               />,

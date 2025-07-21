@@ -24,14 +24,18 @@ export function useMap(initialRegion: Region) {
   }, [allRestAreas, restAreaIds]);
 
   const [region, setRegion] = useState(initialRegion);
+
   const { mapDimensions, onLayout } = useMapDimensions();
   const points = usePoints(restAreas, mapDimensions, region);
 
-  return {
-    setRegion,
-    region,
-    points,
-    mapDimensions,
-    onLayout,
-  };
+  return useMemo(
+    () => ({
+      setRegion,
+      region,
+      points,
+      mapDimensions,
+      onLayout,
+    }),
+    [setRegion, region, points, mapDimensions, onLayout],
+  );
 }

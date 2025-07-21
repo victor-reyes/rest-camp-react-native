@@ -5,10 +5,8 @@ type RestAreaPoint = RestAreaStatus & { type: "Point" };
 type RestAreaCluster = {
   type: "Cluster";
   id: string;
-  coords: {
-    latitude: number;
-    longitude: number;
-  };
+  latitude: number;
+  longitude: number;
   count: number;
 };
 

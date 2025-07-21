@@ -4,6 +4,8 @@ import Supercluster from "react-native-clusterer/lib/typescript/types";
 import { Region } from "react-native-maps";
 import { RestAreaStatus, Point } from "@/features/rest-areas";
 
+const CLUSTER_OPTIONS = { radius: 25, maxZoom: 12 };
+
 export function usePoints(
   restAreas: RestAreaStatus[],
   mapDimensions: { width: number; height: number },
@@ -22,23 +24,24 @@ export function usePoints(
       })),
     [restAreas],
   );
-
-  const clusterOptions = { radius: 25, maxZoom: 12 };
-  const [_points] = useClusterer(memorizedPoints, mapDimensions, region, clusterOptions);
+  let timeStart = performance.now();
+  const [_points] = useClusterer(memorizedPoints, mapDimensions, region, CLUSTER_OPTIONS);
 
   const points: Point[] = _points.map(point => {
     if (isPointCluster(point))
       return {
         type: "Cluster",
         id: `cluster-${point.properties.cluster_id}`,
-        coords: {
-          latitude: point.geometry.coordinates[1],
-          longitude: point.geometry.coordinates[0],
-        },
+        latitude: point.geometry.coordinates[1],
+        longitude: point.geometry.coordinates[0],
         count: point.properties.point_count,
       };
 
     return { type: "Point", ...point.properties };
   });
+
+  let timeEnd = performance.now();
+  console.log(`Clustered points in ${timeEnd - timeStart} ms`);
+
   return points;
 }

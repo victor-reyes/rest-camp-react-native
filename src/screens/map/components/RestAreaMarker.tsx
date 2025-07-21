@@ -5,14 +5,15 @@ import { Status } from "@/features/rest-areas";
 
 interface Props {
   id: string;
-  coords: { latitude: number; longitude: number };
+  latitude: number;
+  longitude: number;
   onRestAreaPress: (id: string) => void;
   status: Status;
 }
-function RestAreaMarkerComponent({ id, coords, onRestAreaPress, status }: Props) {
+function RestAreaMarkerComponent({ id, latitude, longitude, onRestAreaPress, status }: Props) {
   const handlePress = () => onRestAreaPress(id);
   return (
-    <FastMarker {...coords} onPress={handlePress}>
+    <FastMarker latitude={latitude} longitude={longitude} onPress={handlePress}>
       <RestAreaIcon width={32} height={32} color={getColor(status)} />
     </FastMarker>
   );
