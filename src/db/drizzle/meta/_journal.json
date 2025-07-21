@@ -43,6 +43,13 @@
       "when": 1751481829954,
       "tag": "0005_add_reviews_table",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1753053725886,
+      "tag": "0006_add_id_primary_to_services_table",
+      "breakpoints": true
     }
   ]
 }

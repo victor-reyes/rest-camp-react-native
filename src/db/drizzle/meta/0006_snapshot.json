@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b202bc0e-de71-4ecd-bd2d-7433a52c5b21",
-  "prevId": "6260b389-f715-450c-b73d-f342ee0cdeab",
+  "id": "f90e9482-46ce-4cf7-9a07-88c6d73643e8",
+  "prevId": "b202bc0e-de71-4ecd-bd2d-7433a52c5b21",
   "tables": {
     "photos": {
       "name": "photos",
@@ -198,6 +198,13 @@
     "services": {
       "name": "services",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -224,18 +231,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": false
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "services_name_rest_area_id_pk": {
-          "columns": ["name", "rest_area_id"],
-          "name": "services_name_rest_area_id_pk"
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     }
