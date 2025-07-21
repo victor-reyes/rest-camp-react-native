@@ -50,6 +50,16 @@ export type Database = MergeDeep<
           };
         };
 
+        services: {
+          Row: {
+            id: string;
+            name: Service;
+            rest_area_id: string;
+            updated_at: string;
+            deleted: boolean;
+          };
+        };
+
         reviews: {
           Row: {
             id: string;

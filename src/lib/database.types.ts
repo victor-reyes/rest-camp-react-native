@@ -59,13 +59,6 @@ export type Database = {
             referencedRelation: "reviews";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "photos_review_id_fkey";
-            columns: ["review_id"];
-            isOneToOne: false;
-            referencedRelation: "reviews_with_profiles";
-            referencedColumns: ["id"];
-          },
         ];
       };
       profiles: {
@@ -156,28 +149,58 @@ export type Database = {
           },
         ];
       };
-      reviews_with_profiles: {
+      services: {
         Row: {
-          avatar_url: string | null;
-          deleted: boolean;
-          full_name: string | null;
-          id: string;
-          owner_id: string;
-          recension: string | null;
-          rest_area_id: string;
-          score: number;
-          updated_at: string;
+          deleted: boolean | null;
+          id: string | null;
+          name:
+            | "refuseBin"
+            | "toilet"
+            | "picnicFacilities"
+            | "playground"
+            | "dumpingStation"
+            | "touristInformation"
+            | "restaurant"
+            | "petrolStation"
+            | null;
+          rest_area_id: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          deleted?: boolean | null;
+          id?: string | null;
+          name?:
+            | "refuseBin"
+            | "toilet"
+            | "picnicFacilities"
+            | "playground"
+            | "dumpingStation"
+            | "touristInformation"
+            | "restaurant"
+            | "petrolStation"
+            | null;
+          rest_area_id?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          deleted?: boolean | null;
+          id?: string | null;
+          name?:
+            | "refuseBin"
+            | "toilet"
+            | "picnicFacilities"
+            | "playground"
+            | "dumpingStation"
+            | "touristInformation"
+            | "restaurant"
+            | "petrolStation"
+            | null;
+          rest_area_id?: string | null;
+          updated_at?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "reviews_owner_id_fkey1";
-            columns: ["owner_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "reviews_rest_area_id_fkey";
+            foreignKeyName: "services_rest_area_id_fkey";
             columns: ["rest_area_id"];
             isOneToOne: false;
             referencedRelation: "rest_areas_with_services";
