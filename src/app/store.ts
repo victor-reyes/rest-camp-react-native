@@ -2,6 +2,7 @@ import { authSlice } from "@/features/auth";
 import { filtersSlice } from "@/features/filters";
 import { offlineRestAreasApi, restAreasApi } from "@/features/rest-areas";
 import { photosApi, offlinePhotosApi } from "@/features/photos";
+import { profilesApi, offlineProfilesApi } from "@/features/profiles";
 import { reviewsApi, offlineReviewsApi } from "@/features/reviews";
 import { servicesApi, offlineServicesApi } from "@/features/services";
 import { configureStore } from "@reduxjs/toolkit";
@@ -16,6 +17,8 @@ export const store = configureStore({
     [offlineRestAreasApi.reducerPath]: offlineRestAreasApi.reducer,
     [photosApi.reducerPath]: photosApi.reducer,
     [offlinePhotosApi.reducerPath]: offlinePhotosApi.reducer,
+    [profilesApi.reducerPath]: profilesApi.reducer,
+    [offlineProfilesApi.reducerPath]: offlineProfilesApi.reducer,
     [reviewsApi.reducerPath]: reviewsApi.reducer,
     [offlineReviewsApi.reducerPath]: offlineReviewsApi.reducer,
     [servicesApi.reducerPath]: servicesApi.reducer,
@@ -27,6 +30,8 @@ export const store = configureStore({
       offlineRestAreasApi.middleware,
       photosApi.middleware,
       offlinePhotosApi.middleware,
+      profilesApi.middleware,
+      offlineProfilesApi.middleware,
       reviewsApi.middleware,
       offlineReviewsApi.middleware,
       servicesApi.middleware,

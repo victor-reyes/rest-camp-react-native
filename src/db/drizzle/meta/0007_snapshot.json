@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b2589b34-0142-4acd-8ae3-8e7454b50ff5",
+  "id": "6523740a-8114-492f-94a4-726c861178d5",
   "prevId": "f90e9482-46ce-4cf7-9a07-88c6d73643e8",
   "tables": {
     "photos": {
@@ -55,7 +55,10 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "photos_url_rest_area_id_pk": {
-          "columns": ["url", "rest_area_id"],
+          "columns": [
+            "url",
+            "rest_area_id"
+          ],
           "name": "photos_url_rest_area_id_pk"
         }
       },
@@ -81,6 +84,13 @@
         },
         "avatar_url": {
           "name": "avatar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "location": {
+          "name": "location",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
