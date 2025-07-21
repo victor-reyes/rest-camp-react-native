@@ -50,6 +50,13 @@
       "when": 1753053725886,
       "tag": "0006_add_id_primary_to_services_table",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1753124344940,
+      "tag": "0007_add_profiles_table",
+      "breakpoints": true
     }
   ]
 }

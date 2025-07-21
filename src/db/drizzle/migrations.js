@@ -8,6 +8,7 @@ import m0003 from "./0003_remove_foreign_key_constraints.sql";
 import m0004 from "./0004_add_deleted_column.sql";
 import m0005 from "./0005_add_reviews_table.sql";
 import m0006 from "./0006_add_id_primary_to_services_table.sql";
+import m0007 from "./0007_add_profiles_table.sql";
 
 export default {
   journal,
@@ -19,5 +20,6 @@ export default {
     m0004,
     m0005,
     m0006,
+    m0007,
   },
 };
