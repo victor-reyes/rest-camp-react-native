@@ -39,21 +39,33 @@ export type Database = MergeDeep<
             name: string;
             latitude: number;
             longitude: number;
-            status: Status;
+            status: Database["v1"]["Enums"]["status"];
             updated_at: string;
             deleted: boolean;
             services: {
-              name: Service;
+              name: Database["v1"]["Enums"]["service"];
               rest_area_id: string;
               updated_at: string;
             }[];
           };
         };
 
+        rest_areas: {
+          Row: {
+            id: string;
+            name: string;
+            latitude: number;
+            longitude: number;
+            status: Database["v1"]["Enums"]["status"];
+            updated_at: string;
+            deleted: boolean;
+          };
+        };
+
         services: {
           Row: {
             id: string;
-            name: Service;
+            name: Database["v1"]["Enums"]["service"];
             rest_area_id: string;
             updated_at: string;
             deleted: boolean;

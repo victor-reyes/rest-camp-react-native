@@ -49,6 +49,13 @@ export type Database = {
             foreignKeyName: "photos_rest_area_id_fkey";
             columns: ["rest_area_id"];
             isOneToOne: false;
+            referencedRelation: "rest_areas";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "photos_rest_area_id_fkey";
+            columns: ["rest_area_id"];
+            isOneToOne: false;
             referencedRelation: "rest_areas_with_services";
             referencedColumns: ["id"];
           },
@@ -85,6 +92,42 @@ export type Database = {
           location?: string | null;
           updated_at?: string | null;
           username?: string | null;
+        };
+        Relationships: [];
+      };
+      rest_areas: {
+        Row: {
+          deleted: boolean | null;
+          description: string | null;
+          id: string | null;
+          latitude: number | null;
+          local_description: string | null;
+          longitude: number | null;
+          name: string | null;
+          status: Database["v1"]["Enums"]["status"] | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          deleted?: boolean | null;
+          description?: string | null;
+          id?: string | null;
+          latitude?: number | null;
+          local_description?: string | null;
+          longitude?: number | null;
+          name?: string | null;
+          status?: Database["v1"]["Enums"]["status"] | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          deleted?: boolean | null;
+          description?: string | null;
+          id?: string | null;
+          latitude?: number | null;
+          local_description?: string | null;
+          longitude?: number | null;
+          name?: string | null;
+          status?: Database["v1"]["Enums"]["status"] | null;
+          updated_at?: string | null;
         };
         Relationships: [];
       };
@@ -144,6 +187,13 @@ export type Database = {
             foreignKeyName: "reviews_rest_area_id_fkey";
             columns: ["rest_area_id"];
             isOneToOne: false;
+            referencedRelation: "rest_areas";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reviews_rest_area_id_fkey";
+            columns: ["rest_area_id"];
+            isOneToOne: false;
             referencedRelation: "rest_areas_with_services";
             referencedColumns: ["id"];
           },
@@ -153,52 +203,32 @@ export type Database = {
         Row: {
           deleted: boolean | null;
           id: string | null;
-          name:
-            | "refuseBin"
-            | "toilet"
-            | "picnicFacilities"
-            | "playground"
-            | "dumpingStation"
-            | "touristInformation"
-            | "restaurant"
-            | "petrolStation"
-            | null;
+          name: Database["v1"]["Enums"]["service"] | null;
           rest_area_id: string | null;
           updated_at: string | null;
         };
         Insert: {
           deleted?: boolean | null;
           id?: string | null;
-          name?:
-            | "refuseBin"
-            | "toilet"
-            | "picnicFacilities"
-            | "playground"
-            | "dumpingStation"
-            | "touristInformation"
-            | "restaurant"
-            | "petrolStation"
-            | null;
+          name?: Database["v1"]["Enums"]["service"] | null;
           rest_area_id?: string | null;
           updated_at?: string | null;
         };
         Update: {
           deleted?: boolean | null;
           id?: string | null;
-          name?:
-            | "refuseBin"
-            | "toilet"
-            | "picnicFacilities"
-            | "playground"
-            | "dumpingStation"
-            | "touristInformation"
-            | "restaurant"
-            | "petrolStation"
-            | null;
+          name?: Database["v1"]["Enums"]["service"] | null;
           rest_area_id?: string | null;
           updated_at?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "services_rest_area_id_fkey";
+            columns: ["rest_area_id"];
+            isOneToOne: false;
+            referencedRelation: "rest_areas";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "services_rest_area_id_fkey";
             columns: ["rest_area_id"];
