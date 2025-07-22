@@ -196,16 +196,13 @@ export function UploadPhotosScreen({ route }: Props) {
         />
 
         <View style={styles.bottomActions}>
-          <View style={styles.bottomButton}>
-            <Button title="Avbryt" onPress={handleCancel} />
-          </View>
-          <View style={styles.bottomButton}>
-            <Button
-              disabled={selectedPhotos.length === 0}
-              title={`Ladda upp${selectedPhotos.length > 0 ? ` (${selectedPhotos.length})` : ""}`}
-              onPress={handleUpload}
-            />
-          </View>
+          <Button title="Avbryt" onPress={handleCancel} style={styles.bottomButton} />
+          <Button
+            disabled={selectedPhotos.length === 0}
+            title={`Ladda upp${selectedPhotos.length > 0 ? ` (${selectedPhotos.length})` : ""}`}
+            onPress={handleUpload}
+            style={styles.bottomButton}
+          />
         </View>
         <ProfileModal />
       </View>
