@@ -17,7 +17,7 @@ export const offlineProfilesApi = createApi({
         const data = await db.query.profiles.findFirst({
           where: (table, { eq }) => eq(table.id, profileId),
         });
-        return { data };
+        return { data: data ?? null };
       },
     }),
 
@@ -52,6 +52,17 @@ export const offlineProfilesApi = createApi({
         }
       },
       invalidatesTags: ["OfflineProfiles"],
+    }),
+
+    getProfileLatestUpdate: builder.query({
+      providesTags: (_res, _err, profileId) => [{ type: "OfflineProfiles", id: profileId }],
+      queryFn: async (profileId: string) => {
+        const data = await db.query.profiles.findFirst({
+          columns: { updatedAt: true },
+          where: (table, { eq }) => eq(table.id, profileId),
+        });
+        return { data: data?.updatedAt ?? 0 };
+      },
     }),
   }),
 });
