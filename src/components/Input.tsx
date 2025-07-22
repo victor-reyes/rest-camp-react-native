@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   input: {
+    color: "#333",
     flex: 1,
     paddingVertical: 4,
   },
