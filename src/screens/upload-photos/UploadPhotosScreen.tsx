@@ -16,9 +16,8 @@ import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useGetRestAreaQuery } from "@/features/rest-areas";
 import { useUploadPhotoMutation } from "@/features/photos";
-
 import * as ImagePicker from "expo-image-picker";
-import { ProfileModal } from "./components/ProfileModal";
+import { ProfileModal } from "@/screens";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import Toast from "react-native-toast-message";
 

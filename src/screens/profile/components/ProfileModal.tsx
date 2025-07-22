@@ -1,5 +1,4 @@
 import { useAppSelector } from "@/app/store";
-import { ProfileScreen } from "@/screens/profile";
 import { selectAuth } from "@/features/auth";
 import {
   BottomSheetBackdrop,
@@ -9,6 +8,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useCallback, useEffect, useRef } from "react";
 import { Text } from "react-native";
+import { SignIn } from "./SignIn";
 
 export function ProfileModal() {
   const btmSheetRef = useRef<BottomSheetModal>(null);
@@ -48,7 +48,7 @@ export function ProfileModal() {
       backdropComponent={renderBackdrop}>
       <BottomSheetView>
         {!session ?
-          <ProfileScreen />
+          <SignIn />
         : <SignedIn />}
       </BottomSheetView>
     </BottomSheetModal>
