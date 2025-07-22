@@ -11,10 +11,12 @@ export const profilesApi = createApi({
   tagTypes: ["Profiles"],
   endpoints: builder => ({
     fetchProfile: builder.query({
+      providesTags: (_res, _err, profileId) => [{ type: "Profiles", id: profileId }],
       queryFn: async (profileId: string, { dispatch }) => {
         const { data } = await dispatch(
           offlineProfilesApi.endpoints.getProfileLatestUpdate.initiate(profileId),
         );
+
         const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
         const { data: profileData, error: fetchError } = await supabase
           .from("profiles")
@@ -79,7 +81,7 @@ export const profilesApi = createApi({
 
         return { data: null };
       },
-      invalidatesTags: ["Profiles"],
+      invalidatesTags: (_res, _err, { id }) => [{ type: "Profiles", id }],
     }),
   }),
 });

@@ -3,7 +3,7 @@ import { Avatar, Button } from "@/components";
 import { signOut } from "@/features/auth";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { useFetchProfileQuery } from "@/features/profiles";
+import { useProfile } from "@/features/profiles/hooks/useProfile";
 
 interface Props {
   userId: string;
@@ -12,7 +12,7 @@ export function Profile({ userId }: Props) {
   const dispatch = useAppDispatch();
   const handleSignOut = () => dispatch(signOut());
 
-  const { data: profile, isLoading, isError } = useFetchProfileQuery(userId);
+  const { profile, isLoading, isError } = useProfile(userId);
 
   if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
   if (isError) return <Text>Något gick fel. Försök igen.</Text>;
