@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineProfilesApi } from "./offline-profiles-api";
-import { ProfileInsert, ProfileUpdate } from "../types";
+import { ProfileInsert, ProfileUpdate, ProfileSupaUpdate } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 const TAG_PROFILE = "Profiles";
@@ -47,10 +47,21 @@ export const profilesApi = createApi({
     }),
 
     updateProfile: builder.mutation<null, ProfileUpdate>({
-      queryFn: async ({ id, ...profileUpdate }, { dispatch }) => {
+      queryFn: async ({ id, ...profile }, { dispatch }) => {
+        const profileUpdate: ProfileSupaUpdate = {
+          full_name: profile.fullName,
+          avatar_url: profile.avatarUrl,
+          location: profile.location,
+          updated_at: new Date().toISOString(),
+        };
         const { data: profileData, error: updateError } = await supabase
           .from("profiles")
-          .update(profileUpdate)
+          .update({
+            full_name: profile.fullName,
+            avatar_url: profile.avatarUrl,
+            location: profile.location,
+            updated_at: new Date().toISOString(),
+          })
           .eq("id", id)
           .select()
           .single();

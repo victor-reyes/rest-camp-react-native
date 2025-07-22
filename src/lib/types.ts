@@ -33,6 +33,13 @@ export type Database = MergeDeep<
             location: string | null;
             updated_at: string;
           };
+          Update: {
+            id?: never;
+            full_name: string;
+            avatar_url?: string | null;
+            location?: string | null;
+            updated_at: string;
+          };
         };
         rest_areas_with_services: {
           Row: {
