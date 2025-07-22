@@ -2,7 +2,6 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineProfilesApi } from "./offline-profiles-api";
 import { ProfileInsert, ProfileUpdate } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
