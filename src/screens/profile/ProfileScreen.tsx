@@ -12,7 +12,7 @@ export function ProfileScreen() {
     <View style={styles.container}>
       <Card style={styles.cardContainer}>
         {session ?
-          <Profile userId={session.user.id} email={session.user.email} />
+          <Profile userId={session.user.id} />
         : <SignIn />}
       </Card>
       <Toast position="bottom" />

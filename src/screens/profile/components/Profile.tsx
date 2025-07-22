@@ -9,9 +9,8 @@ import Feather from "@expo/vector-icons/Feather";
 
 interface Props {
   userId: string;
-  email?: string;
 }
-export function Profile({ userId, email }: Props) {
+export function Profile({ userId }: Props) {
   const [name, setName] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
@@ -60,10 +59,7 @@ export function Profile({ userId, email }: Props) {
           </View>
         }
 
-        <View>
-          <Text style={styles.name}>{name}</Text>
-          {email && <Text style={styles.email}>Inloggad som {email}</Text>}
-        </View>
+        <Text style={styles.name}>{name}</Text>
       </View>
       <Button
         title="Logga ut"
@@ -106,10 +102,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#333",
-  },
-  email: {
-    fontSize: 8,
-    fontWeight: "400",
-    color: "#666",
   },
 });
