@@ -9,6 +9,7 @@ interface Props {
   iconSize?: number;
   disabled?: boolean;
   fit?: boolean;
+  hitSlop?: number;
   onPress: () => void;
 }
 
@@ -21,10 +22,12 @@ export function Button({
   iconSize = 24,
   disabled = false,
   fit = false,
+  hitSlop = 8,
 }: Props) {
   const iconSizeStyle = { height: iconSize, width: iconSize };
   return (
     <Pressable
+      hitSlop={hitSlop}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
