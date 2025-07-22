@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { selectAuth, clearError } from "@/features/auth";
+import { selectAuth, errorCleared } from "@/features/auth";
 import Toast from "react-native-toast-message";
 import { AuthenticationError } from "@/features/auth";
 import { SignedIn, SignedOut } from "./components";
@@ -9,16 +9,11 @@ import { SignedIn, SignedOut } from "./components";
 export function ProfileScreen() {
   const dispatch = useAppDispatch();
   const { session, isLoading, error } = useAppSelector(selectAuth);
+  const clearError = useCallback(() => dispatch(errorCleared()), [dispatch]);
 
   const showToast = useCallback(
-    (errorMessage: AuthenticationError) =>
-      Toast.show({
-        type: "error",
-        text1: "Fel",
-        text2: getErrorMessage(errorMessage),
-        onHide: () => dispatch(clearError()),
-      }),
-    [dispatch],
+    (error: AuthenticationError) => Toast.show(ErrorToast({ error, onHide: clearError })),
+    [clearError],
   );
 
   useEffect(() => {
@@ -38,6 +33,15 @@ export function ProfileScreen() {
     </View>
   );
 }
+
+const ErrorToast = ({ error, onHide }: { error: AuthenticationError; onHide: () => void }) => {
+  return {
+    type: "error",
+    text1: "Fel",
+    text2: getErrorMessage(error),
+    onHide,
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
