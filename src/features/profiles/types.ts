@@ -9,7 +9,7 @@ export type Profile = ProfileSelect;
 
 export interface ProfileUpdate {
   id: string;
-  fullName?: string;
+  fullName: string;
   avatarUrl?: string;
   location?: string;
 }

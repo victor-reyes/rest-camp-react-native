@@ -47,22 +47,10 @@ export const profilesApi = createApi({
     }),
 
     updateProfile: builder.mutation<null, ProfileUpdate>({
-      queryFn: async ({ id, ...updates }, { dispatch }) => {
-        const updateData: any = {};
-
-        if (updates.fullName !== undefined) {
-          updateData.full_name = updates.fullName;
-        }
-        if (updates.avatarUrl !== undefined) {
-          updateData.avatar_url = updates.avatarUrl;
-        }
-        if (updates.location !== undefined) {
-          updateData.location = updates.location;
-        }
-
+      queryFn: async ({ id, ...profileUpdate }, { dispatch }) => {
         const { data: profileData, error: updateError } = await supabase
           .from("profiles")
-          .update(updateData)
+          .update(profileUpdate)
           .eq("id", id)
           .select()
           .single();
