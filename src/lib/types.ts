@@ -28,6 +28,10 @@ export type Database = MergeDeep<
         profiles: {
           Row: {
             id: string;
+            full_name: string | null;
+            avatar_url: string | null;
+            location: string | null;
+            updated_at: string;
           };
         };
         rest_areas_with_services: {
