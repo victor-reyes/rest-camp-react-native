@@ -19,12 +19,12 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setSession: (state, action: PayloadAction<Session | null>) => {
+    sessionSet: (state, action: PayloadAction<Session | null>) => {
       state.session = action.payload;
       state.error = null;
       state.isLoading = false;
     },
-    clearError: state => {
+    errorCleared: state => {
       state.error = null;
     },
   },
@@ -55,4 +55,4 @@ export const authSlice = createSlice({
 });
 
 export const selectAuth = (state: RootState) => state.auth;
-export const { setSession, clearError } = authSlice.actions;
+export const { sessionSet, errorCleared } = authSlice.actions;

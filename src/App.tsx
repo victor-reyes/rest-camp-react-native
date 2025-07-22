@@ -12,7 +12,7 @@ import { SystemBars } from "react-native-edge-to-edge";
 import { client, migrations } from "@/db/";
 import Toast from "react-native-toast-message";
 import { supabase } from "./lib/supabase";
-import { setSession } from "./features/auth";
+import { sessionSet } from "./features/auth";
 import { drizzle } from "drizzle-orm/expo-sqlite/driver";
 
 Asset.loadAsync([
@@ -67,10 +67,10 @@ function Auth() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => dispatch(setSession(session)));
+    supabase.auth.getSession().then(({ data: { session } }) => dispatch(sessionSet(session)));
 
     const subscription = supabase.auth.onAuthStateChange((_, session) => {
-      dispatch(setSession(session));
+      dispatch(sessionSet(session));
     }).data.subscription;
 
     return () => subscription.unsubscribe();
