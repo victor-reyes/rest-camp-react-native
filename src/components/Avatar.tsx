@@ -2,7 +2,7 @@ import { Image, ImageSource } from "expo-image";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface Props {
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   size?: number;
   placeholder?: ImageSource | string | number;
 }
