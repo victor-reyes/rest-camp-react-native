@@ -10,32 +10,34 @@ export const profilesApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ["Profiles"],
   endpoints: builder => ({
-    fetchProfiles: builder.query({
-      queryFn: async (profileIds: string[], { dispatch }) => {
-        if (profileIds.length === 0) {
-          return { data: null };
-        }
-
+    fetchProfile: builder.query({
+      queryFn: async (profileId: string, { dispatch }) => {
+        const { data } = await dispatch(
+          offlineProfilesApi.endpoints.getProfileLatestUpdate.initiate(profileId),
+        );
+        const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
         const { data: profileData, error: fetchError } = await supabase
           .from("profiles")
           .select()
-          .in("id", profileIds);
+          .eq("id", profileId)
+          .gt("updated_at", updatedAt)
+          .maybeSingle();
 
         if (fetchError) return { error: fetchError };
 
-        const profiles: ProfileInsert[] = profileData.map(profile => ({
-          id: profile.id!,
-          fullName: profile.full_name,
-          avatarUrl: profile.avatar_url,
-          location: profile.location,
-          updatedAt: new Date(profile.updated_at!).getTime(),
-        }));
+        if (profileData) {
+          const profile: ProfileInsert = {
+            id: profileData.id,
+            fullName: profileData.full_name,
+            avatarUrl: profileData.avatar_url,
+            location: profileData.location,
+            updatedAt: new Date(profileData.updated_at).getTime(),
+          };
 
-        if (profiles.length > 0) {
-          await dispatch(offlineProfilesApi.endpoints.upsertProfiles.initiate(profiles));
+          await dispatch(offlineProfilesApi.endpoints.upsertProfiles.initiate([profile]));
         }
 
-        return { data: null };
+        return { data: profileId ? { id: profileId } : null };
       },
     }),
 
@@ -80,4 +82,4 @@ export const profilesApi = createApi({
   }),
 });
 
-export const { useFetchProfilesQuery, useUpdateProfileMutation } = profilesApi;
+export const { useFetchProfileQuery, useUpdateProfileMutation } = profilesApi;
