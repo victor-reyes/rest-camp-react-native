@@ -6,13 +6,14 @@ import { drizzle } from "drizzle-orm/expo-sqlite/driver";
 
 const db = drizzle(client, { schema: { profiles } });
 
+const TAG_PROFILE = "OfflineProfiles";
 export const offlineProfilesApi = createApi({
   reducerPath: "offlineProfilesApi",
   baseQuery: fakeBaseQuery(),
-  tagTypes: ["OfflineProfiles"],
+  tagTypes: [TAG_PROFILE],
   endpoints: builder => ({
     getProfile: builder.query({
-      providesTags: (_res, _err, profileId) => [{ type: "OfflineProfiles", id: profileId }],
+      providesTags: (_res, _err, id) => [{ type: TAG_PROFILE, id }],
       queryFn: async (profileId: string) => {
         const data = await db.query.profiles.findFirst({
           where: (table, { eq }) => eq(table.id, profileId),
@@ -22,12 +23,12 @@ export const offlineProfilesApi = createApi({
     }),
 
     getProfiles: builder.query({
-      providesTags: ["OfflineProfiles"],
-      queryFn: async (profileIds: string[]) => {
-        if (profileIds.length === 0) return { data: [] };
+      providesTags: (_res, _err, ids) => ids.map(id => ({ type: TAG_PROFILE, id })),
+      queryFn: async (ids: string[]) => {
+        if (ids.length === 0) return { data: [] };
 
         const data = await db.query.profiles.findMany({
-          where: (table, { inArray }) => inArray(table.id, profileIds),
+          where: (table, { inArray }) => inArray(table.id, ids),
         });
         return { data };
       },
@@ -51,11 +52,11 @@ export const offlineProfilesApi = createApi({
           return { error: { data: "Failed to upsert profiles" } };
         }
       },
-      invalidatesTags: ["OfflineProfiles"],
+      invalidatesTags: (_res, _err, profs) => profs.map(({ id }) => ({ type: TAG_PROFILE, id })),
     }),
 
     getProfileLatestUpdate: builder.query({
-      providesTags: (_res, _err, profileId) => [{ type: "OfflineProfiles", id: profileId }],
+      providesTags: (_res, _err, id) => [{ type: TAG_PROFILE, id }],
       queryFn: async (profileId: string) => {
         const data = await db.query.profiles.findFirst({
           columns: { updatedAt: true },

@@ -4,14 +4,15 @@ import { offlineProfilesApi } from "./offline-profiles-api";
 import { ProfileInsert, ProfileUpdate } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
+const TAG_PROFILE = "Profiles";
 
 export const profilesApi = createApi({
   reducerPath: "profilesApi",
   baseQuery: fakeBaseQuery(),
-  tagTypes: ["Profiles"],
+  tagTypes: [TAG_PROFILE],
   endpoints: builder => ({
     fetchProfile: builder.query({
-      providesTags: (_res, _err, profileId) => [{ type: "Profiles", id: profileId }],
+      providesTags: (_res, _err, id) => [{ type: TAG_PROFILE, id: id }],
       queryFn: async (profileId: string, { dispatch }) => {
         const { data } = await dispatch(
           offlineProfilesApi.endpoints.getProfileLatestUpdate.initiate(profileId),
@@ -81,7 +82,7 @@ export const profilesApi = createApi({
 
         return { data: null };
       },
-      invalidatesTags: (_res, _err, { id }) => [{ type: "Profiles", id }],
+      invalidatesTags: (_res, _err, { id }) => [{ type: TAG_PROFILE, id }],
     }),
   }),
 });
