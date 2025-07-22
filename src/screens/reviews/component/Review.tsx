@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { type Review as ReviewType } from "../types";
-import { Card } from "./Card";
+import { Card } from "@/components";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { UserInfo } from "./UserInfo";
 
