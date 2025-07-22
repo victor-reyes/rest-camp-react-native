@@ -1,65 +1,42 @@
 import { useAppDispatch } from "@/app/store";
 import { Button } from "@/components";
-import { supabase } from "@/lib/supabase";
 import { signOut } from "@/features/auth";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import { useFetchProfileQuery } from "@/features/profiles";
 
 interface Props {
   userId: string;
 }
 export function Profile({ userId }: Props) {
-  const [name, setName] = useState<string | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
   const dispatch = useAppDispatch();
   const handleSignOut = () => dispatch(signOut());
 
-  const getProfile = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select(`full_name, avatar_url`)
-        .eq("id", userId)
-        .single();
+  const { data: profile, isLoading, isError } = useFetchProfileQuery(userId);
 
-      if (error) {
-        console.error("Error fetching profile:", error);
-        return;
-      }
-
-      if (data) {
-        setName(data.full_name);
-        setAvatarUrl(data.avatar_url);
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    getProfile();
-  }, [getProfile]);
+  if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
+  if (isError) return <Text>Något gick fel. Försök igen.</Text>;
 
   return (
     <View style={styles.container}>
       <View style={styles.userContainer}>
-        {avatarUrl ?
+        {profile?.avatarUrl ?
           <Image
-            source={{ uri: avatarUrl }}
+            source={{ uri: profile.avatarUrl }}
             style={styles.avatar}
             placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
             contentFit="cover"
             transition={500}
           />
         : <View style={[styles.avatar, styles.avatarPlaceholder]}>
-            <Text style={styles.avatarText}>{name ? name.charAt(0).toUpperCase() : "?"}</Text>
+            <Text style={styles.avatarText}>
+              {profile?.fullName ? profile.fullName.charAt(0).toUpperCase() : "?"}
+            </Text>
           </View>
         }
 
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{profile?.fullName}</Text>
       </View>
       <Button
         title="Logga ut"
@@ -78,14 +55,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userContainer: {
-    alignItems: "flex-start",
+    alignItems: "center",
     alignSelf: "flex-start",
     flexDirection: "row",
     gap: 16,
   },
   avatar: {
-    width: 48,
-    height: 48,
+    width: 32,
+    height: 32,
     borderRadius: 40,
   },
   avatarPlaceholder: {

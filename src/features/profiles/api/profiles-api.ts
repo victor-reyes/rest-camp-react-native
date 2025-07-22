@@ -2,6 +2,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineProfilesApi } from "./offline-profiles-api";
 import { ProfileInsert, ProfileUpdate } from "../types";
+import { PostgrestError } from "@supabase/supabase-js";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
@@ -25,19 +26,21 @@ export const profilesApi = createApi({
 
         if (fetchError) return { error: fetchError };
 
-        if (profileData) {
-          const profile: ProfileInsert = {
-            id: profileData.id,
-            fullName: profileData.full_name,
-            avatarUrl: profileData.avatar_url,
-            location: profileData.location,
-            updatedAt: new Date(profileData.updated_at).getTime(),
-          };
+        const profile: ProfileInsert | null =
+          profileData ?
+            {
+              id: profileData.id,
+              fullName: profileData.full_name,
+              avatarUrl: profileData.avatar_url,
+              location: profileData.location,
+              updatedAt: new Date(profileData.updated_at).getTime(),
+            }
+          : null;
 
+        if (profile)
           await dispatch(offlineProfilesApi.endpoints.upsertProfiles.initiate([profile]));
-        }
 
-        return { data: profileId ? { id: profileId } : null };
+        return { data: profile };
       },
     }),
 
