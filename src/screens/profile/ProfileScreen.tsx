@@ -18,7 +18,10 @@ export function ProfileScreen() {
 
   useEffect(() => {
     if (error) showToast(error);
-  }, [error, showToast]);
+    return () => {
+      clearError();
+    };
+  }, [error, showToast, clearError]);
 
   return (
     <View style={styles.container}>
