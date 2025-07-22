@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/app/store";
 import { selectAuth, errorCleared } from "@/features/auth";
 import Toast from "react-native-toast-message";
 import { AuthenticationError } from "@/features/auth";
-import { SignedIn, SignedOut } from "./components";
+import { Profile, SignIn } from "./components";
 
 export function ProfileScreen() {
   const dispatch = useAppDispatch();
@@ -29,8 +29,8 @@ export function ProfileScreen() {
         {isLoading ?
           <ActivityIndicator size="large" color="#155196" />
         : session ?
-          <SignedIn userId={session.user.id} email={session.user.email} />
-        : <SignedOut />}
+          <Profile userId={session.user.id} email={session.user.email} />
+        : <SignIn />}
       </View>
       <Toast position="bottom" />
     </View>

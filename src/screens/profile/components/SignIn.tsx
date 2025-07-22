@@ -3,7 +3,7 @@ import { Apple, Button, GoogleIcon } from "@/components";
 import { signIn } from "@/features/auth";
 import { Platform, StyleSheet, Text, View } from "react-native";
 
-export function SignedOut() {
+export function SignIn() {
   const dispatch = useAppDispatch();
 
   const handleGoogleSignIn = () => dispatch(signIn("google"));

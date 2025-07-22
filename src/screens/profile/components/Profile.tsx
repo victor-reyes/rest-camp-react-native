@@ -11,7 +11,7 @@ interface Props {
   userId: string;
   email?: string;
 }
-export function SignedIn({ userId, email }: Props) {
+export function Profile({ userId, email }: Props) {
   const [name, setName] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
