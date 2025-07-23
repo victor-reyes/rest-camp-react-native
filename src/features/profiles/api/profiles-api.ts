@@ -48,12 +48,6 @@ export const profilesApi = createApi({
 
     updateProfile: builder.mutation<null, ProfileUpdate>({
       queryFn: async ({ id, ...profile }, { dispatch }) => {
-        const profileUpdate: ProfileSupaUpdate = {
-          full_name: profile.fullName,
-          avatar_url: profile.avatarUrl,
-          location: profile.location,
-          updated_at: new Date().toISOString(),
-        };
         const { data: profileData, error: updateError } = await supabase
           .from("profiles")
           .update({
