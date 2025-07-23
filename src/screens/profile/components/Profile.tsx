@@ -5,11 +5,14 @@ import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { useProfile } from "@/features/profiles/hooks/useProfile";
 import { ModalFormInput } from "./ModalFormInput";
-import { ProfileUpdate, useUpdateProfileMutation } from "@/features/profiles";
+import {
+  ProfileUpdate,
+  useUpdateProfileMutation,
+  useUploadAvatarMutation,
+} from "@/features/profiles";
 import { useEffect, useState } from "react";
 import equal from "fast-deep-equal";
 import { ChoseImageModal } from "./ChoseImageModal";
-import { useUploadPhotoMutation } from "@/features/photos";
 
 interface Props {
   userId: string;
@@ -20,34 +23,37 @@ export function Profile({ userId }: Props) {
 
   const { profile, isLoading, isError } = useProfile(userId);
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
-  const [uploadPhoto, { isLoading: isUploadingPhoto }] = useUploadPhotoMutation();
+  const [uploadAvatar, { isLoading: isUploadingAvatar }] = useUploadAvatarMutation();
 
   const [updatedProfile, setUpdatedProfile] = useState(profile);
   useEffect(() => {
-    if (profile) {
-      setUpdatedProfile(profile);
-    }
+    if (profile) setUpdatedProfile(profile);
   }, [profile]);
 
   const handleUpdateProfile = async () => {
-    if (!updatedProfile || !updatedProfile.fullName || isUpdating) return;
+    if (!updatedProfile || !updatedProfile.fullName || isUpdating || isUploadingAvatar) return;
 
-    if (updatedProfile.avatarUrl && updatedProfile.avatarUrl !== profile?.avatarUrl) {
-      uploadPhoto(updatedProfile.avatarUrl);
+    const profileUpdate: ProfileUpdate = {
+      id: updatedProfile.id,
+      fullName: updatedProfile.fullName,
+      location: updatedProfile.location,
+      avatarUrl: updatedProfile.avatarUrl,
+    };
+
+    if (updatedProfile.avatarUrl && isLocalUri(updatedProfile.avatarUrl)) {
+      const { avatarUrl, id } = updatedProfile;
+      const { data, error } = await uploadAvatar({ uri: avatarUrl, userId: id });
+
+      if (error) {
+        console.error("Failed to upload avatar:", error);
+        return;
+      }
+
+      if (data) profileUpdate.avatarUrl = data;
     }
 
-    try {
-      const profileUpdate: ProfileUpdate = {
-        id: updatedProfile.id,
-        fullName: updatedProfile.fullName,
-        location: updatedProfile.location,
-        avatarUrl: updatedProfile.avatarUrl,
-      };
-
-      await updateProfile(profileUpdate).unwrap();
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-    }
+    const { error } = await updateProfile(profileUpdate);
+    if (error) console.error("Failed to update profile:", error);
   };
 
   if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
@@ -56,13 +62,13 @@ export function Profile({ userId }: Props) {
   const hasUpdate = updatedProfile && !equal(updatedProfile, profile);
   return (
     <View style={styles.container}>
-      {isUpdating && <ActivityIndicator size="small" color="#0000ff" />}
+      {(isUpdating || isUploadingAvatar) && <ActivityIndicator size="small" color="#0000ff" />}
       {hasUpdate && (
         <Button
           fit
           title="Spara ändringar"
           onPress={handleUpdateProfile}
-          disabled={isUpdating}
+          disabled={isUpdating || isUploadingAvatar}
           style={{ marginBottom: 16 }}
         />
       )}
@@ -70,6 +76,7 @@ export function Profile({ userId }: Props) {
         <Avatar avatarUrl={updatedProfile?.avatarUrl} size={96} />
         <ChoseImageModal
           onImageSelected={avatarUrl => setUpdatedProfile(prev => ({ ...prev!, avatarUrl }))}
+          disabled={isUploadingAvatar || isUpdating}
         />
       </View>
 
@@ -90,6 +97,8 @@ export function Profile({ userId }: Props) {
     </View>
   );
 }
+
+const isLocalUri = (uri: string) => uri.startsWith("file://") || uri.startsWith("content://");
 
 const styles = StyleSheet.create({
   container: {
