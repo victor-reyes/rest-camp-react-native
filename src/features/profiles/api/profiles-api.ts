@@ -1,7 +1,8 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineProfilesApi } from "./offline-profiles-api";
-import { ProfileInsert, ProfileUpdate, ProfileSupaUpdate } from "../types";
+import { ProfileInsert, ProfileUpdate } from "../types";
+import { compressImageToBuffer } from "@/lib/utils";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 const TAG_PROFILE = "Profiles";
@@ -11,6 +12,33 @@ export const profilesApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: [TAG_PROFILE],
   endpoints: builder => ({
+    uploadAvatar: builder.mutation<string, { uri: string; userId: string }>({
+      queryFn: async ({ uri, userId }) => {
+        try {
+          const path = `avatar-${userId}-${Date.now()}.jpeg`;
+          const options = { contentType: "image/jpeg" };
+
+          const compressedImage = await compressImageToBuffer(uri, { maxWidth: 400, quality: 0.8 });
+
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from("avatars")
+            .upload(path, compressedImage, options);
+
+          if (uploadError) {
+            console.error("Avatar upload Supabase error:", uploadError);
+            return { error: uploadError };
+          }
+
+          const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(uploadData.path);
+
+          return { data: urlData.publicUrl };
+        } catch (error) {
+          console.error("Avatar upload failed:", error);
+          return { error: { message: "Failed to upload avatar" } };
+        }
+      },
+    }),
+
     fetchProfile: builder.query({
       providesTags: (_res, _err, id) => [{ type: TAG_PROFILE, id: id }],
       queryFn: async (profileId: string, { dispatch }) => {
@@ -80,4 +108,5 @@ export const profilesApi = createApi({
   }),
 });
 
-export const { useFetchProfileQuery, useUpdateProfileMutation } = profilesApi;
+export const { useFetchProfileQuery, useUpdateProfileMutation, useUploadAvatarMutation } =
+  profilesApi;
