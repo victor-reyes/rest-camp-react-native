@@ -14,6 +14,7 @@ import Toast from "react-native-toast-message";
 
 interface Props {
   onImageSelected: (uri: string) => void;
+  disabled?: boolean;
 }
 
 const OPTIONS: ImagePicker.ImagePickerOptions = {
@@ -24,7 +25,7 @@ const OPTIONS: ImagePicker.ImagePickerOptions = {
   quality: 1,
 };
 
-export function ChoseImageModal({ onImageSelected }: Props) {
+export function ChoseImageModal({ onImageSelected, disabled = false }: Props) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const renderBackdrop = useCallback(
@@ -76,7 +77,7 @@ export function ChoseImageModal({ onImageSelected }: Props) {
 
   return (
     <View>
-      <Button title="Ändra profilbild" onPress={presentBottomSheet} />
+      <Button title="Ändra profilbild" onPress={presentBottomSheet} disabled={disabled} />
       <BottomSheetModal ref={bottomSheetRef} enableDynamicSizing backdropComponent={renderBackdrop}>
         <BottomSheetScrollView>
           <View style={{ padding: 16 }}>
