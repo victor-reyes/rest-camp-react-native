@@ -1,9 +1,8 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
-import { Image } from "react-native-compressor";
-import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
 import { offlinePhotosApi } from "./offline-photos-api";
 import { PhotoInsert } from "../types";
+import { compressImageToBuffer } from "@/lib/utils";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
@@ -86,10 +85,5 @@ export const photosApi = createApi({
     }),
   }),
 });
-
-async function compressImageToBuffer(uri: string, options: CompressorOptions) {
-  const compressedUri = await Image.compress(uri, options);
-  return fetch(compressedUri).then(res => res.arrayBuffer());
-}
 
 export const { useFetchPhotosQuery, useUploadPhotoMutation } = photosApi;
