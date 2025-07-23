@@ -1,28 +1,33 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useAppSelector } from "@/app/store";
 import { selectAuth } from "@/features/auth";
 import Toast from "react-native-toast-message";
 import { Profile, SignIn } from "./components";
 import { Card } from "@/components";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export function ProfileScreen() {
   const { session } = useAppSelector(selectAuth);
 
   return (
-    <View style={styles.container}>
-      <Card style={styles.cardContainer}>
-        {session ?
-          <Profile userId={session.user.id} />
-        : <SignIn />}
-      </Card>
+    <GestureHandlerRootView style={styles.container}>
+      <BottomSheetModalProvider>
+        <Card style={styles.cardContainer}>
+          {session ?
+            <Profile userId={session.user.id} />
+          : <SignIn />}
+        </Card>
+      </BottomSheetModalProvider>
       <Toast position="bottom" />
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
