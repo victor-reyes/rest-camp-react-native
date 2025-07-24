@@ -35,9 +35,6 @@ export type Database = MergeDeep<
           };
           Update: {
             id?: never;
-            full_name: string;
-            avatar_url?: string | null;
-            location?: string | null;
             updated_at: string;
           };
         };
