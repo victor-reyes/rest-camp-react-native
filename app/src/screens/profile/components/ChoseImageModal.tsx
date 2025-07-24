@@ -11,6 +11,7 @@ import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import Toast, { ToastShowParams } from "react-native-toast-message";
 import { Pressable } from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
 
 interface Props extends Required<PropsWithChildren> {
   onImageSelected: (uri: string) => void;
@@ -57,7 +58,7 @@ export function ChoseImageModal({ onImageSelected, children }: Props) {
     <View>
       <Pressable onPress={presentBottomSheet}>{children}</Pressable>
       <BottomSheetModal ref={bottomSheetRef} enableDynamicSizing backdropComponent={renderBackdrop}>
-        <BottomSheetView style={{ paddingHorizontal: 24, paddingBottom: 32 }}>
+        <BottomSheetView style={styles.container}>
           <ChooseButton onPress={handlePress} title="Välj från galleriet" type="gallery" />
           <ChooseButton onPress={handlePress} title="Ta en foto" type="camera" />
         </BottomSheetView>
@@ -94,23 +95,40 @@ async function getImageUriFromPicker(type: "camera" | "gallery") {
   return result.assets[0].uri;
 }
 
-const ChooseButton = ({
-  onPress,
-  title,
-  type,
-}: {
+interface ChooseButtonProps {
   onPress: (type: "camera" | "gallery") => void | Promise<void>;
   title: string;
   type: "camera" | "gallery";
-}) => {
+}
+
+const ChooseButton = ({ onPress, title, type }: ChooseButtonProps) => {
   const handlePress = useCallback(() => onPress(type), [onPress, type]);
   return (
     <Pressable
       onPress={handlePress}
-      style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-      <FontAwesome5 name={type === "camera" ? "camera" : "images"} size={24} color="#155196" />
-      <Text style={{ fontSize: 16, color: "#155196" }}>{title}</Text>
+      style={({ pressed }) => [styles.chooseButton, pressed && styles.pressed]}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+        <FontAwesome5 name={type === "camera" ? "camera" : "images"} size={24} color="#155196" />
+        <Text style={styles.chooseButtonText}>{title}</Text>
+      </View>
       <MaterialIcons name="navigate-next" size={24} color="black" />
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { paddingHorizontal: 24, paddingBottom: 32 },
+  chooseButton: {
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+  },
+  pressed: { backgroundColor: "#f0f0f0" },
+  chooseButtonText: {
+    fontSize: 16,
+    color: "#155196",
+  },
+});
