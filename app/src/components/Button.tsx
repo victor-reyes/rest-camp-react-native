@@ -10,7 +10,7 @@ interface Props {
   disabled?: boolean;
   fit?: boolean;
   hitSlop?: number;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export function Button({
