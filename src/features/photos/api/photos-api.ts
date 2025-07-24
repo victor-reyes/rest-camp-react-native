@@ -3,8 +3,13 @@ import { supabase } from "@/lib";
 import { offlinePhotosApi } from "./offline-photos-api";
 import { PhotoInsert } from "../types";
 import { compressImageToBuffer } from "@/lib/utils";
+import { FileOptions } from "@supabase/storage-js/src/lib/types";
+import { CompressorOptions } from "react-native-compressor/lib/typescript/Image";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
+const INSERT_OPTIONS: FileOptions = { cacheControl: "31536000", contentType: "image/jpeg" };
+const FULL_COMPRESS_OPTIONS: CompressorOptions = { maxWidth: 1200, quality: 0.7 };
+const THUMBNAIL_COMPRESS_OPTIONS: CompressorOptions = { maxWidth: 400, quality: 0.7 };
 
 export const photosApi = createApi({
   reducerPath: "photosApi",
@@ -19,7 +24,6 @@ export const photosApi = createApi({
         );
 
         const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
-        console.log(`Last photo updated at: ${updatedAt}`);
 
         const [{ data: photoData, error: fetchError }] = await Promise.all([
           supabase.from("photos").select().gt("updated_at", updatedAt),
@@ -47,15 +51,14 @@ export const photosApi = createApi({
       invalidatesTags: ["FetchPhotos"],
       queryFn: async ({ restAreaId, uri, description }) => {
         const path = `${restAreaId}-${Date.now()}.jpeg`;
-        const options = { contentType: "image/jpeg" };
 
         const { storage } = supabase;
         const [photoResponse, thumbnailResponse] = await Promise.all([
-          compressImageToBuffer(uri, { maxWidth: 1200, quality: 0.7 }).then(res =>
-            storage.from("photos").upload(path, res, options),
+          compressImageToBuffer(uri, FULL_COMPRESS_OPTIONS).then(res =>
+            storage.from("photos").upload(path, res, INSERT_OPTIONS),
           ),
-          compressImageToBuffer(uri, { maxWidth: 400, quality: 0.7 }).then(res =>
-            storage.from("photos").upload(`thumbnails-${path}`, res, options),
+          compressImageToBuffer(uri, THUMBNAIL_COMPRESS_OPTIONS).then(res =>
+            storage.from("photos").upload(`thumbnails-${path}`, res, INSERT_OPTIONS),
           ),
         ]);
 
