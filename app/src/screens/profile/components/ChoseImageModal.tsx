@@ -9,7 +9,7 @@ import { View, Text, Linking } from "react-native";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
-import Toast from "react-native-toast-message";
+import Toast, { ToastShowParams } from "react-native-toast-message";
 import { Pressable } from "react-native-gesture-handler";
 
 interface Props extends Required<PropsWithChildren> {
@@ -38,41 +38,17 @@ export function ChoseImageModal({ onImageSelected, children }: Props) {
 
   const handlePress = useCallback(
     async (type: "camera" | "gallery") => {
-      const permission =
-        type === "camera" ?
-          await ImagePicker.requestCameraPermissionsAsync()
-        : await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permission = await getPermissionFor(type);
 
-      if (!permission.granted) {
-        if (permission.canAskAgain) {
-          Toast.show({
-            type: "info",
-            text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`,
-            bottomOffset: 100,
-          });
-        } else {
-          Toast.show({
-            type: "info",
-            text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`,
-            text2: `Pressa på knappen för att gå till inställningar.`,
-            bottomOffset: 100,
-            onPress: () => Linking.openSettings(),
-          });
-        }
-        return;
+      if (permission.granted) {
+        const avatarUri = await getImageUriFromPicker(type);
+        if (avatarUri) onImageSelected(avatarUri);
+      } else {
+        const toastShowParams = getToastShowParamsFor(type, permission.canAskAgain);
+        Toast.show(toastShowParams);
       }
 
-      const result =
-        type === "camera" ?
-          await ImagePicker.launchCameraAsync(OPTIONS)
-        : await ImagePicker.launchImageLibraryAsync(OPTIONS);
-
-      if (result.canceled) return;
-      const avatarUri = result.assets.map(asset => ({ uri: asset.uri }));
-      if (avatarUri.length > 0) {
-        onImageSelected(avatarUri[0].uri);
-        bottomSheetRef.current?.dismiss();
-      }
+      bottomSheetRef.current?.dismiss();
     },
     [onImageSelected],
   );
@@ -88,6 +64,34 @@ export function ChoseImageModal({ onImageSelected, children }: Props) {
       </BottomSheetModal>
     </View>
   );
+}
+
+async function getPermissionFor(type: "camera" | "gallery") {
+  return type === "camera" ?
+      await ImagePicker.requestCameraPermissionsAsync()
+    : await ImagePicker.requestMediaLibraryPermissionsAsync();
+}
+
+function getToastShowParamsFor(type: "camera" | "gallery", canAskAgain: boolean) {
+  let toast: ToastShowParams = { type: "info", bottomOffset: 100 };
+  if (canAskAgain)
+    toast.text1 = `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`;
+  else {
+    toast.text1 = `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`;
+    toast.text2 = `Pressa på knappen för att gå till inställningar.`;
+    toast.onPress = () => Linking.openSettings();
+  }
+  return toast;
+}
+
+async function getImageUriFromPicker(type: "camera" | "gallery") {
+  const result =
+    type === "camera" ?
+      await ImagePicker.launchCameraAsync(OPTIONS)
+    : await ImagePicker.launchImageLibraryAsync(OPTIONS);
+
+  if (result.canceled) return;
+  return result.assets[0].uri;
 }
 
 const ChooseButton = ({
