@@ -12,6 +12,7 @@ import {
 } from "@/features/profiles";
 import { ChoseImageModal } from "./ChoseImageModal";
 import Toast from "react-native-toast-message";
+import FontAwesome5 from "@expo/vector-icons/build/FontAwesome5";
 
 interface Props {
   userId: string;
@@ -55,16 +56,22 @@ export function Profile({ userId }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Avatar avatarUrl={profile?.avatarUrl} size={96} />
-        <ChoseImageModal
-          onImageSelected={avatarUrl => handleUpdateProfile({ avatarUrl })}
-          disabled={isUploadingAvatar || isUpdating}
-        />
-      </View>
+      <ChoseImageModal onImageSelected={avatarUrl => handleUpdateProfile({ avatarUrl })}>
+        <View style={styles.avatarContainer}>
+          <Avatar avatarUrl={profile?.avatarUrl} size={120} />
+          <Button
+            title="Ändra"
+            style={styles.triggerButton}
+            iconSize={16}
+            icon={<FontAwesome5 name="camera" size={16} color="black" />}
+          />
+        </View>
+      </ChoseImageModal>
 
       <View style={styles.row}>
-        <Text style={styles.name}>{profile?.fullName}</Text>
+        <Text style={[styles.name, !profile?.fullName ? { color: "#aaa", fontSize: 12 } : {}]}>
+          {profile?.fullName ?? "Ange ditt namn"}
+        </Text>
         {profile && (
           <ModalFormInput
             label="Namn (offentligt för andra användare)"
@@ -114,6 +121,25 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     alignItems: "center",
   },
+  triggerButton: {
+    marginTop: -20,
+    zIndex: 1,
+    width: "auto",
+    borderRadius: 48,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 0,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
   avatarContainer: {
     position: "relative",
     alignItems: "center",
@@ -143,7 +169,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#333",
   },

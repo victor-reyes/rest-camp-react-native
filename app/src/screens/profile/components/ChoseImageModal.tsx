@@ -4,17 +4,17 @@ import {
   BottomSheetBackdropProps,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, PropsWithChildren } from "react";
 import { View, Text, Linking } from "react-native";
 import { Button } from "@/components/Button";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
+import { Pressable } from "react-native-gesture-handler";
 
-interface Props {
+interface Props extends Required<PropsWithChildren> {
   onImageSelected: (uri: string) => void;
-  disabled?: boolean;
 }
 
 const OPTIONS: ImagePicker.ImagePickerOptions = {
@@ -25,7 +25,7 @@ const OPTIONS: ImagePicker.ImagePickerOptions = {
   quality: 1,
 };
 
-export function ChoseImageModal({ onImageSelected, disabled = false }: Props) {
+export function ChoseImageModal({ onImageSelected, children }: Props) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   const renderBackdrop = useCallback(
@@ -77,7 +77,7 @@ export function ChoseImageModal({ onImageSelected, disabled = false }: Props) {
 
   return (
     <View>
-      <Button title="Ändra profilbild" onPress={presentBottomSheet} disabled={disabled} />
+      <Pressable onPress={presentBottomSheet}>{children}</Pressable>
       <BottomSheetModal ref={bottomSheetRef} enableDynamicSizing backdropComponent={renderBackdrop}>
         <BottomSheetScrollView>
           <View style={{ padding: 16 }}>
