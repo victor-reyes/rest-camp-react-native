@@ -6,7 +6,6 @@ import {
   BottomSheetScrollView,
   BottomSheetTextInput,
 } from "@gorhom/bottom-sheet";
-import { is } from "drizzle-orm";
 import { useRef, useMemo, useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
@@ -79,6 +78,7 @@ export function ModalFormInput({ label, defaultValue, onSave, placeholder }: Pro
             autoFocus={true}
             onChangeText={setValue}
             placeholder={placeholder}
+            placeholderTextColor={"#999"}
             style={style.input}
           />
           <View style={style.bottomContainer}>
