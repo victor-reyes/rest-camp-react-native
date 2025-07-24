@@ -37,43 +37,46 @@ export function ChoseImageModal({ onImageSelected, children }: Props) {
 
   const presentBottomSheet = useCallback(() => bottomSheetRef.current?.present(), []);
 
-  const handlePress = async (type: "camera" | "gallery") => {
-    const permission =
-      type === "camera" ?
-        await ImagePicker.requestCameraPermissionsAsync()
-      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const handlePress = useCallback(
+    async (type: "camera" | "gallery") => {
+      const permission =
+        type === "camera" ?
+          await ImagePicker.requestCameraPermissionsAsync()
+        : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (!permission.granted) {
-      if (permission.canAskAgain) {
-        Toast.show({
-          type: "info",
-          text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`,
-          bottomOffset: 100,
-        });
-      } else {
-        Toast.show({
-          type: "info",
-          text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`,
-          text2: `Pressa på knappen för att gå till inställningar.`,
-          bottomOffset: 100,
-          onPress: () => Linking.openSettings(),
-        });
+      if (!permission.granted) {
+        if (permission.canAskAgain) {
+          Toast.show({
+            type: "info",
+            text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`,
+            bottomOffset: 100,
+          });
+        } else {
+          Toast.show({
+            type: "info",
+            text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`,
+            text2: `Pressa på knappen för att gå till inställningar.`,
+            bottomOffset: 100,
+            onPress: () => Linking.openSettings(),
+          });
+        }
+        return;
       }
-      return;
-    }
 
-    const result =
-      type === "camera" ?
-        await ImagePicker.launchCameraAsync(OPTIONS)
-      : await ImagePicker.launchImageLibraryAsync(OPTIONS);
+      const result =
+        type === "camera" ?
+          await ImagePicker.launchCameraAsync(OPTIONS)
+        : await ImagePicker.launchImageLibraryAsync(OPTIONS);
 
-    if (result.canceled) return;
-    const avatarUri = result.assets.map(asset => ({ uri: asset.uri }));
-    if (avatarUri.length > 0) {
-      onImageSelected(avatarUri[0].uri);
-      bottomSheetRef.current?.dismiss();
-    }
-  };
+      if (result.canceled) return;
+      const avatarUri = result.assets.map(asset => ({ uri: asset.uri }));
+      if (avatarUri.length > 0) {
+        onImageSelected(avatarUri[0].uri);
+        bottomSheetRef.current?.dismiss();
+      }
+    },
+    [onImageSelected],
+  );
 
   return (
     <View>
