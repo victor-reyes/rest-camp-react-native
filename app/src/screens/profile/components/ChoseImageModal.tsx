@@ -2,12 +2,11 @@ import {
   BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
-  BottomSheetScrollView,
+  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { useRef, useCallback, PropsWithChildren } from "react";
 import { View, Text, Linking } from "react-native";
-import { Button } from "@/components/Button";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 import Toast from "react-native-toast-message";
@@ -82,24 +81,32 @@ export function ChoseImageModal({ onImageSelected, children }: Props) {
     <View>
       <Pressable onPress={presentBottomSheet}>{children}</Pressable>
       <BottomSheetModal ref={bottomSheetRef} enableDynamicSizing backdropComponent={renderBackdrop}>
-        <BottomSheetScrollView>
-          <View style={{ padding: 16 }}>
-            <Text style={{ marginBottom: 8 }}>Välj en bild</Text>
-            <Button
-              title="Kamera"
-              fit
-              icon={<FontAwesome5 name="camera" size={24} color="#155196" />}
-              onPress={() => handlePress("camera")}
-            />
-            <Button
-              title="Galleri"
-              fit
-              icon={<FontAwesome5 name="images" size={24} color="#155196" />}
-              onPress={() => handlePress("gallery")}
-            />
-          </View>
-        </BottomSheetScrollView>
+        <BottomSheetView style={{ paddingHorizontal: 24, paddingBottom: 32 }}>
+          <ChooseButton onPress={handlePress} title="Välj från galleriet" type="gallery" />
+          <ChooseButton onPress={handlePress} title="Ta en foto" type="camera" />
+        </BottomSheetView>
       </BottomSheetModal>
     </View>
   );
 }
+
+const ChooseButton = ({
+  onPress,
+  title,
+  type,
+}: {
+  onPress: (type: "camera" | "gallery") => void | Promise<void>;
+  title: string;
+  type: "camera" | "gallery";
+}) => {
+  const handlePress = useCallback(() => onPress(type), [onPress, type]);
+  return (
+    <Pressable
+      onPress={handlePress}
+      style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      <FontAwesome5 name={type === "camera" ? "camera" : "images"} size={24} color="#155196" />
+      <Text style={{ fontSize: 16, color: "#155196" }}>{title}</Text>
+      <MaterialIcons name="navigate-next" size={24} color="black" />
+    </Pressable>
+  );
+};
