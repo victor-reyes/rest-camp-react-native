@@ -1,6 +1,12 @@
-import { useAppDispatch, useAppSelector } from "@/app/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { Apple, Button, GoogleIcon } from "@/components";
-import { AuthenticationError, errorCleared, selectAuth, signIn } from "@/features/auth";
+import {
+  AuthenticationError,
+  errorCleared,
+  selectError,
+  selectIsLoading,
+  signIn,
+} from "@/features/auth";
 import { useCallback, useEffect } from "react";
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -8,7 +14,9 @@ import Toast from "react-native-toast-message";
 export function SignIn() {
   const dispatch = useAppDispatch();
 
-  const { isLoading, error } = useAppSelector(selectAuth);
+  const isLoading = useAppSelector(selectIsLoading);
+  const error = useAppSelector(selectError);
+
   const clearError = useCallback(() => dispatch(errorCleared()), [dispatch]);
 
   const showToast = useCallback(

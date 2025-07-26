@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/app/store";
+import { useAppDispatch } from "@/store";
 import { Avatar, Button } from "@/components";
 import { signOut } from "@/features/auth";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";

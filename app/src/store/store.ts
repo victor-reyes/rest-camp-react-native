@@ -3,7 +3,7 @@ import { filtersSlice } from "@/features/filters";
 import { offlineRestAreasApi, restAreasApi } from "@/features/rest-areas";
 import { photosApi, offlinePhotosApi } from "@/features/photos";
 import { profilesApi, offlineProfilesApi } from "@/features/profiles";
-import { reviewsApi, offlineReviewsApi } from "@/features/reviews";
+import { reviewsApi, offlineReviewsApi } from "@/features/reviews/";
 import { servicesApi, offlineServicesApi } from "@/features/services";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";

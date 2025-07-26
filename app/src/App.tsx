@@ -3,7 +3,7 @@ import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
 import { Navigation } from "./navigation";
 import { Provider } from "react-redux";
-import { store, useAppDispatch } from "@/app/store";
+import { store, useAppDispatch } from "@/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";

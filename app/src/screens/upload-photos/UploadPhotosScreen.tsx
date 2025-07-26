@@ -9,7 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { Image } from "expo-image";
-import { RootStackParamList } from "@/navigation";
+import { RootStackParamList } from "@/navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@/components";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";

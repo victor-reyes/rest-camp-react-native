@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/app/store";
-import { selectAuth } from "@/features/auth";
+import { useAppSelector } from "@/store";
+import { selectSession } from "@/features/auth";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -13,7 +13,7 @@ import { SignIn } from "./SignIn";
 export function ProfileModal() {
   const btmSheetRef = useRef<BottomSheetModal>(null);
 
-  const { session } = useAppSelector(selectAuth);
+  const session = useAppSelector(selectSession);
 
   useEffect(() => {
     if (!session) btmSheetRef.current?.present();

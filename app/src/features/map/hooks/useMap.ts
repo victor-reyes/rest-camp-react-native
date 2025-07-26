@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useAppSelector } from "@/app/store";
+import { useAppSelector } from "@/store";
 import { Region } from "react-native-maps";
 import { useMapDimensions } from "./useMapDimensions";
 import { usePoints } from "./usePoints";

@@ -1,22 +1,13 @@
 import { createStaticNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MapScreen, ProfileScreen, UploadPhotosScreen } from "@/screens";
+import { AddReviewScreen, MapScreen, ProfileScreen, UploadPhotosScreen } from "@/screens";
+import { RootStackParamList } from "./types";
 
 // type HomeTabsParamList = {
 //   Map: undefined;
 //   Home: undefined;
 //   Updates: undefined;
 // };
-
-export type RootStackParamList = {
-  // HomeTabs: NavigatorScreenParams<HomeTabsParamList> | undefined;
-  // Profile: { user: string };
-  // Settings: undefined;
-  // NotFound: undefined;
-  Map: undefined;
-  Profile: undefined;
-  UploadPhotos: { restAreaId: string };
-};
 
 // const HomeTabs = createBottomTabNavigator<HomeTabsParamList>({
 //   screens: {
@@ -125,14 +116,16 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
         headerBackVisible: true,
       }),
     },
+    AddReview: {
+      screen: AddReviewScreen,
+      options: () => ({
+        title: "Lägg till recension",
+        presentation: "modal",
+        headerShown: true,
+        headerBackVisible: true,
+      }),
+    },
   },
 });
 
 export const Navigation = createStaticNavigation(RootStack);
-
-declare global {
-  namespace ReactNavigation {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    interface RootParamList extends RootStackParamList {}
-  }
-}

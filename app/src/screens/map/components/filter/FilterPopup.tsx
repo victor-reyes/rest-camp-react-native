@@ -1,5 +1,5 @@
 import { View, Pressable, Text, StyleSheet, Modal, Dimensions } from "react-native";
-import { useAppDispatch, useAppSelector } from "@/app/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { filterAdded, filterRemoved, filtersCleared, selectFilters } from "@/features/filters";
 import { Filter } from "@/features/filters";
 import { FilterItem } from "./FilterItem";
