@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineReviewsApi } from "./offline-reviews-api";
-import { ReviewInsert, ReviewSubmit, ReviewSupaInsert, ReviewSupaSelect } from "../types";
+import { ReviewInsert, ReviewSubmit, ReviewSupaSelect, ReviewUpdate } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 const REST_AREA = "RemoteReviewById" as const;
@@ -51,13 +51,24 @@ export const reviewsApi = createApi({
     submitReview: builder.mutation<null, ReviewSubmit>({
       invalidatesTags: (_res, _err, { restAreaId }) => [{ type: REST_AREA, id: restAreaId }],
       queryFn: async review => {
-        const reviewData: ReviewSupaInsert = {
-          rest_area_id: review.restAreaId,
-          score: review.score,
-          recension: review.recension,
-        };
+        const { restAreaId: rest_area_id, score, recension } = review;
 
-        const { error } = await supabase.from("reviews").upsert(reviewData);
+        const { error } = await supabase.from("reviews").insert({ rest_area_id, score, recension });
+
+        if (error) return { error };
+
+        return { data: null };
+      },
+    }),
+
+    updateReview: builder.mutation<null, ReviewUpdate>({
+      invalidatesTags: (_res, _err, { restAreaId }) => [{ type: REST_AREA, id: restAreaId }],
+      queryFn: async review => {
+        const { id, score, recension } = review;
+        const { error } = await supabase
+          .from("reviews")
+          .update({ score, recension, updated_at: new Date().toISOString() })
+          .eq("id", id);
 
         if (error) return { error };
 

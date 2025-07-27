@@ -14,6 +14,7 @@ const DEFAULT_VALUES: ReviewFormData = { score: 0, recension: undefined };
 
 export function AddReviewModal({ route }: Props) {
   const { restAreaId, reviewId } = route.params;
+
   const userId = useUserId();
   const { submitReview, isSubmitting } = useSubmitReview(userId);
   const { review, isLoading } = useReview(reviewId);
@@ -24,25 +25,27 @@ export function AddReviewModal({ route }: Props) {
     navigation.navigate("Profile");
   }, [navigation]);
 
-  const handleSubmit = async (data: ReviewFormData) => {
-    if (!userId) {
-      showNavigateToProfileToast(navigateToProfileAndHideToast);
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (data: ReviewFormData) => {
+      if (!userId) {
+        showNavigateToProfileToast(navigateToProfileAndHideToast);
+        return;
+      }
 
-    const result = await submitReview({
-      restAreaId,
-      score: data.score,
-      recension: data.recension || null,
-    });
+      const result = await submitReview(
+        { restAreaId, score: data.score, recension: data.recension || null },
+        reviewId,
+      );
 
-    if (result.success) {
-      showSuccessToast();
-      navigation.goBack();
-    } else {
-      showErrorToast(result.error);
-    }
-  };
+      if (result.success) {
+        showSuccessToast();
+        navigation.goBack();
+      } else {
+        showErrorToast(result.error);
+      }
+    },
+    [userId, submitReview, restAreaId, reviewId, navigateToProfileAndHideToast, navigation],
+  );
 
   return (
     <View style={styles.container}>

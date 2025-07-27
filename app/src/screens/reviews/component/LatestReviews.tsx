@@ -5,7 +5,7 @@ import { Score } from "@/screens/rest-area/components/Score";
 import { Button } from "@/components";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/core";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useReviews } from "@/features/reviews";
 import { selectUserId } from "@/features/auth";
 import { useAppSelector } from "@/store";
@@ -32,6 +32,11 @@ export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
     navigation.navigate("AddReview", { restAreaId });
   }, [navigation, onNeedAuthorization, restAreaId, userId]);
 
+  const alreadyReviewed = useMemo(
+    () => reviews.some(review => review.ownerId === userId),
+    [reviews, userId],
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
@@ -45,18 +50,20 @@ export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
           <Text style={{ fontSize: 16, fontWeight: "bold", color: "#155196" }}>
             Recensioner{isFetching && " (uppdateras...)"}
           </Text>
-          <Button
-            title="Skriv en recension"
-            fit
-            style={{ backgroundColor: "#15519622", borderWidth: 0, paddingVertical: 6 }}
-            textColor="#155196"
-            iconSize={18}
-            icon={<FontAwesome name="pencil-square-o" size={18} color="#155196" />}
-            onPress={handleAddReviewPress}
-          />
+          {!alreadyReviewed && (
+            <Button
+              title="Skriv en recension"
+              fit
+              style={{ backgroundColor: "#15519622", borderWidth: 0, paddingVertical: 6 }}
+              textColor="#155196"
+              iconSize={18}
+              icon={<FontAwesome name="pencil-square-o" size={18} color="#155196" />}
+              onPress={handleAddReviewPress}
+            />
+          )}
         </View>
 
-        <Score restAreaId="ra1" onClick={() => {}} />
+        <Score restAreaId={restAreaId} onClick={() => {}} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer} horizontal>
         {reviews?.map(review => (

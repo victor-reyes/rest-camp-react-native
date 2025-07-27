@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { reviewsApi } from "../api";
 import { ReviewSubmit } from "../types";
+import { useAppDispatch } from "@/store";
 
 type SubmitReviewData = {
   restAreaId: string;
@@ -11,11 +12,12 @@ type SubmitReviewData = {
 type SubmitReviewResult = { success: true; error?: undefined } | { success: false; error: string };
 
 export const useSubmitReview = (userId?: string) => {
+  const dispatch = useAppDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [submitReviewToBackend] = reviewsApi.useSubmitReviewMutation();
+  const { submitReview, updateReview } = reviewsApi.endpoints;
 
-  const submitReview = useCallback(
+  const submitOrUpdateReview = useCallback(
     async (submitReviewData: SubmitReviewData, reviewId?: string): Promise<SubmitReviewResult> => {
       if (!userId) {
         const error = "Du måste vara inloggad för att lämna en recension";
@@ -31,7 +33,13 @@ export const useSubmitReview = (userId?: string) => {
         recension: submitReviewData.recension || undefined,
       };
 
-      const { error } = await submitReviewToBackend(reviewSubmit);
+      console.log("Submitting review:", reviewSubmit, "for reviewId:", reviewId);
+      const { error } = await dispatch(
+        reviewId ?
+          updateReview.initiate({ ...reviewSubmit, id: reviewId })
+        : submitReview.initiate(reviewSubmit),
+      );
+
       setIsSubmitting(false);
       if (!error) return { success: true, error: undefined };
 
@@ -40,8 +48,8 @@ export const useSubmitReview = (userId?: string) => {
 
       return { success: false, error: errorMessage };
     },
-    [userId, submitReviewToBackend],
+    [userId, dispatch, updateReview, submitReview],
   );
 
-  return { submitReview, isSubmitting };
+  return { submitReview: submitOrUpdateReview, isSubmitting };
 };

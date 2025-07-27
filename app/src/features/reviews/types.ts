@@ -11,16 +11,10 @@ export type Score = {
   numberOfReviews: number;
 };
 
-export type ReviewSubmit = {
-  id?: string;
-  restAreaId: string;
-  ownerId?: string;
-  score: number;
-  recension?: string;
-};
+export type ReviewSubmit = { id?: string; restAreaId: string; score: number; recension?: string };
+export type ReviewUpdate = ReviewSubmit & { id: string };
 
 // supabase types
-export type ReviewSupaInsert = Database["v1"]["Views"]["reviews"]["Insert"];
 export type ReviewSupaSelect = Database["v1"]["Views"]["reviews"]["Row"];
 
 export type Review = Omit<typeof reviews.$inferSelect, "deleted"> & { isUserReview: boolean };

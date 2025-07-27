@@ -95,9 +95,12 @@ export type Database = MergeDeep<
             deleted?: never;
           };
           Update: {
-            rest_area_id: string;
             score: number;
-            owner_id: string;
+            updated_at: string;
+            recension?: string | null;
+            rest_area_id?: never;
+            owner_id?: never;
+            id?: never;
           };
         };
       };

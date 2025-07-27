@@ -18,7 +18,7 @@ export const useReviews = (restAreaId: string, userId?: string) => {
     [data, userId],
   );
 
-  return isLoading ? { isFetching, isLoading } : { reviews, isFetching, isLoading };
+  return isLoading ? { reviews, isFetching, isLoading } : { reviews, isFetching, isLoading };
 };
 
 export function useReview(reviewId?: string) {
