@@ -11,7 +11,7 @@ import {
 import { Image } from "expo-image";
 import { RootStackParamList } from "@/navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Button } from "@/components";
+import { Button, Toast } from "@/components";
 import { FontAwesome5, Feather, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useGetRestAreaQuery } from "@/features/rest-areas";
@@ -19,7 +19,6 @@ import { useUploadPhotoMutation } from "@/features/photos";
 import * as ImagePicker from "expo-image-picker";
 import { ProfileModal } from "@/screens";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import Toast from "react-native-toast-message";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UploadPhotos">;
 
@@ -88,7 +87,8 @@ export function UploadPhotosScreen({ route }: Props) {
         Toast.show({
           type: "info",
           text1: `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`,
-          text2: `Pressa på knappen för att gå till inställningar.`,
+          text2: `Du kan ändra detta i inställningarna.`,
+          buttonTitle: "Till inställningar",
           bottomOffset: 100,
           onPress: () => Linking.openSettings(),
         });

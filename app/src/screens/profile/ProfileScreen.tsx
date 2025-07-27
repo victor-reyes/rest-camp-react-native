@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
 import { useAppSelector } from "@/store";
-import Toast from "react-native-toast-message";
 import { Profile, SignIn } from "./components";
-import { Card } from "@/components";
+import { Card, Toast } from "@/components";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { authSlice } from "@/features/auth/auth-slice";
+import { authSlice } from "@/features/auth";
 
 export function ProfileScreen() {
   const session = useAppSelector(authSlice.selectors.selectSession);
@@ -19,7 +18,7 @@ export function ProfileScreen() {
           : <SignIn />}
         </Card>
       </BottomSheetModalProvider>
-      <Toast position="bottom" />
+      <Toast />
     </GestureHandlerRootView>
   );
 }

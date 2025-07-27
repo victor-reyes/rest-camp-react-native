@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store";
-import { Avatar, Button } from "@/components";
+import { Avatar, Button, Toast } from "@/components";
 import { signOut } from "@/features/auth";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
@@ -11,7 +11,6 @@ import {
   useUploadAvatarMutation,
 } from "@/features/profiles";
 import { ChoseImageModal } from "./ChoseImageModal";
-import Toast from "react-native-toast-message";
 import FontAwesome5 from "@expo/vector-icons/build/FontAwesome5";
 
 interface Props {

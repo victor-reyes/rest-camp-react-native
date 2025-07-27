@@ -1,5 +1,6 @@
-export { Input } from "./Input";
-export { Button } from "./Button";
-export { Avatar } from "./Avatar";
-export { Card } from "./Card";
+export * from "./Input";
+export * from "./Button";
+export * from "./Avatar";
+export * from "./Card";
+export * from "./Toast";
 export * from "./icons";
