@@ -4,13 +4,15 @@ import { offlineReviewsApi } from "./offline-reviews-api";
 import { ReviewInsert, ReviewSubmit, ReviewSupaInsert, ReviewSupaSelect } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
+const REST_AREA = "RemoteReviewById" as const;
 
 export const reviewsApi = createApi({
   reducerPath: "reviewsApi",
   baseQuery: fakeBaseQuery(),
-  tagTypes: ["Reviews"],
+  tagTypes: [REST_AREA],
   endpoints: builder => ({
-    fetchReviewsForRestArea: builder.query({
+    fetchReviewsForRestArea: builder.query<null, string>({
+      providesTags: (_res, _err, restAreaId) => [{ type: REST_AREA, id: restAreaId }],
       queryFn: async (restAreaId: string, { dispatch }) => {
         const { data } = await dispatch(
           offlineReviewsApi.endpoints.getLatestReviewUpdatedAtByRestArea.initiate(restAreaId),
@@ -33,21 +35,21 @@ export const reviewsApi = createApi({
       },
     }),
 
-    fetchReviewById: builder.query({
+    fetchReviewById: builder.query<string, string>({
+      providesTags: restAreaId => (restAreaId ? [{ type: REST_AREA, id: restAreaId }] : []),
       queryFn: async (reviewId: string, { dispatch }) => {
         const { data, error } = await supabase.from("reviews").select().eq("id", reviewId).single();
         if (error) return { error };
-        if (data) {
-          const review = toLocalReview(data);
-          await dispatch(offlineReviewsApi.endpoints.upsertReviews.initiate([review]));
-          return { data: review };
-        }
-        return { data: null };
+
+        const review = toLocalReview(data);
+        await dispatch(offlineReviewsApi.endpoints.upsertReviews.initiate([review]));
+
+        return { data: review.restAreaId };
       },
     }),
 
     submitReview: builder.mutation<null, ReviewSubmit>({
-      invalidatesTags: ["Reviews"],
+      invalidatesTags: (_res, _err, { restAreaId }) => [{ type: REST_AREA, id: restAreaId }],
       queryFn: async review => {
         const reviewData: ReviewSupaInsert = {
           rest_area_id: review.restAreaId,
