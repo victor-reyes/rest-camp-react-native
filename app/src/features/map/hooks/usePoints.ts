@@ -24,7 +24,7 @@ export function usePoints(
       })),
     [restAreas],
   );
-  let timeStart = performance.now();
+
   const [_points] = useClusterer(memorizedPoints, mapDimensions, region, CLUSTER_OPTIONS);
 
   const points: Point[] = _points.map(point => {
@@ -39,9 +39,6 @@ export function usePoints(
 
     return { type: "Point", ...point.properties };
   });
-
-  let timeEnd = performance.now();
-  console.log(`Clustered points in ${timeEnd - timeStart} ms`);
 
   return points;
 }
