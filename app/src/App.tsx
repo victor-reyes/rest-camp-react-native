@@ -1,25 +1,17 @@
-import { Assets as NavigationAssets } from "@react-navigation/elements";
-import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
-import { Navigation } from "./navigation";
 import { Provider } from "react-redux";
 import { store, useAppDispatch } from "@/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { drizzle } from "drizzle-orm/expo-sqlite/driver";
 import { Alert } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
-import { client, migrations } from "@/db/";
-import Toast from "react-native-toast-message";
-import { supabase } from "./lib/supabase";
-import { sessionSet } from "./features/auth";
-import { drizzle } from "drizzle-orm/expo-sqlite/driver";
-
-Asset.loadAsync([
-  ...NavigationAssets,
-  require("./assets/newspaper.png"),
-  require("./assets/bell.png"),
-]);
+import { client, migrations } from "@/db";
+import { Toast } from "@/components";
+import { Navigation } from "@/navigation";
+import { supabase } from "@/lib";
+import { sessionSet } from "@/features/auth";
 
 SplashScreen.preventAutoHideAsync();
 
