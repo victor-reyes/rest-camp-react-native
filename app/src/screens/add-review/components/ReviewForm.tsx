@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Button } from "@/components";
 import { StarRating } from "./StarRating";
 import { TextArea } from "./TextArea";
+import { useCallback } from "react";
 
 const reviewSchema = z.object({
   score: z.number().min(1, "Betyg är obligatoriskt").max(5),
@@ -32,9 +33,7 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues }: Props) 
 
   const { errors } = formState;
 
-  const handleFormSubmit = (data: ReviewFormData) => {
-    onSubmit(data);
-  };
+  const handleFormSubmit = useCallback((data: ReviewFormData) => onSubmit(data), [onSubmit]);
 
   return (
     <View style={styles.container}>
