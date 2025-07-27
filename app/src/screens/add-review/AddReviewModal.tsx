@@ -52,6 +52,7 @@ export function AddReviewModal({ route }: Props) {
           onSubmit={handleSubmit}
           loading={isSubmitting}
           defaultValues={review || DEFAULT_VALUES}
+          isEdit={!!reviewId}
         />
       }
       <Toast />

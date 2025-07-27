@@ -26,9 +26,10 @@ interface Props {
   onSubmit: (data: ReviewFormData) => void;
   loading?: boolean;
   defaultValues: ReviewFormData;
+  isEdit?: boolean;
 }
 
-export function ReviewForm({ onSubmit, loading = false, defaultValues }: Props) {
+export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = false }: Props) {
   const { control, handleSubmit, formState } = useForm({ resolver, defaultValues });
 
   const { errors } = formState;
@@ -70,7 +71,11 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues }: Props) 
         )}
       />
 
-      <Button title="Skicka recension" fit onPress={handleSubmit(handleFormSubmit)} />
+      <Button
+        title={isEdit ? "Uppdatera recension" : "Skicka recension"}
+        fit
+        onPress={handleSubmit(handleFormSubmit)}
+      />
     </View>
   );
 }
