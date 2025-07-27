@@ -5,22 +5,34 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "@/components";
 import { useNavigation } from "@react-navigation/native";
 import { useGetRestAreaPhotosQuery } from "@/features/photos";
+import { useUserId } from "@/features/auth";
+import { onNeedAuthorizationProps } from "../types";
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 interface Props {
   restAreaId: string;
+  onNeedAuthorization: ({ reason, description }: onNeedAuthorizationProps) => void;
 }
 
-export function PhotoGallery({ restAreaId }: Props) {
+export function PhotoGallery({ restAreaId, onNeedAuthorization }: Props) {
   const navigation = useNavigation();
-
+  const userId = useUserId();
   const { photos } = useGetRestAreaPhotosQuery(restAreaId, {
     selectFromResult: ({ data }) => ({ photos: data || [] }),
   });
 
-  const handleAddPhotos = () => navigation.navigate("UploadPhotos", { restAreaId });
+  const handleAddPhotos = () => {
+    if (!userId) {
+      onNeedAuthorization({
+        reason: "Behöver autentisering",
+        description: "Logga in för att ladda upp bilder.",
+      });
+      return;
+    }
+    navigation.navigate("UploadPhotos", { restAreaId });
+  };
   return (
     <View style={styles.section}>
       <View style={styles.sectionTitle}>

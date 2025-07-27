@@ -4,15 +4,33 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Score } from "@/screens/rest-area/components/Score";
 import { Button } from "@/components";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { REVIEWS } from "./fake-reviews";
+import { useNavigation } from "@react-navigation/core";
+import { useCallback } from "react";
+import { useReviews } from "@/features/reviews";
+import { selectUserId } from "@/features/auth";
+import { useAppSelector } from "@/store";
+import { onNeedAuthorizationProps } from "@/screens/rest-area";
 
 interface Props {
   restAreaId: string;
+  onNeedAuthorization: ({ reason, description }: onNeedAuthorizationProps) => void;
 }
 
-export function LatestReviews({ restAreaId }: Props) {
-  // const { reviews, isFetching, isLoading } = useReviews(restAreaId);
+export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
+  const userId = useAppSelector(selectUserId);
+  const { reviews, isFetching, isLoading } = useReviews(restAreaId, userId);
   const { width } = useWindowDimensions();
+  const navigation = useNavigation();
+  const handleAddReviewPress = useCallback(() => {
+    if (!userId) {
+      onNeedAuthorization({
+        reason: "Behöver autentisering",
+        description: "Logga in för att skriva en recension.",
+      });
+      return;
+    }
+    navigation.navigate("AddReview", { restAreaId });
+  }, [navigation, onNeedAuthorization, restAreaId, userId]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,7 +42,9 @@ export function LatestReviews({ restAreaId }: Props) {
             alignItems: "center",
             gap: 8,
           }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#155196" }}>Recensioner</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#155196" }}>
+            Recensioner{isFetching && " (uppdateras...)"}
+          </Text>
           <Button
             title="Skriv en recension"
             fit
@@ -32,14 +52,14 @@ export function LatestReviews({ restAreaId }: Props) {
             textColor="#155196"
             iconSize={18}
             icon={<FontAwesome name="pencil-square-o" size={18} color="#155196" />}
-            onPress={() => {}}
+            onPress={handleAddReviewPress}
           />
         </View>
 
         <Score restAreaId="ra1" onClick={() => {}} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer} horizontal>
-        {REVIEWS.map(review => (
+        {reviews?.map(review => (
           <Review
             key={review.id}
             review={review}

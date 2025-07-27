@@ -1,16 +1,17 @@
 import { Avatar } from "@/components";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
-import { PROFILES } from "./fake-reviews";
+import { useProfile } from "@/features/profiles";
 
 interface Props {
-  id: string;
+  userId: string;
 }
 
-export function UserInfo({ id }: Props) {
-  const user = PROFILES.find(profile => profile.id === id);
-  if (!user) return <ActivityIndicator size="small" color="#0000ff" />;
+const DEFAULT_VALUES = { fullName: "Anonym", avatarUrl: undefined };
 
-  const { fullName, avatarUrl } = user;
+export function UserInfo({ userId }: Props) {
+  const { profile, isLoading } = useProfile(userId);
+  if (isLoading) return <ActivityIndicator size="small" color="#0000ff" />;
+  const { fullName, avatarUrl } = profile ?? DEFAULT_VALUES;
 
   return (
     <View style={styles.container}>

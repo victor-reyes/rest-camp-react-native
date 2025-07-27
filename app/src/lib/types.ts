@@ -80,6 +80,7 @@ export type Database = MergeDeep<
         reviews: {
           Row: {
             id: string;
+            updated_at: string;
             rest_area_id: string;
             owner_id: string;
             score: number;
@@ -87,8 +88,16 @@ export type Database = MergeDeep<
           };
           Insert: {
             rest_area_id: string;
-            owner_id: string;
             score: number;
+            id?: never;
+            updated_at?: never;
+            owner_id?: never;
+            deleted?: never;
+          };
+          Update: {
+            rest_area_id: string;
+            score: number;
+            owner_id: string;
           };
         };
       };

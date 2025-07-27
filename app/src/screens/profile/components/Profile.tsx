@@ -3,7 +3,7 @@ import { Avatar, Button, Toast } from "@/components";
 import { signOut } from "@/features/auth";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { useProfile } from "@/features/profiles/hooks/useProfile";
+import { useProfile } from "@/features/profiles";
 import { ModalFormInput } from "./ModalFormInput";
 import {
   ProfileUpdate,

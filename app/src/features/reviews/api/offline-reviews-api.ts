@@ -21,6 +21,16 @@ export const offlineReviewsApi = createApi({
       },
     }),
 
+    getReview: builder.query({
+      providesTags: ["Reviews"],
+      queryFn: async (reviewId: string) => {
+        const data = await db.query.reviews.findFirst({
+          where: (table, { eq }) => eq(table.id, reviewId),
+        });
+        return { data };
+      },
+    }),
+
     getRestAreaScore: builder.query<Score, string>({
       providesTags: ["Reviews"],
       queryFn: async (restAreaId: string) => {
@@ -72,6 +82,7 @@ export const offlineReviewsApi = createApi({
 });
 
 export const {
+  useGetReviewQuery,
   useGetRestAreaReviewsQuery,
   useGetRestAreaScoreQuery,
   useUpsertReviewsMutation,

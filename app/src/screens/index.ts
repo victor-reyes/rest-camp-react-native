@@ -6,3 +6,4 @@ export * from "./Updates";
 export * from "./profile";
 export * from "./NotFound";
 export * from "./upload-photos";
+export * from "./add-review";

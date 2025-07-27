@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { supabase } from "@/lib";
 import { offlineReviewsApi } from "./offline-reviews-api";
-import { ReviewInsert } from "../types";
+import { ReviewInsert, ReviewSubmit, ReviewSupaInsert, ReviewSupaSelect } from "../types";
 
 const DEFAULT_UPDATED_AT = "1970-01-01T00:00:00Z";
 
@@ -24,15 +24,7 @@ export const reviewsApi = createApi({
 
         if (fetchError) return { error: fetchError };
 
-        const reviews: Required<ReviewInsert>[] = reviewData.map(review => ({
-          id: review.id,
-          restAreaId: review.rest_area_id,
-          ownerId: review.owner_id,
-          score: review.score,
-          recension: review.recension,
-          updatedAt: new Date(review.updated_at!).getTime(),
-          deleted: review.deleted,
-        }));
+        const reviews = reviewData.map(toLocalReview);
 
         if (reviews.length > 0) {
           await dispatch(offlineReviewsApi.endpoints.upsertReviews.initiate(reviews));
@@ -40,7 +32,49 @@ export const reviewsApi = createApi({
         return { data: null };
       },
     }),
+
+    fetchReviewById: builder.query({
+      queryFn: async (reviewId: string, { dispatch }) => {
+        const { data, error } = await supabase.from("reviews").select().eq("id", reviewId).single();
+        if (error) return { error };
+        if (data) {
+          const review = toLocalReview(data);
+          await dispatch(offlineReviewsApi.endpoints.upsertReviews.initiate([review]));
+          return { data: review };
+        }
+        return { data: null };
+      },
+    }),
+
+    submitReview: builder.mutation<null, ReviewSubmit>({
+      invalidatesTags: ["Reviews"],
+      queryFn: async review => {
+        const reviewData: ReviewSupaInsert = {
+          rest_area_id: review.restAreaId,
+          score: review.score,
+          recension: review.recension,
+        };
+
+        const { error } = await supabase.from("reviews").upsert(reviewData);
+
+        if (error) return { error };
+
+        return { data: null };
+      },
+    }),
   }),
 });
 
-export const { useFetchReviewsForRestAreaQuery } = reviewsApi;
+export const { useFetchReviewsForRestAreaQuery, useSubmitReviewMutation } = reviewsApi;
+
+function toLocalReview(review: ReviewSupaSelect): Required<ReviewInsert> {
+  return {
+    id: review.id,
+    restAreaId: review.rest_area_id,
+    ownerId: review.owner_id,
+    score: review.score,
+    recension: review.recension || null,
+    updatedAt: new Date(review.updated_at!).getTime(),
+    deleted: review.deleted || false,
+  };
+}

@@ -6,7 +6,7 @@ export type RootStackParamList = {
   Map: undefined;
   Profile: undefined;
   UploadPhotos: { restAreaId: string };
-  AddReview: { restAreaId: string };
+  AddReview: { restAreaId: string; reviewId?: string };
 };
 
 declare global {
