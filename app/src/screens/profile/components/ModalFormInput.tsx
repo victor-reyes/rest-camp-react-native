@@ -21,8 +21,8 @@ export function ModalFormInput({ label, defaultValue, onSave, placeholder }: Pro
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["50%"], []);
   const [value, setValue] = useState(defaultValue);
-  const isValueEmpty = useMemo(() => !value?.trim(), [value]);
-  const isDefaultValueEmpty = useMemo(() => !defaultValue?.trim(), [defaultValue]);
+  const isValueEmpty = !value?.trim();
+  const isDefaultValueEmpty = !defaultValue?.trim();
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
