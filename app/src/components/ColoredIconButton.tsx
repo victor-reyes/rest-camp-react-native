@@ -1,6 +1,6 @@
 import { StyleProp, ViewStyle } from "react-native";
 import { Button } from "./Button";
-import { useMemo, ReactElement } from "react";
+import { useMemo, memo, ReactElement } from "react";
 
 interface Props {
   title: string;
@@ -12,7 +12,8 @@ interface Props {
   alpha?: number;
   disabled?: boolean;
 }
-export function ColoredIconButton({
+
+function ColoredIconButtonComponent({
   title,
   style,
   iconSize = 24,
@@ -46,3 +47,5 @@ export function ColoredIconButton({
     />
   );
 }
+
+export const ColoredIconButton = memo(ColoredIconButtonComponent);
