@@ -23,11 +23,14 @@ export function UserInfo({ userId }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },
   name: {
+    flex: 1,
     marginLeft: 8,
+    fontSize: 12,
     fontWeight: "bold",
   },
 });
