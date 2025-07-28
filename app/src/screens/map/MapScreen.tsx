@@ -25,7 +25,7 @@ export function MapScreen() {
       const camera = await mapRef.current?.getCamera();
       if (!camera) return;
       const zoom = camera.zoom ?? 1;
-      camera.zoom = zoom + 2;
+      camera.zoom = zoom + 1;
 
       camera.center = { latitude: coords.latitude, longitude: coords.longitude };
       mapRef.current?.animateCamera(camera, { duration: 500 });
