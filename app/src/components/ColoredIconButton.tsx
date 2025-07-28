@@ -1,13 +1,12 @@
 import { StyleProp, ViewStyle } from "react-native";
 import { Button } from "./Button";
-import { useMemo } from "react";
-import React from "react";
+import { useMemo, ReactElement } from "react";
 
 interface Props {
   title: string;
   style?: StyleProp<ViewStyle>;
   iconSize?: number;
-  renderIcon: (color: string) => React.ReactElement;
+  renderIcon: (color: string, size: number) => ReactElement;
   onPress: () => void;
   color?: string;
   alpha?: number;
@@ -42,7 +41,7 @@ export function ColoredIconButton({
       style={buttonStyle}
       textColor={color}
       iconSize={iconSize}
-      icon={renderIcon(color)}
+      icon={renderIcon(color, iconSize)}
       onPress={onPress}
     />
   );
