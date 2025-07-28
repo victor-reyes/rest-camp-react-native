@@ -2,7 +2,7 @@ import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { Review } from "./Review";
 import { ScrollView } from "react-native-gesture-handler";
 import { Score } from "@/screens/rest-area/components/Score";
-import { Button } from "@/components";
+import { Card, ColoredIconButton } from "@/components";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/core";
 import { useCallback, useMemo } from "react";
@@ -32,47 +32,39 @@ export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
     navigation.navigate("AddReview", { restAreaId });
   }, [navigation, onNeedAuthorization, restAreaId, userId]);
 
-  const alreadyReviewed = useMemo(
-    () => reviews.some(review => review.ownerId === userId),
-    [reviews, userId],
+  const alreadyReviewed = reviews.some(review => review.ownerId === userId);
+  const cardStyle = useMemo(() => ({ width: width * 0.7, maxWidth: 320 }), [width]);
+
+  const renderIcon = useCallback(
+    (color: string, size: number) => <FontAwesome name="plus" size={size} color={color} />,
+    [],
   );
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.header}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 8,
-          }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#155196" }}>
-            Recensioner{isFetching && " (uppdateras...)"}
-          </Text>
+      <View style={styles.headerContainer}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Recensioner{isFetching && " (uppdateras...)"}</Text>
           {!alreadyReviewed && (
-            <Button
-              title="Skriv en recension"
-              fit
-              style={{ backgroundColor: "#15519622", borderWidth: 0, paddingVertical: 6 }}
-              textColor="#155196"
-              iconSize={18}
-              icon={<FontAwesome name="pencil-square-o" size={18} color="#155196" />}
+            <ColoredIconButton
+              renderIcon={renderIcon}
               onPress={handleAddReviewPress}
+              style={styles.buttonStyle}
+              disabled={isLoading}
+              title="Lägg till recension"
+              iconSize={16}
             />
           )}
         </View>
 
         <Score restAreaId={restAreaId} onClick={() => {}} />
       </View>
+
       <ScrollView contentContainerStyle={styles.scrollViewContainer} horizontal>
         {reviews?.map(review => (
-          <Review
-            key={review.id}
-            review={review}
-            numberOfLines={4}
-            style={{ width: width * 0.66, maxWidth: 320 }}
-          />
+          <Card style={cardStyle} key={review.id}>
+            <Review review={review} />
+          </Card>
         ))}
       </ScrollView>
     </View>
@@ -80,6 +72,14 @@ export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
 }
 
 const styles = StyleSheet.create({
-  header: { padding: 12 },
-  scrollViewContainer: { gap: 8, height: 200, paddingVertical: 24, paddingHorizontal: 12 },
+  headerContainer: { padding: 12 },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 8,
+  },
+  title: { fontSize: 16, fontWeight: "bold", color: "#333" },
+  scrollViewContainer: { height: "100%", gap: 8, paddingVertical: 24, paddingHorizontal: 12 },
+  buttonStyle: {},
 });
