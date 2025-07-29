@@ -13,7 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: "1.0.6",
   orientation: "portrait",
   icon: "./assets/icon.png",
-  userInterfaceStyle: "automatic",
+  userInterfaceStyle: "light",
   newArchEnabled: true,
   scheme: "rastplatser",
   ios: {
