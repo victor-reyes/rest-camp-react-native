@@ -16,14 +16,25 @@ export function AddReviewModal({ route }: Props) {
   const { restAreaId, reviewId } = route.params;
 
   const userId = useUserId();
-  const { submitReview, isSubmitting } = useSubmitReview(userId);
+  const { submitReview, removeReview, isSubmitting } = useSubmitReview(userId);
   const { review, isLoading } = useReview(reviewId);
+
   const navigation = useNavigation();
 
   const navigateToProfileAndHideToast = useCallback(() => {
     Toast.hide();
     navigation.navigate("Profile");
   }, [navigation]);
+
+  const handleResult = useCallback(
+    (result: { success: true; error?: never } | { success: false; error: string }) => {
+      if (result.success) {
+        showSuccessToast();
+        navigation.goBack();
+      } else showErrorToast(result.error);
+    },
+    [navigation],
+  );
 
   const handleSubmit = useCallback(
     async (data: ReviewFormData) => {
@@ -37,15 +48,16 @@ export function AddReviewModal({ route }: Props) {
         reviewId,
       );
 
-      if (result.success) {
-        showSuccessToast();
-        navigation.goBack();
-      } else {
-        showErrorToast(result.error);
-      }
+      handleResult(result);
     },
-    [userId, submitReview, restAreaId, reviewId, navigateToProfileAndHideToast, navigation],
+    [userId, submitReview, restAreaId, reviewId, handleResult, navigateToProfileAndHideToast],
   );
+
+  const handleRemove = useCallback(async () => {
+    if (!reviewId) return;
+    const result = await removeReview(reviewId);
+    handleResult(result);
+  }, [reviewId, removeReview, handleResult]);
 
   return (
     <View style={styles.container}>
@@ -53,6 +65,7 @@ export function AddReviewModal({ route }: Props) {
         <ActivityIndicator size="large" color="#0000ff" />
       : <ReviewForm
           onSubmit={handleSubmit}
+          onRemove={handleRemove}
           loading={isSubmitting}
           defaultValues={review || DEFAULT_VALUES}
           isEdit={!!reviewId}

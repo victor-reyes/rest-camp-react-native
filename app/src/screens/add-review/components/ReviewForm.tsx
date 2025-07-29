@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, BackHandler } from "react-native";
+import { View, Text, StyleSheet, Alert, BackHandler, ActivityIndicator } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,18 +25,27 @@ export type ReviewFormData = z.infer<typeof reviewSchema>;
 
 interface Props {
   onSubmit: (data: ReviewFormData) => void;
+  onRemove: () => void;
   loading?: boolean;
   defaultValues: ReviewFormData;
   isEdit?: boolean;
 }
 
-export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = false }: Props) {
+export function ReviewForm({
+  onSubmit,
+  onRemove,
+  loading = false,
+  defaultValues,
+  isEdit = false,
+}: Props) {
   const { control, handleSubmit, formState } = useForm({ resolver, defaultValues });
 
   const { errors } = formState;
 
   const handleFormSubmit = useCallback((data: ReviewFormData) => onSubmit(data), [onSubmit]);
   const navigation = useNavigation();
+
+  const handleRemove = useCallback(() => onRemove(), [onRemove]);
 
   useEffect(() => {
     const onBackPress = () => {
@@ -62,6 +71,25 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = 
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1,
+            backgroundColor: "#ffffff80",
+          }}>
+          <ActivityIndicator
+            size="large"
+            color="#0000ff"
+            animating={loading}
+            style={{ padding: 20 }}
+          />
+        </View>
+      )}
       <Controller
         name="score"
         control={control}
@@ -82,6 +110,7 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = 
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
+              editable={!loading}
               placeholder="Beskriv din upplevelse (valfritt)"
               multiline
             />
@@ -95,11 +124,15 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = 
         )}
       />
 
-      <Button
-        title={isEdit ? "Uppdatera recension" : "Skicka recension"}
-        fit
-        onPress={handleSubmit(handleFormSubmit)}
-      />
+      <View style={styles.row}>
+        {isEdit && <Button title="Ta bort recension" fit onPress={handleRemove} />}
+        <Button
+          title={isEdit ? "Uppdatera recension" : "Skicka recension"}
+          fit
+          onPress={handleSubmit(handleFormSubmit)}
+          disabled={!formState.isDirty || loading}
+        />
+      </View>
     </View>
   );
 }
@@ -113,6 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     gap: 8,
   },
+  row: { flexDirection: "row", gap: 8, alignItems: "center", justifyContent: "space-between" },
   ratingContainer: {
     alignSelf: "flex-start",
   },

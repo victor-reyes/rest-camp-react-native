@@ -15,7 +15,7 @@ export const useSubmitReview = (userId?: string) => {
   const dispatch = useAppDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { submitReview, updateReview } = reviewsApi.endpoints;
+  const { submitReview, updateReview, removeReview } = reviewsApi.endpoints;
 
   const submitOrUpdateReview = useCallback(
     async (submitReviewData: SubmitReviewData, reviewId?: string): Promise<SubmitReviewResult> => {
@@ -51,5 +51,27 @@ export const useSubmitReview = (userId?: string) => {
     [userId, dispatch, updateReview, submitReview],
   );
 
-  return { submitReview: submitOrUpdateReview, isSubmitting };
+  const remove = useCallback(
+    async (reviewId: string): Promise<SubmitReviewResult> => {
+      if (!userId) {
+        const error = "Du måste vara inloggad för att ta bort en recension";
+        setIsSubmitting(false);
+        return { success: false, error };
+      }
+
+      setIsSubmitting(true);
+
+      const { error } = await dispatch(removeReview.initiate(reviewId));
+
+      setIsSubmitting(false);
+      if (!error) return { success: true, error: undefined };
+
+      const errorMessage = "Kunde inte ta bort recensionen. Försök igen.";
+
+      return { success: false, error: errorMessage };
+    },
+    [userId, dispatch, removeReview],
+  );
+
+  return { submitReview: submitOrUpdateReview, removeReview: remove, isSubmitting };
 };
