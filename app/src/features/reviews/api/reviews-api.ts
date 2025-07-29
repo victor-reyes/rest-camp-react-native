@@ -75,10 +75,30 @@ export const reviewsApi = createApi({
         return { data: null };
       },
     }),
+
+    removeReview: builder.mutation<string, string>({
+      invalidatesTags: restAreaId => [{ type: REST_AREA, id: restAreaId }],
+      queryFn: async reviewId => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const { data, error } = await supabase
+          .from("reviews")
+          .update({ deleted: true, updated_at: new Date().toISOString() })
+          .eq("id", reviewId)
+          .select("rest_area_id")
+          .single();
+
+        console.log("Removing review:", reviewId, "result:", data, "error:", error);
+
+        if (error) return { error };
+
+        return { data: data.rest_area_id };
+      },
+    }),
   }),
 });
 
-export const { useFetchReviewsForRestAreaQuery, useSubmitReviewMutation } = reviewsApi;
+export const { useFetchReviewsForRestAreaQuery, useSubmitReviewMutation, useRemoveReviewMutation } =
+  reviewsApi;
 
 function toLocalReview(review: ReviewSupaSelect): Required<ReviewInsert> {
   return {
