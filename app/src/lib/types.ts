@@ -90,14 +90,11 @@ export type Database = MergeDeep<
             rest_area_id: string;
             score: number;
             id?: never;
-            updated_at?: never;
+            updated_at: string;
             owner_id?: never;
-            deleted?: never;
           };
           Update: {
-            score: number;
             updated_at: string;
-            recension?: string | null;
             rest_area_id?: never;
             owner_id?: never;
             id?: never;

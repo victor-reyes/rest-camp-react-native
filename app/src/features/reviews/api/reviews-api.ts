@@ -51,9 +51,17 @@ export const reviewsApi = createApi({
     submitReview: builder.mutation<null, ReviewSubmit>({
       invalidatesTags: (_res, _err, { restAreaId }) => [{ type: REST_AREA, id: restAreaId }],
       queryFn: async review => {
-        const { restAreaId: rest_area_id, score, recension } = review;
+        const { restAreaId: rest_area_id, score, recension = null } = review;
+        const [updated_at, deleted] = [new Date().toISOString(), false];
 
-        const { error } = await supabase.from("reviews").insert({ rest_area_id, score, recension });
+        /// delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const { error } = await supabase
+          .from("reviews")
+          .upsert(
+            { rest_area_id, score, recension, deleted, updated_at },
+            { onConflict: "owner_id, rest_area_id", ignoreDuplicates: false },
+          );
 
         if (error) return { error };
 
