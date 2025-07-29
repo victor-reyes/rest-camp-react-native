@@ -10,9 +10,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   name: "Rastplatser",
   slug: "Rastplatser",
-  version: "1.1.1",
+  version: "1.1.2",
   orientation: "portrait",
-  icon: "./assets/icon.png",
+  icon: "./assets/ios-light.png",
   userInterfaceStyle: "light",
   newArchEnabled: true,
   scheme: "rastplatser",
@@ -55,7 +55,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        backgroundColor: "#ffffff",
+        backgroundColor: "#155196",
         image: "./assets/icon.png",
       },
     ],
