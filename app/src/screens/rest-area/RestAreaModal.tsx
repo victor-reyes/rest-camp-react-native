@@ -1,7 +1,7 @@
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
-  BottomSheetView,
+  BottomSheetScrollView,
   useBottomSheetTimingConfigs,
 } from "@gorhom/bottom-sheet";
 import { memo, useCallback, useEffect, useRef } from "react";
@@ -50,11 +50,12 @@ function RestAreaModalComponent({ id, onClose }: Props) {
         onChange={handleSheetChanges}
         onDismiss={onClose}
         enablePanDownToClose
+        enableDynamicSizing={false}
         handleStyle={{ paddingBottom: 0, paddingTop: 8 }}
         animationConfigs={animationConfigs}>
-        <BottomSheetView>
+        <BottomSheetScrollView style={{ marginBottom: 32 }}>
           <RestAreaCard id={id} />
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheetModal>
     )
   );
