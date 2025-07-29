@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert, BackHandler } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components";
 import { StarRating } from "./StarRating";
 import { TextArea } from "./TextArea";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const reviewSchema = z.object({
   score: z.number().min(1, "Betyg är obligatoriskt").max(5),
@@ -35,6 +36,29 @@ export function ReviewForm({ onSubmit, loading = false, defaultValues, isEdit = 
   const { errors } = formState;
 
   const handleFormSubmit = useCallback((data: ReviewFormData) => onSubmit(data), [onSubmit]);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (formState.isDirty) {
+        Alert.alert(
+          "Vill du slänga utkastet?",
+          "Du kommer att förlora det du har skrivit.",
+          [
+            { text: "Släng", onPress: () => navigation.goBack(), style: "destructive" },
+            { text: "Behåll", onPress: () => {}, style: "cancel" },
+          ],
+          { cancelable: false },
+        );
+
+        return true;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => backHandler.remove();
+  }, [formState.isDirty, navigation]);
 
   return (
     <View style={styles.container}>
