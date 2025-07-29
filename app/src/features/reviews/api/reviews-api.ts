@@ -54,8 +54,6 @@ export const reviewsApi = createApi({
         const { restAreaId: rest_area_id, score, recension = null } = review;
         const [updated_at, deleted] = [new Date().toISOString(), false];
 
-        /// delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
         const { error } = await supabase
           .from("reviews")
           .upsert(
@@ -87,7 +85,6 @@ export const reviewsApi = createApi({
     removeReview: builder.mutation<string, string>({
       invalidatesTags: restAreaId => [{ type: REST_AREA, id: restAreaId }],
       queryFn: async reviewId => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
         const { data, error } = await supabase
           .from("reviews")
           .update({ deleted: true, updated_at: new Date().toISOString() })
