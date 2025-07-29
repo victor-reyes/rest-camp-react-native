@@ -8,8 +8,9 @@ import { useNavigation } from "@react-navigation/core";
 import { useCallback, useMemo } from "react";
 import { useReviews } from "@/features/reviews";
 import { selectUserId } from "@/features/auth";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { onNeedAuthorizationProps } from "@/screens/rest-area";
+import { offlineProfilesApi } from "@/features/profiles";
 
 interface Props {
   restAreaId: string;
@@ -18,10 +19,11 @@ interface Props {
 
 export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
   const userId = useAppSelector(selectUserId);
+  const dispatch = useAppDispatch();
   const { reviews, isFetching, isLoading } = useReviews(restAreaId, userId);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
-  const handleAddReviewPress = useCallback(() => {
+  const handleAddReviewPress = useCallback(async () => {
     if (!userId) {
       onNeedAuthorization({
         reason: "Behöver autentisering",
@@ -29,8 +31,20 @@ export function LatestReviews({ restAreaId, onNeedAuthorization }: Props) {
       });
       return;
     }
+
+    const promise = dispatch(offlineProfilesApi.endpoints.getProfile.initiate(userId));
+    const profile = await promise.unwrap();
+    promise.unsubscribe();
+    if (!profile?.fullName) {
+      onNeedAuthorization({
+        reason: "Behöver fullständigt namn",
+        description: "Fyll i ditt fullständiga namn i profilen för att skriva en recension.",
+      });
+      return;
+    }
+
     navigation.navigate("AddReview", { restAreaId });
-  }, [navigation, onNeedAuthorization, restAreaId, userId]);
+  }, [dispatch, navigation, onNeedAuthorization, restAreaId, userId]);
 
   const alreadyReviewed = reviews.some(review => review.ownerId === userId);
   const cardStyle = useMemo(() => ({ width: width * 0.7, maxWidth: 320 }), [width]);
