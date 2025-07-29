@@ -11,7 +11,8 @@ import { client, migrations } from "@/db";
 import { Toast } from "@/components";
 import { Navigation } from "@/navigation";
 import { supabase } from "@/lib";
-import { sessionSet } from "@/features/auth";
+import { sessionSet, useUserId } from "@/features/auth";
+import { profilesApi } from "./features/profiles";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,6 +68,18 @@ function Auth() {
 
     return () => subscription.unsubscribe();
   }, [dispatch]);
+
+  const userId = useUserId();
+  useEffect(() => {
+    const updateProfile = async () => {
+      if (userId) {
+        const promise = dispatch(profilesApi.endpoints.fetchProfile.initiate(userId));
+        await promise;
+        promise.unsubscribe();
+      }
+    };
+    updateProfile();
+  }, [dispatch, userId]);
 
   return null;
 }
