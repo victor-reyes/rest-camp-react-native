@@ -8,6 +8,8 @@ interface Props extends PropsWithChildren {
   onPress?: () => void;
 }
 
+const ANCHOR = { x: 0.5, y: 0.5 };
+
 function FastMarkerComponent({
   latitude,
   longitude,
@@ -28,6 +30,7 @@ function FastMarkerComponent({
     <Marker
       tracksViewChanges={shouldTrackChanges}
       tracksInfoWindowChanges={false}
+      anchor={ANCHOR}
       onPress={onPress}
       coordinate={{ latitude, longitude }}>
       {children}
