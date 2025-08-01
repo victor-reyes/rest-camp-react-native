@@ -95,7 +95,8 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-r/increasing from-indigo-500 to-teal-400 text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen
+        bg-linear-to-r/increasing from-indigo-500 to-teal-400 text-white`}
       >
         <script
           type="application/ld+json"
