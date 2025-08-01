@@ -24,7 +24,7 @@ export default function Features() {
             return (
               <Card
                 key={feature.id}
-                className="bg-card/70 px-4 py-8 hover:shadow-xl transition-all duration-300 hover:scale-105 text-center"
+                className="bg-card/60 px-4 py-8 hover:shadow-xl transition-all duration-300 hover:scale-105 text-center"
               >
                 <CardHeader>
                   <div className="h-12 w-12 text-accent mb-4 mx-auto flex items-center justify-center">
