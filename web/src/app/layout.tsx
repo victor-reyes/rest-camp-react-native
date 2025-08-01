@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { siteMetadata } from '@/content';
 import './globals.css';
+import { Footer } from '@/components';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -94,7 +95,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-r/increasing from-indigo-500 to-teal-400 text-white`}
       >
         <script
           type="application/ld+json"
@@ -120,6 +121,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Footer />
       </body>
     </html>
   );
