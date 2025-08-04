@@ -19,8 +19,6 @@ export const restAreasApi = createApi({
 
         const updatedAt = data ? new Date(data).toISOString() : DEFAULT_UPDATED_AT;
 
-        console.log(`Current date: ${new Date().toISOString()}`);
-        console.log(`Last updated at: ${updatedAt}`);
         const { data: restAreasData, error: fetchError } = await supabase
           .from("rest_areas")
           .select()

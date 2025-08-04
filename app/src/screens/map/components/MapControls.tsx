@@ -3,7 +3,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 import { Linking, Pressable, StyleSheet } from "react-native";
 import { FilterPopup } from "./filter/FilterPopup";
-import Toast from "react-native-toast-message";
+import { Toast } from "@/components";
 
 interface Props {
   onLocationUpdate: (coords: { latitude: number; longitude: number }) => void;
@@ -16,7 +16,8 @@ export function MapControls({ onLocationUpdate }: Props) {
         Toast.show({
           type: "info",
           text1: "Platstillstånd nekades",
-          text2: "Pressa på knappen för att gå till inställningar.",
+          text2: "Du kan ändra detta i appens inställningar.",
+          buttonTitle: "Inställningar",
           onPress: () => Linking.openSettings(),
         });
       return;

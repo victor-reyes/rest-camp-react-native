@@ -9,9 +9,10 @@ import { View, Text, Linking } from "react-native";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
-import Toast, { ToastShowParams } from "react-native-toast-message";
+
 import { Pressable } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
+import { Toast, ToastShowParams } from "@/components";
 
 interface Props extends Required<PropsWithChildren> {
   onImageSelected: (uri: string) => void;
@@ -79,7 +80,8 @@ function getToastShowParamsFor(type: "camera" | "gallery", canAskAgain: boolean)
     toast.text1 = `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} krävs.`;
   else {
     toast.text1 = `Behörighet till ${type === "camera" ? "kamera" : "galleriet"} nekad.`;
-    toast.text2 = `Pressa på knappen för att gå till inställningar.`;
+    toast.text2 = "Du kan ändra detta i inställningarna.";
+    toast.buttonTitle = "Inställningar";
     toast.onPress = () => Linking.openSettings();
   }
   return toast;

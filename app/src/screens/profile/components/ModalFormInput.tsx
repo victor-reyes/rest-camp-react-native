@@ -1,4 +1,4 @@
-import { Button } from "@/components";
+import { Button, Toast } from "@/components";
 import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -8,7 +8,6 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useRef, useMemo, useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Toast from "react-native-toast-message";
 
 interface Props {
   label: string;

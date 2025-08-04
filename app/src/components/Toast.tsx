@@ -6,7 +6,7 @@ import {
   ToastConfig,
   ToastConfigParams,
   ToastProps,
-  ToastShowParams,
+  ToastShowParams as ToastShowParamsRN,
 } from "react-native-toast-message";
 import ToastBase from "react-native-toast-message";
 import { Button } from "./Button";
@@ -14,10 +14,10 @@ import { useCallback, useMemo } from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 type ButtonToastProps = BaseToastProps & { buttonTitle?: string };
-type BaseShowParams = ToastShowParams & { buttonTitle?: string };
+export type ToastShowParams = ToastShowParamsRN & { buttonTitle?: string };
 
-Toast.show = ({ buttonTitle, ...params }: BaseShowParams) => {
-  const props: ToastShowParams = { ...params.props, buttonTitle };
+Toast.show = ({ buttonTitle, ...params }: ToastShowParams) => {
+  const props: ToastShowParamsRN = { ...params.props, buttonTitle };
   ToastBase.show({ ...params, props });
 };
 Toast.hide = (params?: void) => ToastBase.hide(params);

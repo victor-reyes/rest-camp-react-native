@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { Apple, Button, GoogleIcon } from "@/components";
+import { Apple, Button, GoogleIcon, Toast } from "@/components";
 import {
   AuthenticationError,
   errorCleared,
@@ -9,7 +9,6 @@ import {
 } from "@/features/auth";
 import { useCallback, useEffect } from "react";
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from "react-native";
-import Toast from "react-native-toast-message";
 
 export function SignIn() {
   const dispatch = useAppDispatch();
