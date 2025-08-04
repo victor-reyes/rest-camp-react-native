@@ -85,6 +85,84 @@ export const features: AppFeature[] = [
   },
 ];
 
+export const supportItems = [
+  {
+    title: 'Komma igång',
+    questions: [
+      {
+        question: 'Ladda ner appen',
+        answer:
+          'Rastplatser finns tillgänglig för både iOS och Android. Sök efter "Rastplatser" i App Store eller Google Play Store, eller använd länkarna på vår hemsida.',
+      },
+      {
+        question: 'Skapa ett konto',
+        answer:
+          'Du kan använda appen utan konto, men genom att logga in med Google eller Apple kan du spara favoriter, lämna recensioner och synkronisera data mellan enheter.',
+      },
+      {
+        question: 'Navigera på kartan',
+        answer:
+          'Använd kartan för att hitta rastplatser längs din rutt. Tryck på en markör för att se detaljer, eller använd filtren för att hitta specifika tjänster.',
+      },
+    ],
+  },
+  {
+    title: 'Vanliga frågor',
+    questions: [
+      {
+        question: 'Hur fungerar appen offline?',
+        answer:
+          'Rastplatser sparar viktig information lokalt på din enhet så att du kan komma åt rastplatsdata även utan internetanslutning. Kartor och grundläggande information synkroniseras automatiskt när du har nätverk.',
+      },
+      {
+        question: 'Kan jag lägga till egna recensioner?',
+        answer:
+          'Ja, du kan dela dina erfarenheter och hjälpa andra resenärer genom att lämna recensioner och betyg. Du kan också ladda upp foton för att visa hur rastplatsen ser ut.',
+      },
+      {
+        question: 'Hur uppdateras informationen?',
+        answer:
+          'Vi uppdaterar rastplatsinformation regelbundet baserat på officiella källor och användarrapporter. Om du märker felaktig information, rapportera det gärna till oss.',
+      },
+      {
+        question: 'Varför visas inte alla rastplatser?',
+        answer:
+          'Vi fokuserar på officiella rastplatser längs svenska motorvägar och större vägar. Privata parkeringsplatser och mindre rastområden inkluderas gradvis.',
+      },
+      {
+        question: 'Kan jag använda appen utomlands?',
+        answer:
+          'För närvarande fokuserar vi på svenska rastplatser, men vi planerar att utöka till andra nordiska länder i framtiden.',
+      },
+      {
+        question: 'Hur raderar jag mitt konto?',
+        answer:
+          'Du kan radera ditt konto och all associerad data genom appens inställningar eller genom att kontakta vår support. All din data raderas permanent inom 30 dagar.',
+      },
+    ],
+  },
+  {
+    title: 'Teknisk support',
+    questions: [
+      {
+        question: 'Appen kraschar eller fungerar inte',
+        answer:
+          'Prova först att starta om appen och kontrollera att du har den senaste versionen. Om problemet kvarstår, kontakta oss med information om din enhet och vad som hände.',
+      },
+      {
+        question: 'GPS-position fungerar inte',
+        answer:
+          'Kontrollera att du har gett appen tillåtelse att använda din plats i enhetens inställningar. Starta om appen efter att ha ändrat behörigheter.',
+      },
+      {
+        question: 'Kartan laddas inte',
+        answer:
+          'Detta kan bero på dålig internetanslutning. Appen fungerar offline med tidigare nedladdad data, men nya kartdata kräver internetanslutning.',
+      },
+    ],
+  },
+];
+
 export const screenshots: AppScreenshot[] = [
   {
     id: 'map-view',
