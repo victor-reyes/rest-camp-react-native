@@ -18,7 +18,7 @@ export default function PrivacyPage() {
   return (
     <div className="bg-white/20 text-foreground">
       <div className="container mx-auto px-4 md:px-8 py-24">
-        <Card className="p-4">
+        <Card className="md:p-8 max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="text-4xl text-center">
               Integritetspolicy
