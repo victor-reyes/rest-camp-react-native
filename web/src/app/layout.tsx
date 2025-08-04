@@ -122,7 +122,7 @@ export default function RootLayout({
           }}
         />
         <Navigation />
-        {children}
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

@@ -12,8 +12,6 @@ export default function Navigation() {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  console.log('Navigation rendered with pathname:', pathname);
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/30 backdrop-blur-md border-b border-border/20 supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-6">

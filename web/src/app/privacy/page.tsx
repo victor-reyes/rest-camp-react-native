@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { brand } from '@/content';
 import { ExternalLink } from 'lucide-react';
 
@@ -17,13 +17,15 @@ const privacyLinks = [
 export default function PrivacyPage() {
   return (
     <div className="bg-white/20 text-foreground">
-      <div className="container mx-auto px-6 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold  mb-8">
-            Integritetspolicy
-          </h1>
+      <div className="container mx-auto px-4 md:px-8 py-24">
+        <Card className="p-4">
+          <CardHeader>
+            <CardTitle className="text-4xl text-center">
+              Integritetspolicy
+            </CardTitle>
+          </CardHeader>
 
-          <div className="space-y-8">
+          <CardContent className="space-y-8">
             <p className="text-lg">{`
               Denna integritetspolicy gäller för appen Rastplatser (nedan kallad
               "Applikationen") för mobila enheter, vilken utvecklades av Víctor
@@ -257,20 +259,16 @@ export default function PrivacyPage() {
                 Tjänsteleverantören via e-post på swedish.dictionary@gmail.com.
               </p>
 
-              <Card className="p-6 bg-muted/70 text-neutral-200">
-                <p>
-                  <strong>Utvecklare:</strong> Víctor Reyes
-                </p>
-                <p>
-                  <strong>E-post:</strong> swedish.dictionary@gmail.com
-                </p>
-                <p>
-                  <strong>Gäller från:</strong> 2025-05-19
-                </p>
-              </Card>
+              <p className="whitespace-pre-wrap">
+                <strong>Utvecklare:</strong> Víctor Reyes
+                <br />
+                <strong>E-post:</strong> swedish.dictionary@gmail.com
+                <br />
+                <strong>Gäller från:</strong> 2025-05-19
+              </p>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

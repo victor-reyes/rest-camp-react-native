@@ -4,7 +4,7 @@ import DownloadButtons from './DownloadButtons';
 
 export default function Hero() {
   return (
-    <section className={`py-12 md:py-24 bg-white/20 md:h-screen`}>
+    <section className={`py-24 bg-white/20 md:h-screen`}>
       <div className="container flex flex-col mx-auto px-6 text-center h-full align-center">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight mx-auto">
           {brand.name}

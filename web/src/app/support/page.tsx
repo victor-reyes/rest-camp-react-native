@@ -17,11 +17,13 @@ export const metadata = {
 export default function SupportPage() {
   return (
     <div className="bg-white/20 text-foreground">
-      <div className="container mx-auto px-6 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-foreground mb-8">Support</h1>
+      <div className="container mx-auto px-4 md:px-8 py-24">
+        <Card className="p-4">
+          <CardHeader>
+            <CardTitle className="text-4xl text-center">Support</CardTitle>
+          </CardHeader>
 
-          <div className="space-y-8 ">
+          <CardContent className="space-y-8">
             <p className="text-lg">
               Behöver du hjälp med Rastplatser appen? Vi är här för att hjälpa
               dig få ut det mesta av din reseupplevelse.
@@ -225,12 +227,7 @@ export default function SupportPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>
-                    <strong>E-post:</strong> support@rastplatser.se
-                  </p>
-                  <p>
-                    <strong>Svarstid:</strong> Inom 24 timmar
-                  </p>
+                  <strong>E-post:</strong> swedish.dictionary@gmail.com
                 </CardContent>
               </Card>
 
@@ -253,35 +250,28 @@ export default function SupportPage() {
                 eller nya funktioner, hör gärna av dig. Din input hjälper oss
                 att göra Rastplatser bättre för alla användare.
               </p>
-
-              <Card className="p-6">
-                <div className="space-y-2 text-card-foreground">
-                  <p>
-                    <strong>Feedback:</strong> feedback@rastplatser.se
-                  </p>
-                  <p className="flex items-center gap-1">
-                    <strong>Betygsätt appen:</strong> Lämna en recension i{' '}
-                    <a
-                      className="flex items-center gap-1"
-                      href="https://apps.apple.com/se/app/rastplatser/id6746166317"
-                      target="_blank"
-                    >
-                      App Store <ExternalLink size={16} />
-                    </a>
-                    {' eller'}
-                    <a
-                      className="flex items-center gap-1"
-                      href="https://play.google.com/store/apps/details?id=nordic.rastplatser"
-                      target="_blank"
-                    >
-                      Google Play <ExternalLink size={16} />
-                    </a>
-                  </p>
-                </div>
-              </Card>
+              <strong>Feedback:</strong> swedish.dictionary@gmail.com
+              <p className="flex items-center gap-1">
+                <strong>Betygsätt appen:</strong> Lämna en recension i{' '}
+                <a
+                  className="flex items-center gap-1"
+                  href="https://apps.apple.com/se/app/rastplatser/id6746166317"
+                  target="_blank"
+                >
+                  App Store <ExternalLink size={16} />
+                </a>
+                {' eller'}
+                <a
+                  className="flex items-center gap-1"
+                  href="https://play.google.com/store/apps/details?id=nordic.rastplatser"
+                  target="_blank"
+                >
+                  Google Play <ExternalLink size={16} />
+                </a>
+              </p>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
