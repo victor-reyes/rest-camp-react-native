@@ -47,18 +47,11 @@ export const downloadLinks: DownloadLink[] = [
 ];
 
 // Navigation links
-export const navigation = {
-  main: [
-    { name: 'Hem', href: '/' },
-    { name: 'Integritetspolicy', href: '/privacy' },
-    { name: 'Support', href: '/support' },
-  ],
-  social: {
-    website: 'https://rastplatser-px6ua.web.app/',
-    support: '/support',
-    privacy: '/privacy',
-  },
-} as const;
+export const navigation = [
+  { name: 'Hem', href: '/' },
+  { name: 'Integritetspolicy', href: '/privacy/' },
+  { name: 'Support', href: '/support/' },
+] as const;
 
 // App features from current website analysis
 export const features: AppFeature[] = [

@@ -16,12 +16,12 @@ export const metadata = {
 
 export default function SupportPage() {
   return (
-    <div className="bg-neutral-600/30 text-foreground">
+    <div className="bg-white/20 text-foreground">
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-foreground mb-8">Support</h1>
 
-          <div className="space-y-8 text-muted-foreground">
+          <div className="space-y-8 ">
             <p className="text-lg">
               Behöver du hjälp med Rastplatser appen? Vi är här för att hjälpa
               dig få ut det mesta av din reseupplevelse.
@@ -37,11 +37,11 @@ export default function SupportPage() {
                     Ladda ner appen
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="text-muted-foreground">
+                    <div className="">
                       <p className="mb-4">
                         Rastplatser finns tillgänglig för både iOS och Android.
-                        Sök efter &quot;Rastplatser&quot; i App Store eller Google
-                        Play Store, eller använd länkarna på vår hemsida.
+                        Sök efter &quot;Rastplatser&quot; i App Store eller
+                        Google Play Store, eller använd länkarna på vår hemsida.
                       </p>
                       <div className="w-fit">
                         <DownloadButtons />
@@ -55,7 +55,7 @@ export default function SupportPage() {
                     Skapa ett konto
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Du kan använda appen utan konto, men genom att logga in
                       med Google eller Apple kan du spara favoriter, lämna
                       recensioner och synkronisera data mellan enheter.
@@ -68,7 +68,7 @@ export default function SupportPage() {
                     Navigera på kartan
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Använd kartan för att hitta rastplatser längs din rutt.
                       Tryck på en markör för att se detaljer, eller använd
                       filtren för att hitta specifika tjänster.
@@ -88,7 +88,7 @@ export default function SupportPage() {
                     Hur fungerar appen offline?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Rastplatser sparar viktig information lokalt på din enhet
                       så att du kan komma åt rastplatsdata även utan
                       internetanslutning. Kartor och grundläggande information
@@ -102,7 +102,7 @@ export default function SupportPage() {
                     Kan jag lägga till egna recensioner?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Ja, du kan dela dina erfarenheter och hjälpa andra
                       resenärer genom att lämna recensioner och betyg. Du kan
                       också ladda upp foton för att visa hur rastplatsen ser ut.
@@ -115,7 +115,7 @@ export default function SupportPage() {
                     Hur uppdateras informationen?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Vi uppdaterar rastplatsinformation regelbundet baserat på
                       officiella källor och användarrapporter. Om du märker
                       felaktig information, rapportera det gärna till oss.
@@ -128,7 +128,7 @@ export default function SupportPage() {
                     Varför visas inte alla rastplatser?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Vi fokuserar på officiella rastplatser längs svenska
                       motorvägar och större vägar. Privata parkeringsplatser och
                       mindre rastområden inkluderas gradvis.
@@ -141,7 +141,7 @@ export default function SupportPage() {
                     Kan jag använda appen utomlands?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       För närvarande fokuserar vi på svenska rastplatser, men vi
                       planerar att utöka till andra nordiska länder i framtiden.
                     </p>
@@ -153,7 +153,7 @@ export default function SupportPage() {
                     Hur raderar jag mitt konto?
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Du kan radera ditt konto och all associerad data genom
                       appens inställningar eller genom att kontakta vår support.
                       All din data raderas permanent inom 30 dagar.
@@ -173,7 +173,7 @@ export default function SupportPage() {
                     Appen kraschar eller fungerar inte
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Prova först att starta om appen och kontrollera att du har
                       den senaste versionen. Om problemet kvarstår, kontakta oss
                       med information om din enhet och vad som hände.
@@ -186,7 +186,7 @@ export default function SupportPage() {
                     GPS-position fungerar inte
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Kontrollera att du har gett appen tillåtelse att använda
                       din plats i enhetens inställningar. Starta om appen efter
                       att ha ändrat behörigheter.
@@ -199,7 +199,7 @@ export default function SupportPage() {
                     Kartan laddas inte
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-muted-foreground">
+                    <p className="">
                       Detta kan bero på dålig internetanslutning. Appen fungerar
                       offline med tidigare nedladdad data, men nya kartdata
                       kräver internetanslutning.

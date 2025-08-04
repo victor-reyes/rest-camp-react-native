@@ -26,7 +26,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Länkar</h4>
             <nav className="space-y-2">
-              {navigation.main.map((link) => (
+              {navigation.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}

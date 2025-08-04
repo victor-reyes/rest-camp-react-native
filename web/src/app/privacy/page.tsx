@@ -16,14 +16,14 @@ const privacyLinks = [
 ];
 export default function PrivacyPage() {
   return (
-    <div className="bg-neutral-600/30 text-foreground">
+    <div className="bg-white/20 text-foreground">
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-foreground mb-8">
+          <h1 className="text-4xl font-bold  mb-8">
             Integritetspolicy
           </h1>
 
-          <div className="space-y-8 text-muted-foreground">
+          <div className="space-y-8">
             <p className="text-lg">{`
               Denna integritetspolicy gäller för appen Rastplatser (nedan kallad
               "Applikationen") för mobila enheter, vilken utvecklades av Víctor

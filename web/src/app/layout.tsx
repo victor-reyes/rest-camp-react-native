@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { siteMetadata } from '@/content';
+import { Navigation, Footer } from '@/components';
 import './globals.css';
-import { Footer } from '@/components';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -121,6 +121,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <Navigation />
         {children}
         <Footer />
       </body>
