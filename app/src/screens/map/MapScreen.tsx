@@ -42,10 +42,14 @@ export function MapScreen() {
   const handleOnProfilePress = useCallback(() => navigation.navigate("Profile"), [navigation]);
 
   const insets = useSafeAreaInsets();
-  const profileButtonTop = insets.top + Platform.select({ android: 12, default: 0 });
+  const isAndroidOrIpad = Platform.OS === "android" || (Platform.OS === "ios" && Platform.isPad);
   const profileButtonStyle = useMemo(
-    () => [styles.profileButton, { top: profileButtonTop }],
-    [profileButtonTop],
+    () => [styles.profileButton, { top: insets.top + (isAndroidOrIpad ? 12 : 0) }],
+    [insets.top, isAndroidOrIpad],
+  );
+  const mapControlsStyle = useMemo(
+    () => [styles.mapControlsContainer, { bottom: insets.bottom + (isAndroidOrIpad ? 12 : 0) }],
+    [insets.bottom, isAndroidOrIpad],
   );
 
   return (
@@ -82,11 +86,7 @@ export function MapScreen() {
               />,
           )}
         </MapView>
-        <View
-          style={[
-            styles.mapControlsContainer,
-            { bottom: insets.bottom + Platform.select({ android: 12, default: 0 }) },
-          ]}>
+        <View style={mapControlsStyle}>
           <MapControls onLocationUpdate={handleOnLocationUpdate} />
         </View>
         <RestAreaModal id={currentRestAreaId} onClose={handleOnRestAreaModalClose} />
