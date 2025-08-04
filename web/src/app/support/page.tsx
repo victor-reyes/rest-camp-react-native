@@ -33,10 +33,7 @@ export default function SupportPage() {
                 <h2 className="text-2xl font-semibold text-foreground mb-6">
                   {section.title}
                 </h2>
-                <Accordion
-                  type="multiple"
-                  className='px-1 md:px-4'
-                >
+                <Accordion type="multiple" className="px-1 md:px-4">
                   {section.questions.map((item, itemIndex) => (
                     <AccordionItem
                       key={itemIndex}
@@ -53,24 +50,19 @@ export default function SupportPage() {
             ))}
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
+              <h3 className="text-3xl font-semibold text-foreground mb-4">
                 Kontakta oss
-              </h2>
+              </h3>
               <p className="mb-6">
                 Om du inte hittar svaret på din fråga, tveka inte att kontakta
                 oss. Vi svarar så snart vi kan och hjälper dig gärna.
               </p>
-
-              <Card className="w-fit">
-                <CardHeader>
-                  <CardTitle className="text-xl font-medium">
-                    Allmän support
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <strong>E-post:</strong> swedish.dictionary@gmail.com
-                </CardContent>
-              </Card>
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                Allmän support
+              </h2>
+              <p>
+                <strong>E-post:</strong> swedish.dictionary@gmail.com
+              </p>
               <div className="mt-6 p-4 bg-muted rounded-lg">
                 <p className="text-sm">
                   <strong>Tips:</strong> När du kontaktar support, inkludera
@@ -82,7 +74,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
                 Feedback och förslag
               </h2>
               <p className="mb-4">
