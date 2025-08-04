@@ -10,7 +10,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   name: "Rastplatser",
   slug: "Rastplatser",
-  version: "1.1.2",
+  version: "1.1.3",
   orientation: "portrait",
   icon: "./assets/ios-light.png",
   userInterfaceStyle: "light",
