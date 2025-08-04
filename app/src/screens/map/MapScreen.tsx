@@ -61,6 +61,7 @@ export function MapScreen() {
         <MapView
           ref={mapRef}
           style={styles.map}
+          userInterfaceStyle="light"
           provider={PROVIDER_GOOGLE}
           onRegionChangeComplete={setRegion}
           toolbarEnabled={false}
