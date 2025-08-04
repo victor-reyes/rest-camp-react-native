@@ -38,6 +38,7 @@ export default function SupportPage() {
                     <AccordionItem
                       key={itemIndex}
                       value={`${sectionIndex}-${itemIndex}`}
+                      className="border-slate-300/40 last:border-none first:rounded-t-md last:rounded-b-md px-4 bg-slate-800/40"
                     >
                       <AccordionTrigger className="text-lg font-medium text-foreground">
                         {item.question}
