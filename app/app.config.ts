@@ -59,7 +59,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         image: "./assets/icon.png",
       },
     ],
-    "react-native-edge-to-edge",
+    [
+      "react-native-edge-to-edge",
+      {
+        android: { parentTheme: "Default", enforceNavigationBarContrast: false },
+      },
+    ],
     "expo-sqlite",
     [
       "expo-build-properties",
